@@ -9,5 +9,6 @@ public class swing{
         JButton button = new JButton("Gurt");
         button.addActionListener(e -> System.out.println("GURTY"));
         frame.add(button);
+        System.out.println("hjello");
     }
 }
