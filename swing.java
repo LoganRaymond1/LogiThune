@@ -1,14 +1,8 @@
 import javax.swing.*;
-import java.util.*;
 
 public class swing {
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
                 Login login = new Login(); 
-            }
-        });
     }
 }
 
@@ -70,25 +64,34 @@ class Login {
     }
 }
 
-class Decryption extends Login{
+class Decryption{
     private JFrame decryptionFrame;
-    private String encryptedWords[] = {"fcw"};
+    private String encryptedWords[] = {"fdw"};
     private String randomEncryptWord;
     private int random = (int) (Math.random() * encryptedWords.length);
-    private int key = 3; 
+    private int key = (int) (Math.random() * 4 + 1); 
+    private String decryptHelp = "To decrypt the word:\n" +
+                "1. Use the key to shift each letter of the encrypted word backward in the alphabet.\n" +
+                "2. For example, if the key is 3 and the encrypted word is 'fdw', shift each letter back by 3.\n" +
+                "3. 'f' becomes 'c', 'd' becomes 'a', and 'w' becomes 't'.\n" +
+                "4. Enter the decrypted word in the text field and click Submit.";
 
     public Decryption() {
         randomEncryptWord = encryptedWords[random];
 
-        decryptionFrame = new JFrame("Decryption Challenge");
+        decryptionFrame = new JFrame("Are you a Robot?");
         decryptionFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        decryptionFrame.setSize(400, 250);
+        decryptionFrame.setSize(400, 300); 
         decryptionFrame.setLocationRelativeTo(null);
         decryptionFrame.setLayout(null);
 
         JLabel textLabel = new JLabel("Encrypted Word: " + randomEncryptWord);
         textLabel.setBounds(50, 50, 300, 30);
         decryptionFrame.add(textLabel);
+
+        JLabel keyLabel = new JLabel("Key: " + key);
+        keyLabel.setBounds(50, 20, 300, 30); 
+        decryptionFrame.add(keyLabel);
 
         JTextField textField = new JTextField();
         textField.setBounds(50, 100, 300, 30);
@@ -101,17 +104,26 @@ class Decryption extends Login{
         decryptButton.addActionListener(e -> {
             String userInput = textField.getText();
             String decryptedWord = decrypt(randomEncryptWord, key); 
-        
             if (userInput.equalsIgnoreCase(decryptedWord)) {
                 JOptionPane.showMessageDialog(decryptionFrame, "Correct! The decrypted word was: " + decryptedWord);
                 decryptionFrame.dispose();
+                new MusicPlayer();
+
             } else {
                 JOptionPane.showMessageDialog(decryptionFrame, "Incorrect! Try again.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
-        
+
+        JButton helpButton = new JButton("Help");
+        helpButton.setBounds(150, 200, 100, 30); 
+        decryptionFrame.add(helpButton);
+
+        helpButton.addActionListener(e -> {
+            JOptionPane.showMessageDialog(decryptionFrame, decryptHelp,"How to Decrypt", JOptionPane.INFORMATION_MESSAGE);
+        });
+
         decryptionFrame.setVisible(true);
-        }
+    }
         
         private String decrypt(String text, int key) {
             StringBuilder decrypted = new StringBuilder();
