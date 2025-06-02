@@ -155,16 +155,22 @@ class Layout {
         layoutFrame.setLocationRelativeTo(null);
         layoutFrame.setLayout(new BorderLayout());
 
+
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new BorderLayout());
         topPanel.setBackground(Color.LIGHT_GRAY);
         topPanel.setPreferredSize(new Dimension(1000, 50));
 
+
         JPanel searchHomePanel = new JPanel();
         searchHomePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
         searchHomePanel.setBackground(Color.LIGHT_GRAY);
-        JButton homeButton = new JButton(new ImageIcon("/Users/thomasforward/Documents/GitHub/Logithune/homeIcon.jpg"));
+
+        ImageIcon homeIcon = new ImageIcon("homeIcon.jpg");
+        Image scaledImage = homeIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        JButton homeButton = new JButton(new ImageIcon(scaledImage));
         homeButton.setPreferredSize(new Dimension(30, 30));
+
         JTextField searchField = new JTextField();
         searchField.setPreferredSize(new Dimension(300, 30));
         searchHomePanel.add(homeButton);
@@ -176,16 +182,37 @@ class Layout {
         JMenuBar menuBar = new JMenuBar();
         menuBar.setBackground(Color.LIGHT_GRAY);
         JMenu menu = new JMenu();
-        menu.setIcon(new ImageIcon("/Users/thomasforward/Documents/GitHub/Logithune/userIcon.jpg")); 
+        menu.setIcon(new ImageIcon("userIcon.jpg")); 
         menu.setPreferredSize(new Dimension(30, 30));
+
         JMenuItem loginItem = new JMenuItem("Account");
-        JMenuItem supportItem = new JMenuItem("Support");
-        JMenuItem registerItem = new JMenuItem("Settings");
-        JMenuItem logoutItem = new JMenuItem("Log out");
         menu.add(loginItem);
+        loginItem.addActionListener(e -> {
+            JOptionPane.showMessageDialog(layoutFrame, "Account settings will be implemented soon.");
+        });
+
+        JMenuItem supportItem = new JMenuItem("Support");
         menu.add(supportItem);
-        menu.add(registerItem);
+        supportItem.addActionListener(e -> {
+            JOptionPane.showMessageDialog(layoutFrame, "Support will be available soon.");
+        });
+
+        JMenuItem settingsItem = new JMenuItem("Settings");
+        menu.add(settingsItem);
+        settingsItem.addActionListener(e -> {
+            JOptionPane.showMessageDialog(layoutFrame, "Settings will be available soon.");
+        });
+
+        JMenuItem logoutItem = new JMenuItem("Log out");
         menu.add(logoutItem);
+        logoutItem.addActionListener(e -> {
+            int response = JOptionPane.showConfirmDialog(layoutFrame, "Are you sure you want to log out?", "Log Out", JOptionPane.YES_NO_OPTION);
+            if (response == JOptionPane.YES_OPTION) {
+                layoutFrame.dispose(); 
+                new Login(); 
+            }
+        });
+        
         menuBar.add(menu);
         accountMenuPanel.add(menuBar);
 
@@ -206,18 +233,16 @@ class Layout {
             clip.open(audioStream);
 
             // Start the playback and update the progress bar
-            new Thread(() -> {
-                clip.start();
-                while (clip.isRunning()) {
-                    int progress = (int) (100 * clip.getMicrosecondPosition() / clip.getMicrosecondLength());
-                    SwingUtilities.invokeLater(() -> musicBar.setValue(progress)); // Update the progress bar on the Event Dispatch Thread
-                    try {
-                        Thread.sleep(100); // Update the progress bar every 100ms
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+            clip.start();
+            while (clip.isRunning()) {
+                int progress = (int) (100 * clip.getMicrosecondPosition() / clip.getMicrosecondLength());
+                musicBar.setValue(progress);
+                try {
+                    Thread.sleep(100); // Update the progress bar every 100ms
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-            }).start();
+            }
 
         } catch (IOException | LineUnavailableException | UnsupportedAudioFileException e) {
             e.printStackTrace();
