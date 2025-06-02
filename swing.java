@@ -1,8 +1,11 @@
 import javax.swing.*;
+import java.awt.*;
+import javax.sound.sampled.*;
+import java.io.*;
 
 public class swing {
     public static void main(String[] args) {
-                Login login = new Login(); 
+                new Login(); 
     }
 }
 
@@ -56,7 +59,7 @@ class Login {
             if (usernames[i].equals(username) && passwords[i].equals(password)) {
                 JOptionPane.showMessageDialog(loginFrame, "Login successful!");
                 loginFrame.dispose(); 
-                Decryption decryption = new Decryption();
+                new Decryption();
                 return;
             }
         }
@@ -85,12 +88,14 @@ class Decryption{
         decryptionFrame.setLocationRelativeTo(null);
         decryptionFrame.setLayout(null);
 
-        JLabel textLabel = new JLabel("Encrypted Word: " + randomEncryptWord);
-        textLabel.setBounds(50, 50, 300, 30);
-        decryptionFrame.add(textLabel);
+        JLabel encryptedWordLabel = new JLabel(randomEncryptWord, SwingConstants.CENTER);
+        encryptedWordLabel.setBounds(50, 20, 300, 50);
+        encryptedWordLabel.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 24)); // Large, bold, italic font
+        encryptedWordLabel.setBorder(BorderFactory.createEmptyBorder()); 
+        decryptionFrame.add(encryptedWordLabel);
 
         JLabel keyLabel = new JLabel("Key: " + key);
-        keyLabel.setBounds(50, 20, 300, 30); 
+        keyLabel.setBounds(50, 70, 300, 30); 
         decryptionFrame.add(keyLabel);
 
         JTextField textField = new JTextField();
@@ -107,7 +112,7 @@ class Decryption{
             if (userInput.equalsIgnoreCase(decryptedWord)) {
                 JOptionPane.showMessageDialog(decryptionFrame, "Correct! The decrypted word was: " + decryptedWord);
                 decryptionFrame.dispose();
-                new MusicPlayer();
+                new Layout();
 
             } else {
                 JOptionPane.showMessageDialog(decryptionFrame, "Incorrect! Try again.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -122,6 +127,7 @@ class Decryption{
             JOptionPane.showMessageDialog(decryptionFrame, decryptHelp,"How to Decrypt", JOptionPane.INFORMATION_MESSAGE);
         });
 
+        decryptionFrame.getRootPane().setDefaultButton(decryptButton); // Set the default button for Enter key
         decryptionFrame.setVisible(true);
     }
         
@@ -137,5 +143,94 @@ class Decryption{
             }
             return decrypted.toString();
         }
+}
+
+class Layout {
+    private JFrame layoutFrame;
+
+    public Layout() {
+        layoutFrame = new JFrame("LogiThune");
+        layoutFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        layoutFrame.setSize(1000, 700);
+        layoutFrame.setLocationRelativeTo(null);
+        layoutFrame.setLayout(new BorderLayout());
+
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new BorderLayout());
+        topPanel.setBackground(Color.LIGHT_GRAY);
+        topPanel.setPreferredSize(new Dimension(1000, 50));
+
+        JPanel searchHomePanel = new JPanel();
+        searchHomePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        searchHomePanel.setBackground(Color.LIGHT_GRAY);
+        JButton homeButton = new JButton(new ImageIcon("/Users/thomasforward/Documents/GitHub/Logithune/homeIcon.jpg"));
+        homeButton.setPreferredSize(new Dimension(30, 30));
+        JTextField searchField = new JTextField();
+        searchField.setPreferredSize(new Dimension(300, 30));
+        searchHomePanel.add(homeButton);
+        searchHomePanel.add(searchField);
+
+        JPanel accountMenuPanel = new JPanel();
+        accountMenuPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        accountMenuPanel.setBackground(Color.LIGHT_GRAY);
+        JMenuBar menuBar = new JMenuBar();
+        menuBar.setBackground(Color.LIGHT_GRAY);
+        JMenu menu = new JMenu();
+        menu.setIcon(new ImageIcon("/Users/thomasforward/Documents/GitHub/Logithune/userIcon.jpg")); 
+        menu.setPreferredSize(new Dimension(30, 30));
+        JMenuItem loginItem = new JMenuItem("Account");
+        JMenuItem supportItem = new JMenuItem("Support");
+        JMenuItem registerItem = new JMenuItem("Settings");
+        JMenuItem logoutItem = new JMenuItem("Log out");
+        menu.add(loginItem);
+        menu.add(supportItem);
+        menu.add(registerItem);
+        menu.add(logoutItem);
+        menuBar.add(menu);
+        accountMenuPanel.add(menuBar);
+
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setLayout(new BorderLayout());
+        bottomPanel.setBackground(Color.LIGHT_GRAY);
+        bottomPanel.setPreferredSize(new Dimension(1000, 70));
+
+        JProgressBar musicBar = new JProgressBar(0, 100);
+        bottomPanel.add(musicBar);
+        musicBar.setPreferredSize(new Dimension(300, 20)); 
+
+        // Load the audio file
+        try {
+            File audioFile = new File("PARTYNEXTDOOR-CN-TOWER-Ft-DRAKE-(HipHopKit.com).wav.wav"); // Replace with your audio file
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioStream);
+
+            // Start the playback and update the progress bar
+            new Thread(() -> {
+                clip.start();
+                while (clip.isRunning()) {
+                    int progress = (int) (100 * clip.getMicrosecondPosition() / clip.getMicrosecondLength());
+                    SwingUtilities.invokeLater(() -> musicBar.setValue(progress)); // Update the progress bar on the Event Dispatch Thread
+                    try {
+                        Thread.sleep(100); // Update the progress bar every 100ms
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+
+        } catch (IOException | LineUnavailableException | UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        }
+
+
+        topPanel.add(searchHomePanel, BorderLayout.CENTER);
+        topPanel.add(accountMenuPanel, BorderLayout.EAST);
+
+        layoutFrame.add(topPanel, BorderLayout.NORTH);
+        layoutFrame.add(bottomPanel, BorderLayout.SOUTH);
+
+        layoutFrame.setVisible(true);
+    }
 }
 
