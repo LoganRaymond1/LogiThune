@@ -1,5 +1,7 @@
 import java.awt.*;
 import java.io.*;
+import java.util.ArrayList;
+
 import javax.sound.sampled.*;
 import javax.swing.*;
 
@@ -264,7 +266,6 @@ class Layout{
             e.printStackTrace();
         }
 
-
         topPanel.add(searchHomePanel, BorderLayout.CENTER);
         topPanel.add(accountMenuPanel, BorderLayout.EAST);
 
@@ -302,7 +303,24 @@ class Song{
 class Album{
     private String title;
     private String artist;
-    private Song[] songs;
+    private Song[] songs = new Song[]{
+        new Song("Song A", "3:45", "songA.wav"),
+        new Song("Song B", "4:20", "songB.wav"),
+        new Song("Song C", "2:50", "songC.wav"),
+        new Song("Song D", "5:10", "songD.wav"),
+        new Song("Song E", "3:30", "songE.wav"),
+        new Song("Song F", "4:00", "songF.wav"),
+        new Song("Song G", "3:15", "songG.wav"),
+        new Song("Song H", "4:05", "songH.wav"),
+        new Song("Song I", "3:50", "songI.wav"),
+        new Song("Song J", "4:25", "songJ.wav"),
+        new Song("Song K", "2:55", "songK.wav"),
+        new Song("Song L", "5:15", "songL.wav"),
+        new Song("Song M", "3:40", "songM.wav"),
+        new Song("Song N", "4:30", "songN.wav"),
+        new Song("Song O", "3:20", "songO.wav"),
+        new Song("Song P", "4:10", "songP.wav")
+    };
 
     public Album(String title, String artist, Song[] songs) {
         this.title = title;
@@ -328,11 +346,7 @@ class Album{
         albumCover.setHorizontalAlignment(SwingConstants.CENTER);
         albumCover.setPreferredSize(new Dimension(300, 300));
         ImageIcon albumImage = new ImageIcon("cnTower.png"); // Replace with actual album cover image
-        if (albumImage.getIconWidth() == -1) {
-            System.out.println("Failed to load image. Check the file path.");
-        } else {
-            albumCover.setIcon(albumImage);
-        }
+        albumCover.setIcon(albumImage);
         albumCover.setAlignmentX(Component.CENTER_ALIGNMENT); // Center-align within the panel
 
         // Album title
@@ -359,16 +373,46 @@ class Album{
 
         // Song panel for the list of songs
         JPanel songPanel = new JPanel();
-        songPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 125)); // Use FlowLayout to center the songListPanel
-        songPanel.setPreferredSize(new Dimension(600, 600)); // Set preferred size for songPanel
+        songPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 125)); 
+        songPanel.setPreferredSize(new Dimension(600, 600)); 
 
         // Song list panel
         JPanel songListPanel = new JPanel();
-        songListPanel.setPreferredSize(new Dimension(500, 500)); // Set preferred size for songListPanel
-        songListPanel.setLayout(new GridLayout(8, 2)); // Use GridLayout for song list
-        songListPanel.setBackground(Color.BLUE); // Set background color for the song list panel
-        //songListPanel.setLocation(400, 300);
-
+        songListPanel.setPreferredSize(new Dimension(500, 500)); 
+        songListPanel.setLayout(new GridLayout(8, (int)Math.ceil(songs.length/8), 5, 5)); 
+        songListPanel.setBackground(Color.WHITE); 
+        
+        for (int i = 0; i < 16; i++) { // Assuming 8 rows and 2 columns (8x2 grid)
+            //if (i >= songs.length) break; // Prevent ArrayIndexOutOfBoundsException if fewer than 16 songs
+            final int index = i; 
+            JButton songButton = new JButton("Song " + (index + 1)); // Create a button for each song
+            songButton.setBackground(Color.WHITE); // Set background color for each button
+            songButton.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Add a black border to each button
+        
+            // Add an ActionListener to handle button clicks
+            songButton.addActionListener(e -> {
+            // Change the button's appearance to make it noticeable
+            songButton.setBackground(Color.YELLOW); // Highlight the button
+            songButton.setText("Playing..."); // Change the text temporarily
+    
+            // Print the song name to the console
+            System.out.println("Playing: " + songButton.getText());
+    
+            // Show a dialog box
+            JOptionPane.showMessageDialog(album, "Playing: " + songButton.getText(), "Now Playing", JOptionPane.INFORMATION_MESSAGE);
+    
+            // Revert the button's appearance after a short delay
+            Timer timer = new Timer(1000, event -> {
+                songButton.setBackground(Color.WHITE); // Reset background color
+                songButton.setText("Song " + (index + 1)); // Reset the text
+            });
+            timer.setRepeats(false); // Ensure the timer only runs once
+            timer.start();
+        });
+        
+            songListPanel.add(songButton); // Add the button to the songListPanel
+        }
+       
         // Add songListPanel to songPanel
         songPanel.add(songListPanel);
 
