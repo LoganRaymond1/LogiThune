@@ -1,9 +1,9 @@
 import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
-
 import javax.sound.sampled.*;
 import javax.swing.*;
+import javax.swing.border.Border;
 
 public class swing {
     public static void main(String[] args) {
@@ -11,9 +11,24 @@ public class swing {
                 //new Layout();
                 
                  Album tower = new Album("cn", "drake", new Song[]{
-                    new Song("Song 1", "3:45", "song1.wav"),
-                    new Song("Song 2", "4:20", "song2.wav"),
-                    new Song("Song 3", "2:50", "song3.wav")
+                    new Song("Song A", "3:45", "songA.wav"),
+                    new Song("Song B", "4:20", "songB.wav"),
+                    new Song("Song C", "2:50", "songC.wav"),
+                    new Song("Song D", "5:10", "songD.wav"),
+                    new Song("Song E", "3:30", "songE.wav"),
+                    new Song("Song F", "4:00", "songF.wav"),
+                    new Song("Song G", "3:15", "songG.wav"),
+                    new Song("Song H", "4:05", "songH.wav"),
+                    new Song("Song I", "3:50", "songI.wav"),
+                    new Song("Song J", "4:25", "songJ.wav"),
+                    new Song("Song K", "2:55", "songK.wav"),
+                    new Song("Song L", "5:15", "songL.wav"),
+                    new Song("Song M", "3:40", "songM.wav"),
+                    new Song("Song N", "4:30", "songN.wav"),
+                    new Song("Song O", "3:20", "songO.wav"),
+                    new Song("Song P", "4:10", "songP.wav"),
+                    new Song("Song Q", "3:55", "songQ.wav"),
+                   
                 });
                 tower.albumFrame();
                 
@@ -300,27 +315,33 @@ class Song{
     }
 }
 
+class RoundedBorder implements Border {
+    private int radius;
+
+    public RoundedBorder(int radius) {
+        this.radius = radius;
+    }
+
+    @Override
+    public Insets getBorderInsets(Component c) {
+        return new Insets(radius + 1, radius + 1, radius + 1, radius + 1);
+    }
+
+    @Override
+    public boolean isBorderOpaque() {
+        return true;
+    }
+
+    @Override
+    public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+        g.drawRoundRect(x, y, width - 1, height - 1, radius, radius);
+    }
+}
+
 class Album{
     private String title;
     private String artist;
-    private Song[] songs = new Song[]{
-        new Song("Song A", "3:45", "songA.wav"),
-        new Song("Song B", "4:20", "songB.wav"),
-        new Song("Song C", "2:50", "songC.wav"),
-        new Song("Song D", "5:10", "songD.wav"),
-        new Song("Song E", "3:30", "songE.wav"),
-        new Song("Song F", "4:00", "songF.wav"),
-        new Song("Song G", "3:15", "songG.wav"),
-        new Song("Song H", "4:05", "songH.wav"),
-        new Song("Song I", "3:50", "songI.wav"),
-        new Song("Song J", "4:25", "songJ.wav"),
-        new Song("Song K", "2:55", "songK.wav"),
-        new Song("Song L", "5:15", "songL.wav"),
-        new Song("Song M", "3:40", "songM.wav"),
-        new Song("Song N", "4:30", "songN.wav"),
-        new Song("Song O", "3:20", "songO.wav"),
-        new Song("Song P", "4:10", "songP.wav")
-    };
+    private Song[] songs;
 
     public Album(String title, String artist, Song[] songs) {
         this.title = title;
@@ -373,38 +394,80 @@ class Album{
 
         // Song panel for the list of songs
         JPanel songPanel = new JPanel();
-        songPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 125)); 
+        songPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 90)); 
         songPanel.setPreferredSize(new Dimension(600, 600)); 
 
         // Song list panel
         JPanel songListPanel = new JPanel();
         songListPanel.setPreferredSize(new Dimension(500, 500)); 
-        songListPanel.setLayout(new GridLayout(8, (int)Math.ceil(songs.length/8), 5, 5)); 
-        songListPanel.setBackground(Color.WHITE); 
+        songListPanel.setLayout(new GridLayout(0, 2, 5, 5)); 
+        songListPanel.setOpaque(false);
         
         for (int i = 0; i < songs.length; i++) { 
             Song song = songs[i];
-            final int index = i; // Capture the current index for the action listener
-            JButton songButton = new JButton(index+1 + ". " + song.getTitle() + "\t\t\t\t\t\t\t\t\t" + song.getDuration());
-            songButton.setFont(new Font("Arial", Font.PLAIN, 16)); // Set font for the button
-            
-            songButton.setBackground(Color.WHITE); // Set background color for each button
-            songButton.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Add a black border to each button
+            String songNumber = (i + 1) + ". ";
+            String songTitle = song.getTitle();
+            String songDuration = song.getDuration();
+        
+            JPanel buttonContent = new JPanel(new BorderLayout());
+            buttonContent.setOpaque(false); 
+        
+            JLabel numberLabel = new JLabel(songNumber);
+            numberLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        
+            JLabel titleLabel = new JLabel(songTitle);
+            titleLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        
+            JLabel durationLabel = new JLabel(songDuration);
+            durationLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+            durationLabel.setHorizontalAlignment(SwingConstants.RIGHT); 
+
+            JLabel playLabel = new JLabel("▶ ");
+            playLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        
+            buttonContent.add(numberLabel, BorderLayout.WEST); 
+            buttonContent.add(titleLabel, BorderLayout.CENTER); 
+            buttonContent.add(durationLabel, BorderLayout.EAST); 
+        
+            JButton songButton = new JButton();
+            songButton.setLayout(new BorderLayout());
+            songButton.add(buttonContent, BorderLayout.CENTER);
+            songButton.setBackground(Color.WHITE); 
+            songButton.setBorder(new RoundedBorder(10)); 
+            songButton.setContentAreaFilled(false);
+            songButton.setOpaque(true);
             
             songButton.addActionListener(e -> {
-                // Change the button's appearance to make it noticeable
-                //songButton.setBackground(Color.YELLOW); 
-                songButton.setText("Playing..."); // Change the text temporarily           
+                songButton.setText("Playing...");          
         
                 // Revert the button's appearance after a short delay
                 Timer timer = new Timer(1000, event -> {
-                    songButton.setBackground(Color.WHITE); // Reset background color
-                    songButton.setText(index+1 + ". " + song.getTitle() + "\t\t\t" + song.getDuration());
+                    songButton.setBackground(Color.WHITE); 
                 });
                 timer.setRepeats(false); // Ensure the timer only runs once
                 timer.start();
             });
-            songButton.setPreferredSize(new Dimension(200, 50)); // Set a preferred size for the button
+
+            songButton.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseEntered(java.awt.event.MouseEvent e) {
+                    buttonContent.remove(numberLabel); 
+                    buttonContent.add(playLabel, BorderLayout.WEST); 
+                    buttonContent.revalidate();
+                    buttonContent.repaint(); 
+                    //buttonContent.setBackground(Color.LIGHT_GRAY); 
+                }
+
+                @Override
+                public void mouseExited(java.awt.event.MouseEvent evt) {
+                    buttonContent.remove(playLabel); 
+                    buttonContent.add(numberLabel, BorderLayout.WEST); 
+                    buttonContent.revalidate(); 
+                    buttonContent.repaint(); 
+                    //buttonContent.setBackground(Color.WHITE); 
+                }
+            });
+            
             songListPanel.add(songButton); // Add the button to the songListPanel
         }
        
