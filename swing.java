@@ -5,13 +5,16 @@ import javax.swing.*;
 
 public class swing {
     public static void main(String[] args) {
-                //new Login(); 
+                new Login(); 
+                //new Layout();
+                /*/
                  Album tower = new Album("cn", "drake", new Song[]{
                     new Song("Song 1", "3:45", "song1.wav"),
                     new Song("Song 2", "4:20", "song2.wav"),
                     new Song("Song 3", "2:50", "song3.wav")
                 });
                 tower.albumFrame();
+                */
                 
     }
 }
@@ -173,23 +176,29 @@ class Layout{
         searchHomePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
         searchHomePanel.setBackground(Color.LIGHT_GRAY);
 
-        ImageIcon homeIcon = new ImageIcon("homeIcon.jpg");
+        ImageIcon homeIcon = new ImageIcon("homeIcon.png");
         Image scaledImage = homeIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         JButton homeButton = new JButton(new ImageIcon(scaledImage));
         homeButton.setPreferredSize(new Dimension(30, 30));
+        homeButton.setBorder(BorderFactory.createEmptyBorder());
 
         JTextField searchField = new JTextField();
         searchField.setPreferredSize(new Dimension(300, 30));
+        searchField.setToolTipText("Search for songs, albums, or artists");
+
         searchHomePanel.add(homeButton);
         searchHomePanel.add(searchField);
-
+        
         JPanel accountMenuPanel = new JPanel();
         accountMenuPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10));
         accountMenuPanel.setBackground(Color.LIGHT_GRAY);
         JMenuBar menuBar = new JMenuBar();
         menuBar.setBackground(Color.LIGHT_GRAY);
         JMenu menu = new JMenu();
-        menu.setIcon(new ImageIcon("userIcon.jpg")); 
+        ImageIcon userIcon = new ImageIcon("userIcon.jpg");
+        Image scaledImageUser = userIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        menu.setIcon(new ImageIcon(scaledImageUser)); 
+        menu.setBorder(BorderFactory.createEmptyBorder());
         menu.setPreferredSize(new Dimension(30, 30));
 
         JMenuItem loginItem = new JMenuItem("Account");
@@ -308,41 +317,58 @@ class Album{
         album.setLocationRelativeTo(null);
         album.setLayout(new BorderLayout());
 
-        // Create a panel for the album cover and title
+        // Create a panel for the album cover, title, and artist
         JPanel albumPanel = new JPanel();
-        albumPanel.setSize(400, 600);
-        // Set layout for albumPanel to display components horizontally
-        albumPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 20));
+        albumPanel.setPreferredSize(new Dimension(400, 600));
+        albumPanel.setLayout(new BoxLayout(albumPanel, BoxLayout.Y_AXIS)); // Use vertical layout
+        albumPanel.setBackground(Color.DARK_GRAY); // Set background color for the album panel
 
+        // Album cover
         JLabel albumCover = new JLabel();
         albumCover.setHorizontalAlignment(SwingConstants.CENTER);
-        //albumCover.setPreferredSize(new Dimension(200, 200));
+        albumCover.setPreferredSize(new Dimension(300, 300));
         ImageIcon albumImage = new ImageIcon("cnTower.png"); // Replace with actual album cover image
         if (albumImage.getIconWidth() == -1) {
             System.out.println("Failed to load image. Check the file path.");
         } else {
-            albumCover.setIcon(new ImageIcon(albumImage.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH)));
+            albumCover.setIcon(albumImage);
         }
+        albumCover.setAlignmentX(Component.CENTER_ALIGNMENT); // Center-align within the panel
 
-        // Add components to albumPanel horizontally
-        albumPanel.add(albumCover);
-
+        // Album title
         JLabel albumTitle = new JLabel(title, SwingConstants.CENTER);
-        albumTitle.setFont(new Font("Arial", Font.BOLD, 24));
-        albumTitle.setLocation(200, 400);
+        albumTitle.setFont(new Font("Arial", Font.BOLD, 30));
+        albumTitle.setAlignmentX(Component.CENTER_ALIGNMENT); // Center-align within the panel
 
+        // Album artist
         JLabel albumArtist = new JLabel(artist, SwingConstants.CENTER);
         albumArtist.setFont(new Font("Arial", Font.ITALIC, 18));
-        albumArtist.setLocation(200, 450);
+        albumArtist.setAlignmentX(Component.CENTER_ALIGNMENT); // Center-align within the panel
 
+        // Add spacing and components to the album panel
+        albumPanel.add(Box.createVerticalGlue()); // Add flexible space at the top
+        albumPanel.add(albumCover);
+        albumPanel.add(Box.createVerticalStrut(25)); // Add space between the cover and title
         albumPanel.add(albumTitle);
+        albumPanel.add(Box.createVerticalStrut(10)); // Add space between the title and artist
         albumPanel.add(albumArtist);
+        albumPanel.add(Box.createVerticalGlue()); // Add flexible space at the bottom
 
         // Add albumPanel to the frame
-        album.add(albumPanel, BorderLayout.NORTH);        
+        album.add(albumPanel, BorderLayout.WEST);
 
+        // Song panel for the list of songs
         JPanel songPanel = new JPanel();
-        songPanel.setLayout(new GridLayout(songs.length/2, 2));
+        songPanel.setSize(600,600);
+        JPanel songListPanel = new JPanel();
+        songListPanel.setSize(400,400);
+        songListPanel.setLayout(new GridLayout(8,2));
+        songListPanel.setBackground(Color.LIGHT_GRAY); // Set background color for the song list panel
+        songPanel.setLayout(new BorderLayout());
+
+
+        // Add the song panel to the frame
+        album.add(songPanel, BorderLayout.EAST);
 
         album.setVisible(true);
 
