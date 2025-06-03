@@ -5,16 +5,16 @@ import javax.swing.*;
 
 public class swing {
     public static void main(String[] args) {
-                new Login(); 
+                //new Login(); 
                 //new Layout();
-                /*/
+                
                  Album tower = new Album("cn", "drake", new Song[]{
                     new Song("Song 1", "3:45", "song1.wav"),
                     new Song("Song 2", "4:20", "song2.wav"),
                     new Song("Song 3", "2:50", "song3.wav")
                 });
                 tower.albumFrame();
-                */
+                
                 
     }
 }
@@ -359,15 +359,20 @@ class Album{
 
         // Song panel for the list of songs
         JPanel songPanel = new JPanel();
-        songPanel.setSize(600,600);
+        songPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 125)); // Use FlowLayout to center the songListPanel
+        songPanel.setPreferredSize(new Dimension(600, 600)); // Set preferred size for songPanel
+
+        // Song list panel
         JPanel songListPanel = new JPanel();
-        songListPanel.setSize(400,400);
-        songListPanel.setLayout(new GridLayout(8,2));
-        songListPanel.setBackground(Color.LIGHT_GRAY); // Set background color for the song list panel
-        songPanel.setLayout(new BorderLayout());
+        songListPanel.setPreferredSize(new Dimension(500, 500)); // Set preferred size for songListPanel
+        songListPanel.setLayout(new GridLayout(8, 2)); // Use GridLayout for song list
+        songListPanel.setBackground(Color.BLUE); // Set background color for the song list panel
+        //songListPanel.setLocation(400, 300);
 
+        // Add songListPanel to songPanel
+        songPanel.add(songListPanel);
 
-        // Add the song panel to the frame
+        // Add songPanel to the frame
         album.add(songPanel, BorderLayout.EAST);
 
         album.setVisible(true);
