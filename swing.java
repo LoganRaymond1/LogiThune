@@ -1,7 +1,7 @@
-import javax.swing.*;
 import java.awt.*;
-import javax.sound.sampled.*;
 import java.io.*;
+import javax.sound.sampled.*;
+import javax.swing.*;
 
 public class swing {
     public static void main(String[] args) {
@@ -311,14 +311,21 @@ class Album{
         // Create a panel for the album cover and title
         JPanel albumPanel = new JPanel();
         albumPanel.setSize(400, 600);
-        albumPanel.setLayout(new BorderLayout());
-        
+        // Set layout for albumPanel to display components horizontally
+        albumPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 20));
+
         JLabel albumCover = new JLabel();
         albumCover.setHorizontalAlignment(SwingConstants.CENTER);
-        albumCover.setPreferredSize(new Dimension(200, 200));
+        //albumCover.setPreferredSize(new Dimension(200, 200));
         ImageIcon albumImage = new ImageIcon("cnTower.png"); // Replace with actual album cover image
-        albumCover.setIcon(new ImageIcon(albumImage.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH)));
-        albumCover.setLocation(100, 150);
+        if (albumImage.getIconWidth() == -1) {
+            System.out.println("Failed to load image. Check the file path.");
+        } else {
+            albumCover.setIcon(new ImageIcon(albumImage.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH)));
+        }
+
+        // Add components to albumPanel horizontally
+        albumPanel.add(albumCover);
 
         JLabel albumTitle = new JLabel(title, SwingConstants.CENTER);
         albumTitle.setFont(new Font("Arial", Font.BOLD, 24));
@@ -328,12 +335,11 @@ class Album{
         albumArtist.setFont(new Font("Arial", Font.ITALIC, 18));
         albumArtist.setLocation(200, 450);
 
-        albumPanel.add(albumCover);
         albumPanel.add(albumTitle);
         albumPanel.add(albumArtist);
 
-        album.add(albumPanel, BorderLayout.WEST);
-        
+        // Add albumPanel to the frame
+        album.add(albumPanel, BorderLayout.NORTH);        
 
         JPanel songPanel = new JPanel();
         songPanel.setLayout(new GridLayout(songs.length/2, 2));
