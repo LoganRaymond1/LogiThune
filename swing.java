@@ -382,34 +382,29 @@ class Album{
         songListPanel.setLayout(new GridLayout(8, (int)Math.ceil(songs.length/8), 5, 5)); 
         songListPanel.setBackground(Color.WHITE); 
         
-        for (int i = 0; i < 16; i++) { // Assuming 8 rows and 2 columns (8x2 grid)
-            //if (i >= songs.length) break; // Prevent ArrayIndexOutOfBoundsException if fewer than 16 songs
-            final int index = i; 
-            JButton songButton = new JButton("Song " + (index + 1)); // Create a button for each song
+        for (int i = 0; i < songs.length; i++) { 
+            Song song = songs[i];
+            final int index = i; // Capture the current index for the action listener
+            JButton songButton = new JButton(index+1 + ". " + song.getTitle() + "\t\t\t\t\t\t\t\t\t" + song.getDuration());
+            songButton.setFont(new Font("Arial", Font.PLAIN, 16)); // Set font for the button
+            
             songButton.setBackground(Color.WHITE); // Set background color for each button
             songButton.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Add a black border to each button
-        
-            // Add an ActionListener to handle button clicks
+            
             songButton.addActionListener(e -> {
-            // Change the button's appearance to make it noticeable
-            songButton.setBackground(Color.YELLOW); // Highlight the button
-            songButton.setText("Playing..."); // Change the text temporarily
-    
-            // Print the song name to the console
-            System.out.println("Playing: " + songButton.getText());
-    
-            // Show a dialog box
-            JOptionPane.showMessageDialog(album, "Playing: " + songButton.getText(), "Now Playing", JOptionPane.INFORMATION_MESSAGE);
-    
-            // Revert the button's appearance after a short delay
-            Timer timer = new Timer(1000, event -> {
-                songButton.setBackground(Color.WHITE); // Reset background color
-                songButton.setText("Song " + (index + 1)); // Reset the text
-            });
-            timer.setRepeats(false); // Ensure the timer only runs once
-            timer.start();
-        });
+                // Change the button's appearance to make it noticeable
+                //songButton.setBackground(Color.YELLOW); 
+                songButton.setText("Playing..."); // Change the text temporarily           
         
+                // Revert the button's appearance after a short delay
+                Timer timer = new Timer(1000, event -> {
+                    songButton.setBackground(Color.WHITE); // Reset background color
+                    songButton.setText(index+1 + ". " + song.getTitle() + "\t\t\t" + song.getDuration());
+                });
+                timer.setRepeats(false); // Ensure the timer only runs once
+                timer.start();
+            });
+            songButton.setPreferredSize(new Dimension(200, 50)); // Set a preferred size for the button
             songListPanel.add(songButton); // Add the button to the songListPanel
         }
        
