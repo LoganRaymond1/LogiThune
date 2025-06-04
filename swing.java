@@ -1,6 +1,5 @@
 import java.awt.*;
 import java.io.*;
-import java.util.ArrayList;
 import javax.sound.sampled.*;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -8,8 +7,8 @@ import javax.swing.border.Border;
 public class swing {
     public static void main(String[] args) {
                 //new Login(); 
-                //new Layout();
-                
+                new Layout();
+                /*
                  Album tower = new Album("cn", "drake", new Song[]{
                     new Song("Song A", "3:45", "songA.wav"),
                     new Song("Song B", "4:20", "songB.wav"),
@@ -31,6 +30,7 @@ public class swing {
                    
                 });
                 tower.albumFrame();
+                */
                 
                 
     }
@@ -250,14 +250,16 @@ class Layout{
         accountMenuPanel.add(menuBar);
 
         JPanel bottomPanel = new JPanel();
-        bottomPanel.setLayout(new BorderLayout());
+        bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
         bottomPanel.setBackground(Color.LIGHT_GRAY);
         bottomPanel.setPreferredSize(new Dimension(1000, 70));
-
-        JProgressBar musicBar = new JProgressBar(0, 100);
-        bottomPanel.add(musicBar);
-        musicBar.setPreferredSize(new Dimension(300, 20)); 
-
+        
+        
+        JSlider playbackSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
+        playbackSlider.setBounds(350, 670, 650, 630);
+        playbackSlider.setPreferredSize(new Dimension(400, 30));
+        playbackSlider.setBackground(null);
+        bottomPanel.add(playbackSlider);
         // Load the audio file
         try {
             File audioFile = new File("PARTYNEXTDOOR-CN-TOWER-Ft-DRAKE-(HipHopKit.com).wav.wav"); // Replace with your audio file
@@ -269,7 +271,7 @@ class Layout{
             clip.start();
             while (clip.isRunning()){
                 int progress = (int) (100 * clip.getMicrosecondPosition() / clip.getMicrosecondLength());
-                musicBar.setValue(progress);
+                playbackSlider.setValue(progress);
                 try{
                     Thread.sleep(100); // Update the progress bar every 100ms
                 } catch (InterruptedException e){
@@ -295,6 +297,10 @@ class Song{
     private String title;
     private String duration;
     private String filePath;
+    private boolean isPaused;
+    private boolean isLooping;
+    private Clip clip;
+
 
     public Song(String title, String duration, String filePath) {
         this.title = title;
@@ -313,6 +319,39 @@ class Song{
     public String getFilePath() {
         return filePath;
     }
+/* 
+    private void playMusic(int songIndex) {
+        File file = null;
+
+        isPaused = false;
+        pauseButton.setText("Pause");
+
+        if (clip != null && clip.isRunning()) {
+            clip.stop();
+        }
+
+        try {
+            if(songNumber == 1) {
+                file = new File("PARTYNEXTDOOR-CN-TOWER-Ft-DRAKE-(HipHopKit.com).wav");
+            } else if(songNumber == 2) {
+                file = new File("Spongebob Squarepants.wav");
+            }
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
+
+            clip = AudioSystem.getClip();
+            clip.open(audioIn);
+
+            if (isLooping) {
+                clip.loop(Clip.LOOP_CONTINUOUSLY);
+            }
+
+            clip.start();
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+        */
 }
 
 class RoundedBorder implements Border {
@@ -455,7 +494,8 @@ class Album{
                     buttonContent.add(playLabel, BorderLayout.WEST); 
                     buttonContent.revalidate();
                     buttonContent.repaint(); 
-                    //buttonContent.setBackground(Color.LIGHT_GRAY); 
+                    buttonContent.setBackground(Color.LIGHT_GRAY); 
+                    songButton.setBackground(Color.LIGHT_GRAY); 
                 }
 
                 @Override
