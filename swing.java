@@ -8,8 +8,8 @@ public class swing {
     public static void main(String[] args) {
                 //new Login(); 
                 new Layout();
-                /*
-                 Album tower = new Album("cn", "drake", new Song[]{
+                
+                /*Album tower = new Album("cn", "drake", new Song[]{
                     new Song("Song A", "3:45", "songA.wav"),
                     new Song("Song B", "4:20", "songB.wav"),
                     new Song("Song C", "2:50", "songC.wav"),
@@ -29,8 +29,8 @@ public class swing {
                     new Song("Song Q", "3:55", "songQ.wav"),
                    
                 });
-                tower.albumFrame();
-                */
+                tower.albumFrame();*/
+                
                 
                 
     }
@@ -250,19 +250,47 @@ class Layout{
         accountMenuPanel.add(menuBar);
 
         JPanel bottomPanel = new JPanel();
-        bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
-        bottomPanel.setBackground(Color.LIGHT_GRAY);
+        bottomPanel.setLayout(new BorderLayout());
         bottomPanel.setPreferredSize(new Dimension(1000, 70));
-        
+        bottomPanel.setBackground(Color.LIGHT_GRAY);
+
+        // Left panel for album cover and song title
+        JPanel leftPanel = new JPanel();
+        leftPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10)); // Align to the left
+        leftPanel.setBackground(Color.LIGHT_GRAY);
+
+        JLabel albumCover = new JLabel();
+        albumCover.setPreferredSize(new Dimension(40, 40)); 
+        ImageIcon albumImage = new ImageIcon("cnTower.png"); 
+        Image scaledAlbumImage = albumImage.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+        albumCover.setIcon(new ImageIcon(scaledAlbumImage));
+
+        JLabel songTitle = new JLabel("Song Title");
+        songTitle.setFont(new Font("Arial", Font.BOLD, 16));
+
+        leftPanel.add(albumCover);
+        leftPanel.add(songTitle);
+
+        // Center panel for playback bar and play button
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10)); // Center-align
+        centerPanel.setBackground(Color.LIGHT_GRAY);
+
+        JButton pauseButton = new JButton("⏸"); // Play button
+        pauseButton.setPreferredSize(new Dimension(40, 40));
+        pauseButton.setFont(new Font("Arial", Font.BOLD, 16));
+        pauseButton.setFocusPainted(false);
+        centerPanel.add(pauseButton);
+
         
         JSlider playbackSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
         playbackSlider.setBounds(350, 670, 650, 630);
         playbackSlider.setPreferredSize(new Dimension(400, 30));
         playbackSlider.setBackground(null);
-        bottomPanel.add(playbackSlider);
+        centerPanel.add(playbackSlider);
         // Load the audio file
         try {
-            File audioFile = new File("PARTYNEXTDOOR-CN-TOWER-Ft-DRAKE-(HipHopKit.com).wav.wav"); // Replace with your audio file
+            File audioFile = new File("PARTYNEXTDOOR-CN-TOWER-Ft-DRAKE-(HipHopKit.com).wav"); // Replace with your audio file
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
             Clip clip = AudioSystem.getClip();
             clip.open(audioStream);
@@ -282,6 +310,39 @@ class Layout{
         } catch (IOException | LineUnavailableException | UnsupportedAudioFileException e){
             e.printStackTrace();
         }
+
+        JPanel rightPanel = new JPanel();
+        rightPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10)); // Align to the right
+        rightPanel.setBackground(Color.LIGHT_GRAY);
+
+        JButton previousButton = new JButton("◀");
+        previousButton.setPreferredSize(new Dimension(40, 40));
+        previousButton.setFont(new Font("Arial", Font.BOLD, 16));
+        previousButton.setFocusPainted(false);
+        rightPanel.add(previousButton);
+
+        JButton nextButton = new JButton("▶");
+        nextButton.setPreferredSize(new Dimension(40, 40));
+        nextButton.setFont(new Font("Arial", Font.BOLD, 16));
+        nextButton.setFocusPainted(false);
+        rightPanel.add(nextButton);
+
+        JButton shuffleButton = new JButton("🔀");
+        shuffleButton.setPreferredSize(new Dimension(40, 40));
+        shuffleButton.setFont(new Font("Arial", Font.BOLD, 16));
+        shuffleButton.setFocusPainted(false);
+        rightPanel.add(shuffleButton);
+        
+        JButton loopButton = new JButton("🔁");
+        loopButton.setPreferredSize(new Dimension(40, 40));
+        loopButton.setFont(new Font("Arial", Font.BOLD, 16));
+        loopButton.setFocusPainted(false);
+        rightPanel.add(loopButton);
+
+
+        bottomPanel.add(rightPanel, BorderLayout.EAST);
+        bottomPanel.add(leftPanel, BorderLayout.WEST);
+        bottomPanel.add(centerPanel, BorderLayout.CENTER);
 
         topPanel.add(searchHomePanel, BorderLayout.CENTER);
         topPanel.add(accountMenuPanel, BorderLayout.EAST);
@@ -504,7 +565,7 @@ class Album{
                     buttonContent.add(numberLabel, BorderLayout.WEST); 
                     buttonContent.revalidate(); 
                     buttonContent.repaint(); 
-                    //buttonContent.setBackground(Color.WHITE); 
+                    songButton.setBackground(Color.WHITE); 
                 }
             });
             
