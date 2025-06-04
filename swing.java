@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.event.*;
 import java.io.*;
 import javax.sound.sampled.*;
 import javax.swing.*;
@@ -315,8 +316,7 @@ class Layout{
         pauseButton.setFocusPainted(false);
         centerPanel.add(pauseButton);
 
-        
-        JSlider playbackSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
+               JSlider playbackSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
         playbackSlider.setBounds(350, 670, 650, 630);
         playbackSlider.setPreferredSize(new Dimension(400, 30));
         playbackSlider.setBackground(null);
@@ -327,19 +327,31 @@ class Layout{
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
             Clip clip = AudioSystem.getClip();
             clip.open(audioStream);
-
-            // Start the playback and update the progress bar
             clip.start();
-            while (clip.isRunning()){
-                int progress = (int) (100 * clip.getMicrosecondPosition() / clip.getMicrosecondLength());
-                playbackSlider.setValue(progress);
-                try{
-                    Thread.sleep(100); // Update the progress bar every 100ms
-                } catch (InterruptedException e){
-                    e.printStackTrace();
+            playbackSlider.setMaximum(clip.getFrameLength());
+            playbackSlider.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    if (clip.isRunning()) {
+                        clip.stop();
+                    }
                 }
-            }
 
+                @Override
+                public void mouseReleased(MouseEvent e){
+                    int newPosition = playbackSlider.getValue();
+                    clip.setFramePosition(newPosition);
+                        clip.start();
+                }
+            });
+        
+
+            Timer timer = new Timer(100, e -> {
+                if (clip.isOpen() && clip.isRunning()) {
+                    playbackSlider.setValue(clip.getFramePosition());
+                }
+            });
+            timer.start();
         } catch (IOException | LineUnavailableException | UnsupportedAudioFileException e){
             e.printStackTrace();
         }
