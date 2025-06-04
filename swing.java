@@ -27,7 +27,6 @@ public class swing {
                     new Song("Song O", "3:20", "songO.wav"),
                     new Song("Song P", "4:10", "songP.wav"),
                     new Song("Song Q", "3:55", "songQ.wav"),
-                   
                 });
                 tower.albumFrame();*/
                 
@@ -38,6 +37,7 @@ public class swing {
 
 class Login {
     protected JFrame loginFrame;
+    public boolean songOn;
 
     private JTextField username;
     private JPasswordField password;
@@ -173,7 +173,8 @@ class Decryption{
 }
 
 class Layout{
-    private JFrame layoutFrame;
+    private static JFrame layoutFrame;
+    public static boolean songOn; 
 
     public Layout() {
         layoutFrame = new JFrame("LogiThune");
@@ -183,11 +184,28 @@ class Layout{
         layoutFrame.setLayout(new BorderLayout());
 
 
+        JPanel topPanel = homeSearchPanel(layoutFrame);        
+
+        if(songOn) {
+            JPanel bottomPanel = musicPanel();
+            layoutFrame.add(bottomPanel, BorderLayout.SOUTH);
+        }
+        
+        JPanel rightPanel = rightPanel();
+        layoutFrame.add(rightPanel, BorderLayout.EAST);
+
+        
+
+        layoutFrame.add(topPanel, BorderLayout.NORTH);
+
+        layoutFrame.setVisible(true);
+    }
+
+    public static JPanel homeSearchPanel(JFrame currentFrame) {
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new BorderLayout());
         topPanel.setBackground(Color.LIGHT_GRAY);
         topPanel.setPreferredSize(new Dimension(1000, 50));
-
 
         JPanel searchHomePanel = new JPanel();
         searchHomePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
@@ -197,7 +215,15 @@ class Layout{
         Image scaledImage = homeIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         JButton homeButton = new JButton(new ImageIcon(scaledImage));
         homeButton.setPreferredSize(new Dimension(30, 30));
-        homeButton.setBorder(BorderFactory.createEmptyBorder());
+        homeButton.setBorder(new RoundedBorder(10)); 
+        homeButton.setBackground(Color.WHITE);
+        homeButton.setContentAreaFilled(false);
+        homeButton.setOpaque(true);
+        homeButton.addActionListener(e -> {
+            currentFrame.dispose(); 
+            new Layout(); 
+        });
+        homeButton.setToolTipText("Go to Home");
 
         JTextField searchField = new JTextField();
         searchField.setPreferredSize(new Dimension(300, 30));
@@ -249,6 +275,13 @@ class Layout{
         menuBar.add(menu);
         accountMenuPanel.add(menuBar);
 
+        topPanel.add(searchHomePanel, BorderLayout.CENTER);
+        topPanel.add(accountMenuPanel, BorderLayout.EAST);
+
+        return topPanel;
+    }
+
+    public static JPanel musicPanel() {
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new BorderLayout());
         bottomPanel.setPreferredSize(new Dimension(1000, 70));
@@ -339,18 +372,144 @@ class Layout{
         loopButton.setFocusPainted(false);
         rightPanel.add(loopButton);
 
-
         bottomPanel.add(rightPanel, BorderLayout.EAST);
         bottomPanel.add(leftPanel, BorderLayout.WEST);
         bottomPanel.add(centerPanel, BorderLayout.CENTER);
 
-        topPanel.add(searchHomePanel, BorderLayout.CENTER);
-        topPanel.add(accountMenuPanel, BorderLayout.EAST);
+        return bottomPanel;
+    }
 
-        layoutFrame.add(topPanel, BorderLayout.NORTH);
-        layoutFrame.add(bottomPanel, BorderLayout.SOUTH);
+    private JPanel rightPanel() {
+        // Create the main panel for the right section
+        JPanel rightPanel = new JPanel();
+        rightPanel.setPreferredSize(new Dimension(700, 700)); // Extend up to 700 pixels from the right
+        rightPanel.setLayout(new BorderLayout()); // Use BorderLayout for structure
+        rightPanel.setBackground(Color.LIGHT_GRAY);
+    
+        // Top panel for the "Your Section" label and sort buttons
+        JPanel topSectionPanel = new JPanel();
+        topSectionPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10)); // Align to the left
+        topSectionPanel.setBackground(Color.LIGHT_GRAY);
+    
+        JLabel sectionLabel = new JLabel("Your Section");
+        sectionLabel.setFont(new Font("Arial", Font.BOLD, 20));
+    
+        JButton sortButton1 = new JButton("Sort 1");
+        JButton sortButton2 = new JButton("Sort 2");
+        JButton sortButton3 = new JButton("Sort 3");
+    
+        sortButton1.setPreferredSize(new Dimension(80, 30));
+        sortButton2.setPreferredSize(new Dimension(80, 30));
+        sortButton3.setPreferredSize(new Dimension(80, 30));
+    
+        topSectionPanel.add(sectionLabel);
+        topSectionPanel.add(sortButton1);
+        topSectionPanel.add(sortButton2);
+        topSectionPanel.add(sortButton3);
+    
+        // Center panel for albums in a square layout
+        JPanel albumsPanel = new JPanel();
+        albumsPanel.setLayout(new GridLayout(10, 2, 10, 10)); // 10 rows, 2 columns, with gaps
+        albumsPanel.setBackground(Color.LIGHT_GRAY);
+    
+        // Example albums (replace with actual data)
+        String[][] albums = {
+            {"Album Cover 1", "Album Name 1", "Artist 1"},
+            {"Album Cover 2", "Album Name 2", "Artist 2"},
+            {"Album Cover 3", "Album Name 3", "Artist 3"},
+            {"Album Cover 4", "Album Name 4", "Artist 4"},
+            {"Album Cover 5", "Album Name 5", "Artist 5"},
+            {"Album Cover 6", "Album Name 6", "Artist 6"},
+            {"Album Cover 7", "Album Name 7", "Artist 7"},
+            {"Album Cover 8", "Album Name 8", "Artist 8"},
+            {"Album Cover 9", "Album Name 9", "Artist 9"},
+            {"Album Cover 10", "Album Name 10", "Artist 10"},
+            {"Album Cover 11", "Album Name 11", "Artist 11"},
+            {"Album Cover 12", "Album Name 12", "Artist 12"},
+            {"Album Cover 13", "Album Name 13", "Artist 13"},
+            {"Album Cover 14", "Album Name 14", "Artist 14"},
+            {"Album Cover 15", "Album Name 15", "Artist 15"},
+            {"Album Cover 16", "Album Name 16", "Artist 16"},
+            {"Album Cover 17", "Album Name 17", "Artist 17"},
+            {"Album Cover 18", "Album Name 18", "Artist 18"},
+            {"Album Cover 19", "Album Name 19", "Artist 19"},
+            {"Album Cover 20", "Album Name 20", "Artist 20"}
+        };
+    
+        for (String[] album : albums) {
+            JButton albumButton = new JButton();
+            albumButton.setLayout(new BorderLayout());
+            albumButton.setBackground(Color.WHITE);
+            albumButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            albumButton.setContentAreaFilled(false);
+            albumButton.setOpaque(true);
+    
+            JLabel albumCover = new JLabel(album[0]);
+            albumCover.setHorizontalAlignment(SwingConstants.CENTER);
+            albumCover.setPreferredSize(new Dimension(100, 100)); // Placeholder for album cover
+    
+            JLabel albumName = new JLabel(album[1]);
+            albumName.setFont(new Font("Arial", Font.BOLD, 14));
+            albumName.setHorizontalAlignment(SwingConstants.CENTER);
+    
+            JLabel albumArtist = new JLabel(album[2]);
+            albumArtist.setFont(new Font("Arial", Font.PLAIN, 12));
+            albumArtist.setHorizontalAlignment(SwingConstants.CENTER);
+    
+            albumButton.add(albumCover, BorderLayout.NORTH);
+            albumButton.add(albumName, BorderLayout.CENTER);
+            albumButton.add(albumArtist, BorderLayout.SOUTH);
 
-        layoutFrame.setVisible(true);
+            albumButton.addActionListener(e -> {
+                Album newAlbum = new Album(album[1], album[2], new Song[]{
+                    new Song("Song A", "3:45", "songA.wav"),
+                    new Song("Song B", "4:20", "songB.wav"),
+                    new Song("Song C", "2:50", "songC.wav"),
+                    new Song("Song D", "5:10", "songD.wav"),
+                    new Song("Song E", "3:30", "songE.wav"),
+                    new Song("Song F", "4:00", "songF.wav"),
+                    new Song("Song G", "3:15", "songG.wav"),
+                    new Song("Song H", "4:05", "songH.wav"),
+                    new Song("Song I", "3:50", "songI.wav"),
+                    new Song("Song J", "4:25", "songJ.wav"),
+                    new Song("Song K", "2:55", "songK.wav"),
+                    new Song("Song L", "5:15", "songL.wav"),
+                    new Song("Song M", "3:40", "songM.wav"),
+                    new Song("Song N", "4:30", "songN.wav"),
+                    new Song("Song O", "3:20", "songO.wav"),
+                    new Song("Song P", "4:10", "songP.wav"),
+                    new Song("Song Q", "3:55", "songQ.wav")
+                });
+                newAlbum.albumFrame();
+                layoutFrame.dispose(); 
+            });
+
+            albumButton.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseEntered(java.awt.event.MouseEvent e) {
+                    albumButton.setBackground(Color.LIGHT_GRAY); 
+                }
+
+                @Override
+                public void mouseExited(java.awt.event.MouseEvent evt) {
+                    albumButton.setBackground(Color.WHITE); 
+                }
+            });
+    
+            albumsPanel.add(albumButton);
+        }
+    
+        // Add the top section and albums panel to the right panel
+        rightPanel.add(topSectionPanel, BorderLayout.NORTH);
+    
+        // Wrap the albums panel in a JScrollPane
+        JScrollPane scrollPane = new JScrollPane(albumsPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    
+        rightPanel.add(scrollPane, BorderLayout.CENTER);
+    
+        return rightPanel;
     }
 }
 
@@ -456,6 +615,9 @@ class Album{
         album.setLocationRelativeTo(null);
         album.setLayout(new BorderLayout());
 
+        JPanel topPanel = Layout.homeSearchPanel(album);
+        album.add(topPanel, BorderLayout.NORTH); 
+
         // Create a panel for the album cover, title, and artist
         JPanel albumPanel = new JPanel();
         albumPanel.setPreferredSize(new Dimension(400, 600));
@@ -546,6 +708,12 @@ class Album{
                 });
                 timer.setRepeats(false); // Ensure the timer only runs once
                 timer.start();
+
+                JPanel bottomPanel = Layout.musicPanel();
+                album.add(bottomPanel, BorderLayout.SOUTH);
+                Layout.songOn = true; 
+                album.revalidate(); 
+                album.repaint();
             });
 
             songButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -554,8 +722,7 @@ class Album{
                     buttonContent.remove(numberLabel); 
                     buttonContent.add(playLabel, BorderLayout.WEST); 
                     buttonContent.revalidate();
-                    buttonContent.repaint(); 
-                    buttonContent.setBackground(Color.LIGHT_GRAY); 
+                    buttonContent.repaint();
                     songButton.setBackground(Color.LIGHT_GRAY); 
                 }
 
