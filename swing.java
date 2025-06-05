@@ -5,6 +5,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.Timer;
 import java.util.*;
+import java.awt.event.*;
 
 public class swing {
     public static void main(String[] args) {
@@ -462,6 +463,7 @@ class Layout{
         playbackSlider.setBackground(null);
         centerPanel.add(playbackSlider);
 
+
         pauseButton.addActionListener(e -> {
             if (AudioManager.isPlaying()) {
                 AudioManager.stopAudio();
@@ -469,12 +471,12 @@ class Layout{
                 Image scaledPlayImage = playIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
                 pauseButton.setIcon(new ImageIcon(scaledPlayImage)); // Change icon to play
             } else {
-                AudioManager.playAudio(audioFile, playbackSlider);
+                AudioManager.startAudio();
                 pauseButton.setIcon(new ImageIcon(scaledPauseImage)); // Change icon to pause
             }
         });
         
-        AudioManager.playAudio(audioFile, playbackSlider);
+        AudioManager.playAudio(audioFile, playbackSlider, pauseButton, scaledPauseImage); // Start playing the audio
 
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10)); // Align to the right
@@ -833,7 +835,7 @@ class AudioManager {
     private static Clip clip;
     private static JSlider playbackSlider;
 
-    public static void playAudio(File audioFile, JSlider slider) {
+    public static void playAudio(File audioFile, JSlider slider, JButton pauseButton, Image scaledPauseImage) {
         try {
             if (clip != null && clip.isRunning()) {
                 clip.stop(); // Stop the current clip if it's already playing
@@ -847,22 +849,34 @@ class AudioManager {
 
             // Start playback and update the progress bar
             clip.start();
-            Timer timer = new Timer(100, event -> {
-                int progress = (int) (100 * clip.getMicrosecondPosition() / clip.getMicrosecondLength());
-                playbackSlider.setValue(progress);
-            });
-            timer.start();
 
-            // Stop the timer when playback ends
-            clip.addLineListener(event -> {
-                if (event.getType() == LineEvent.Type.STOP) {
-                    timer.stop();
+            playbackSlider.setMaximum(clip.getFrameLength());
+            playbackSlider.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e){
+                    if(clip.isRunning()){
+                        clip.stop();
+                    }
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e){
+                    int newPosition = playbackSlider.getValue();
+                    pauseButton.setIcon(new ImageIcon(scaledPauseImage)); // Change icon to pause
+
+                    clip.setFramePosition(newPosition);
+                    clip.start();
                 }
             });
 
-        } catch (IOException | LineUnavailableException | UnsupportedAudioFileException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error playing audio: " + ex.getMessage());
+            Timer timer = new Timer(100, e -> {
+                if(clip.isOpen() && clip.isRunning()){
+                    playbackSlider.setValue(clip.getFramePosition());
+                }
+            });
+            timer.start();
+        } catch (IOException | LineUnavailableException | UnsupportedAudioFileException e) {
+            e.printStackTrace();
         }
     }
 
@@ -871,8 +885,10 @@ class AudioManager {
     }
 
     public static void stopAudio() {
-        if (clip != null) {
-            clip.stop();
-        }
+        clip.stop();
+    }
+
+    public static void startAudio(){
+        clip.start();
     }
 }
