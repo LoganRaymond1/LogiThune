@@ -177,6 +177,7 @@ class Layout{
     private static JFrame layoutFrame;
     public static boolean songOn; 
     public static File audioFile; // Declare audioFile as a static variable
+
     
     Song[] cnTowerSongs = {
         new Song("CN TOWER", "4:01", "someSexySongs4U/01-PARTYNEXTDOOR-CN-TOWER-ft-Drake-(JustNaija.wav"),
@@ -223,6 +224,7 @@ class Layout{
     };
 
     public Layout() {
+        audioFile = new File("someSexySongs4U/01-PARTYNEXTDOOR-CN-TOWER-ft-Drake-(JustNaija.wav"); // Declare audioFile as a static variable
         layoutFrame = new JFrame("LogiThune");
         layoutFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         layoutFrame.setSize(1000, 700);
@@ -328,6 +330,7 @@ class Layout{
         layoutFrame.add(topPanel, BorderLayout.NORTH);
 
         if(songOn) {
+            System.out.println("SONGON" + audioFile);
             JPanel bottomPanel = musicPanel(audioFile);
             layoutFrame.add(bottomPanel, BorderLayout.SOUTH);
         }
@@ -412,10 +415,13 @@ class Layout{
         topPanel.add(searchHomePanel, BorderLayout.CENTER);
         topPanel.add(accountMenuPanel, BorderLayout.EAST);
 
+        //layoutFrame.setVisible(true);
+
         return topPanel;
     }
 
     public static JPanel musicPanel(File audioFile) {
+        System.out.println("MUSICPANEL" + audioFile);
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new BorderLayout());
         bottomPanel.setPreferredSize(new Dimension(1000, 70));
@@ -615,7 +621,6 @@ class Album{
 }
 
 class AlbumFrame extends Album {
-    public File audioFile;
 
     public AlbumFrame(String title, String artist, Song[] songs) {
         super(title, artist, songs);
@@ -736,8 +741,8 @@ class AlbumFrame extends Album {
                 timer.setRepeats(false); // Ensure the timer only runs once
                 timer.start();
 
-                audioFile = new File(song.getFilePath());
-                JPanel bottomPanel = Layout.musicPanel(audioFile);
+                Layout.audioFile = new File(song.getFilePath());
+                JPanel bottomPanel = Layout.musicPanel(Layout.audioFile);
                 album.add(bottomPanel, BorderLayout.SOUTH);
                 Layout.songOn = true; 
                 album.revalidate(); 
@@ -780,7 +785,8 @@ class AlbumFrame extends Album {
         album.add(songPanel, BorderLayout.EAST);
 
         if(Layout.songOn) {
-            JPanel bottomPanel = Layout.musicPanel(audioFile);
+            System.out.println("SONGON2" + Layout.audioFile);
+            JPanel bottomPanel = Layout.musicPanel(Layout.audioFile);
             album.add(bottomPanel, BorderLayout.SOUTH);
         }
 
@@ -834,6 +840,7 @@ class AudioManager {
             }
 
             playbackSlider = slider; // Assign the slider for playback updates
+            System.out.println("Audio file: " + audioFile);
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
             clip = AudioSystem.getClip();
             clip.open(audioStream);
