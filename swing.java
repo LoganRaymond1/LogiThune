@@ -1,12 +1,11 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.*;
 import javax.sound.sampled.*;
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.Timer;
-import java.util.*;
-import java.awt.event.*;
+import javax.swing.border.Border;
 
 public class swing {
     public static void main(String[] args) {
@@ -423,7 +422,6 @@ class Layout{
     }
 
     public static JPanel musicPanel(File audioFile) {
-        System.out.println("MUSICPANEL" + audioFile);
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new BorderLayout());
         bottomPanel.setPreferredSize(new Dimension(1000, 70));
@@ -834,25 +832,24 @@ class Playlist {
 
 class AudioManager {
     private static Clip clip;
-    private static JSlider playbackSlider;
+   // private static JSlider playbackSlider;
 
     public static void playAudio(File audioFile, JSlider slider, JButton pauseButton, Image scaledPauseImage) {
         try {
             if (clip != null && clip.isRunning()) {
-                clip.stop(); // Stop the current clip if it's already playing
+                clip.stop();
             }
 
-            playbackSlider = slider; // Assign the slider for playback updates
-            System.out.println("Audio file: " + audioFile);
+           // playbackSlider = slider; // Assign the slider for playback updates
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+            System.out.println(audioFile);
             clip = AudioSystem.getClip();
             clip.open(audioStream);
 
             // Start playback and update the progress bar
             clip.start();
-
-            playbackSlider.setMaximum(clip.getFrameLength());
-            playbackSlider.addMouseListener(new MouseAdapter() {
+            slider.setMaximum(clip.getFrameLength());
+            slider.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e){
                     if(clip.isRunning()){
@@ -862,7 +859,7 @@ class AudioManager {
 
                 @Override
                 public void mouseReleased(MouseEvent e){
-                    int newPosition = playbackSlider.getValue();
+                    int newPosition = slider.getValue();
                     pauseButton.setIcon(new ImageIcon(scaledPauseImage)); // Change icon to pause
 
                     clip.setFramePosition(newPosition);
@@ -872,7 +869,7 @@ class AudioManager {
 
             Timer timer = new Timer(100, e -> {
                 if(clip.isOpen() && clip.isRunning()){
-                    playbackSlider.setValue(clip.getFramePosition());
+                    slider.setValue(clip.getFramePosition());
                 }
             });
             timer.start();
