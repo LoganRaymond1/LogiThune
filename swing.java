@@ -181,6 +181,12 @@ class Layout{
     public static JSlider playbackSlider; // Declare playbackSlider as a static variable
     public static JButton pauseButton; // Declare pauseButton as a static variable
     public static Image scaledPauseImage; // Declare scaledPauseImage as a static variable
+    private JPanel albumsPanel;
+    private boolean isSortButton1Active = false;
+    private boolean isSortButton2Active = false;
+    private boolean isSortButton3Active = false;
+    private boolean isSortButton4Active = false;
+    public static boolean shuffle = false;
 
     
     static Song[] cnTowerSongs = {
@@ -211,7 +217,7 @@ class Layout{
 
     Object[][] albums = {
         {new ImageIcon("cnTower.png"), "$ome $exy Songs 4U", "Drake", cnTowerSongs},
-        {new ImageIcon("albumCover2.png"), "Album Name 2", "Artist 2", new Song[]{
+        {new ImageIcon("albumCover2.png"), "blbum Name 2", "Artist 2", new Song[]{
             new Song("Song A2", "3:50", "songA2.wav"),
             new Song("Song B2", "4:10", "songB2.wav")
         }},
@@ -219,14 +225,26 @@ class Layout{
             new Song("Song A3", "3:30", "songA3.wav"),
             new Song("Song B3", "4:00", "songB3.wav")
         }},
-        {new ImageIcon("albumCover4.png"), "Album Name 4", "Artist 4", new Song[]{
+        {new ImageIcon("albumCover4.png"), "Album Name 4", "brtist 4", new Song[]{
             new Song("Song A4", "3:40", "songA4.wav"),
             new Song("Song B4", "4:15", "songB4.wav")
         }},
         {new ImageIcon("albumCover5.png"), "Album Name 5", "Artist 5", new Song[]{
             new Song("Song A4", "3:40", "songA4.wav"),
             new Song("Song B4", "4:15", "songB4.wav")
-        }}
+        }},
+        {new ImageIcon("albumCover6.png"), "Album Name 6", "Artist 6", new Song[]{
+            new Song("Song A4", "3:40", "songA4.wav"),
+            new Song("Song B4", "4:15", "songB4.wav")
+        }},
+        {new ImageIcon("albumCover7.png"), "Album Name 7", "Artist 7", new Song[]{
+            new Song("Song A4", "3:40", "songA4.wav"),
+            new Song("Song B4", "4:15", "songB4.wav")
+        }},
+        {new ImageIcon("albumCover8.png"), "Album Name 8", "Artist 8", new Song[]{
+            new Song("Song A4", "3:40", "songA4.wav"),
+            new Song("Song B4", "4:15", "songB4.wav")
+        }},
     };
 
     public Layout() {
@@ -253,22 +271,145 @@ class Layout{
     
         JLabel sectionLabel = new JLabel("For You");
         sectionLabel.setFont(new Font("Arial", Font.BOLD, 20));
+
+        JLabel sortLabel = new JLabel("Sort Album Name:");
+        sortLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        sortLabel.setPreferredSize(new Dimension(120, 30));
+        sortLabel.setHorizontalAlignment(SwingConstants.LEFT);
+
+        JLabel sortLabel2 = new JLabel("Sort Artist Name:");
+        sortLabel2.setFont(new Font("Arial", Font.PLAIN, 14));
+        sortLabel2.setPreferredSize(new Dimension(120, 30));
+        sortLabel2.setHorizontalAlignment(SwingConstants.LEFT);
+
+        ImageIcon sortAscendIcon = new ImageIcon("upArrow.png");
+        Image scaledSortAscendIcon = sortAscendIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        ImageIcon sortDescendIcon = new ImageIcon("downArrow.png");
+        Image scaledSortDescendIcon = sortDescendIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        JButton sortButton1 = new JButton(new ImageIcon(scaledSortAscendIcon));
+        JButton sortButton2 = new JButton(new ImageIcon(scaledSortDescendIcon));
+        JButton sortButton3 = new JButton(new ImageIcon(scaledSortAscendIcon));
+        JButton sortButton4 = new JButton(new ImageIcon(scaledSortDescendIcon));
+        sortButton1.setToolTipText("Sort by Album Name Ascending");
     
-        JButton sortButton1 = new JButton("Sort 1");
-        JButton sortButton2 = new JButton("Sort 2");
-        JButton sortButton3 = new JButton("Sort 3");
+        sortButton1.setPreferredSize(new Dimension(30, 30));
+        sortButton2.setPreferredSize(new Dimension(30, 30));
+        sortButton3.setPreferredSize(new Dimension(30, 30));
+        sortButton4.setPreferredSize(new Dimension(30, 30));
+
+        sortButton1.setOpaque(false);
+        sortButton1.setContentAreaFilled(false);
+        sortButton2.setOpaque(false);
+        sortButton2.setContentAreaFilled(false);
+        sortButton3.setOpaque(false);
+        sortButton3.setContentAreaFilled(false);
+        sortButton4.setOpaque(false);
+        sortButton4.setContentAreaFilled(false);
+
+        sortButton1.addActionListener(e -> {
+            if (!isSortButton1Active) {
+                // Sort the albums array by album name (field index 1)
+                insertion(albums, 1, true);
+        
+                // Highlight the button
+                sortButton1.setBackground(Color.BLUE);
+                isSortButton1Active = true;
+            } else {
+                // Reset the albums array to its original order (unsorted)
+                resetSort();
+        
+                // Reset the button color
+                sortButton1.setBackground(Color.WHITE);
+                isSortButton1Active = false;
+            }
+            
+            resetPanel();
+        });
+
+        sortButton2.addActionListener(e -> {
+            if (!isSortButton2Active) {
+                // Sort the albums array by album name (field index 1)
+                insertion(albums, 1, false);
+        
+                // Highlight the button
+                sortButton2.setBackground(Color.BLUE);
+                isSortButton2Active = true;
+            } else {
+                // Reset the albums array to its original order (unsorted)
+                resetSort();
+        
+                // Reset the button color
+                sortButton2.setBackground(Color.WHITE);
+                isSortButton2Active = false;
+            }
+            
+            resetPanel();
+        });
+
+        sortButton3.addActionListener(e -> {
+            if (!isSortButton3Active) {
+                // Sort the albums array by album name (field index 1)
+                insertion(albums, 2, true);
+        
+                // Highlight the button
+                sortButton3.setBackground(Color.BLUE);
+                isSortButton3Active = true;
+            } else {
+                // Reset the albums array to its original order (unsorted)
+                resetSort();
+        
+                // Reset the button color
+                sortButton2.setBackground(Color.WHITE);
+                isSortButton3Active = false;
+            }
+        
+            resetPanel();
+        });
+
+        sortButton4.addActionListener(e -> {
+            if (!isSortButton4Active) {
+                // Sort the albums array by album name (field index 1)
+                insertion(albums, 2, false);
+        
+                // Highlight the button
+                sortButton4.setBackground(Color.BLUE);
+                isSortButton4Active = true;
+            } else {
+                // Reset the albums array to its original order (unsorted)
+                resetSort();
+        
+                // Reset the button color
+                sortButton4.setBackground(Color.WHITE);
+                isSortButton4Active = false;
+            }
+        
+            resetPanel();
+        });
+        
     
-        sortButton1.setPreferredSize(new Dimension(80, 30));
-        sortButton2.setPreferredSize(new Dimension(80, 30));
-        sortButton3.setPreferredSize(new Dimension(80, 30));
-    
+        JPanel sortingPanel = new JPanel();
+        sortingPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 10)); // Horizontal gap: 20px, Vertical gap: 10px
+        sortingPanel.setBackground(Color.LIGHT_GRAY);
+
+        // Add "Sort Album Name" label and buttons
+        sortingPanel.add(sortLabel); // Add "Sort Album Name" label
+        sortingPanel.add(sortButton1); // Add ascending button
+        sortingPanel.add(sortButton2); // Add descending button
+
+        // Add spacing between the two sorting sections
+        sortingPanel.add(Box.createHorizontalStrut(50)); // Add horizontal spacing (50px)
+
+        // Add "Sort Artist Name" label and buttons
+        sortingPanel.add(sortLabel2); // Add "Sort Artist Name" label
+        sortingPanel.add(sortButton3); // Add ascending button
+        sortingPanel.add(sortButton4); // Add descending button
+
         topSectionPanel.add(sectionLabel);
-        topSectionPanel.add(sortButton1);
-        topSectionPanel.add(sortButton2);
-        topSectionPanel.add(sortButton3);
+        topSectionPanel.add(sortingPanel, BorderLayout.CENTER);
+
     
         // Center panel for albums in a square layout
-        JPanel albumsPanel = new JPanel();
+        albumsPanel = new JPanel();
         albumsPanel.setLayout(new GridLayout(0, 2, 10, 10)); // 10 rows, 2 columns, with gaps
         albumsPanel.setBackground(Color.LIGHT_GRAY);
         
@@ -303,6 +444,20 @@ class Layout{
 
             albumButton.addActionListener(e -> {
                 AlbumFrame newAlbum = new AlbumFrame(album.getTitle(), album.getArtist(), album.getSongs());
+                File currentAudioFile = Layout.audioFile;
+                int audioFrame = AudioManager.getFrame();
+                Layout.audioFile = currentAudioFile;
+
+                if(!AudioManager.isPlaying()) {
+                    if(audioFrame != 0) {
+                        AudioManager.stopAudio();
+                    }
+                }
+                else {
+                    playSong(Layout.audioFile);
+                    AudioManager.setFrame(audioFrame);
+                }
+
                 newAlbum.displayFrame();
                 layoutFrame.dispose();
             });
@@ -336,7 +491,6 @@ class Layout{
         layoutFrame.add(topPanel, BorderLayout.NORTH);
 
         if(songOn) {
-            System.out.println("SONGON" + audioFile);
             JPanel bottomPanel = musicPanel(audioFile);
             layoutFrame.add(bottomPanel, BorderLayout.SOUTH);
         }
@@ -363,9 +517,26 @@ class Layout{
         homeButton.setContentAreaFilled(false);
         homeButton.setOpaque(true);
         homeButton.addActionListener(e -> {
-            currentFrame.dispose(); 
+            File currentAudioFile = Layout.audioFile;
+            int audioFrame = AudioManager.getFrame();
             new Layout(); 
+            Layout.audioFile = currentAudioFile;
+
+            ImageIcon playIcon;
+            if(!AudioManager.isPlaying()) {
+                AudioManager.stopAudio();
+                playIcon = new ImageIcon("play.png");
+            } else {
+                playSong(Layout.audioFile);
+                playIcon = new ImageIcon("pause.png");
+                AudioManager.setFrame(audioFrame);
+            }
+
+            Image scaledPlayImage = playIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+            pauseButton.setIcon(new ImageIcon(scaledPlayImage));
+            currentFrame.dispose(); 
         });
+
         homeButton.setToolTipText("Go to Home");
 
         JTextField searchField = new JTextField();
@@ -421,8 +592,6 @@ class Layout{
         topPanel.add(searchHomePanel, BorderLayout.CENTER);
         topPanel.add(accountMenuPanel, BorderLayout.EAST);
 
-        //layoutFrame.setVisible(true);
-
         return topPanel;
     }
 
@@ -457,6 +626,7 @@ class Layout{
         ImageIcon pauseIcon = new ImageIcon("pause.png");
         scaledPauseImage = pauseIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         pauseButton = new JButton(new ImageIcon(scaledPauseImage)); 
+        pauseButton.setBackground(null);
         pauseButton.setFocusPainted(false);
         centerPanel.add(pauseButton);
         
@@ -479,8 +649,10 @@ class Layout{
                 pauseButton.setIcon(new ImageIcon(scaledPauseImage)); // Change icon to pause
             }
         });
-        System.out.println(Layout.audioFile);
-        AudioManager.playAudio(Layout.audioFile, playbackSlider, pauseButton, scaledPauseImage); // Start playing the audio
+
+        if(!AudioManager.isPlaying()) {
+            AudioManager.playAudio(audioFile, playbackSlider, pauseButton, scaledAlbumImage);
+        }
 
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10)); // Align to the right
@@ -489,14 +661,23 @@ class Layout{
         ImageIcon prevIcon = new ImageIcon("prevSong.png");
         Image scaledPrevImage = prevIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         JButton prevButton = new JButton(new ImageIcon(scaledPrevImage));
+        prevButton.setBackground(null);
         prevButton.setFocusPainted(false);
         rightPanel.add(prevButton);
 
         prevButton.addActionListener(e -> {
             // Logic to play the previous song
+            pauseButton.setIcon(new ImageIcon(scaledPauseImage));
             int currentSongIndex = Layout.cnTower.checkSongIndex(Layout.audioFile.getPath().replace('\\', '/'));
-            if(currentSongIndex > 0){
-            Layout.audioFile = new File(Layout.cnTower.getSong(currentSongIndex - 1).getFilePath());
+            int randomIndex = currentSongIndex;
+            if(shuffle) {
+                while(randomIndex == currentSongIndex) {
+                    randomIndex = (int)(Math.random() * Layout.cnTower.songs.length);
+                    Layout.audioFile = new File(Layout.cnTower.getSong(randomIndex).getFilePath());
+                }
+            }
+            else if(currentSongIndex > 0){
+                Layout.audioFile = new File(Layout.cnTower.getSong(currentSongIndex - 1).getFilePath());
             }
             else{
                 Layout.audioFile = new File(Layout.cnTower.getSong(Layout.cnTower.songs.length - 1).getFilePath());
@@ -510,56 +691,212 @@ class Layout{
         ImageIcon nextIcon = new ImageIcon("nextSong.png");
         Image scaledNextImage = nextIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         JButton nextButton = new JButton(new ImageIcon(scaledNextImage));
+        nextButton.setBackground(null);
         nextButton.setFocusPainted(false);
         rightPanel.add(nextButton);
 
         nextButton.addActionListener(e -> {
             // Logic to play the previous song
+            pauseButton.setIcon(new ImageIcon(scaledPauseImage));
             int currentSongIndex = Layout.cnTower.checkSongIndex(Layout.audioFile.getPath().replace('\\', '/'));
-            if(currentSongIndex < Layout.cnTower.songs.length - 1){
-            Layout.audioFile = new File(Layout.cnTower.getSong(currentSongIndex + 1).getFilePath());
+            int randomIndex = currentSongIndex;
+            if(shuffle) {
+                while(randomIndex == currentSongIndex) {
+                    randomIndex = (int)(Math.random() * Layout.cnTower.songs.length);
+                    Layout.audioFile = new File(Layout.cnTower.getSong(randomIndex).getFilePath());
+                }
+            }
+            else if(currentSongIndex < Layout.cnTower.songs.length - 1){
+                Layout.audioFile = new File(Layout.cnTower.getSong(currentSongIndex + 1).getFilePath());
             }
             else{
                 Layout.audioFile = new File(Layout.cnTower.getSong(0).getFilePath());
             }
             playSong(Layout.audioFile);
-
-            
         });
 
         ImageIcon shuffleIcon = new ImageIcon("shuffle.png");
         Image scaledShuffleImage = shuffleIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         JButton shuffleButton = new JButton(new ImageIcon(scaledShuffleImage));
+        shuffleButton.setBackground(null);
         shuffleButton.setFocusPainted(false);
         rightPanel.add(shuffleButton);
 
         shuffleButton.addActionListener(e -> {
             // Logic to shuffle the songs
-            Random random = new Random();
-            int randomIndex = random.nextInt(Layout.cnTower.songs.length);
-            Layout.audioFile = new File(Layout.cnTower.getSong(randomIndex).getFilePath());
-            playSong(Layout.audioFile);
+            if(shuffle)
+                shuffle = false;
+            else
+                shuffle = true;
         });
         
         ImageIcon loopIcon = new ImageIcon("loop.png");
         Image scaledLoopImage = loopIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         JButton loopButton = new JButton(new ImageIcon(scaledLoopImage));
+        loopButton.setBackground(null);
         loopButton.setFocusPainted(false);
         rightPanel.add(loopButton);
+
+        loopButton.addActionListener(e -> {
+            // Logic to loop the song
+            if(AudioManager.isLooping()) {
+                AudioManager.setLooping(false);
+                loopButton.setBackground(null);
+            } else {
+                AudioManager.setLooping(true);
+                loopButton.setBackground(Color.GRAY);
+            }
+        });
 
         bottomPanel.add(rightPanel, BorderLayout.EAST);
         bottomPanel.add(leftPanel, BorderLayout.WEST);
         bottomPanel.add(centerPanel, BorderLayout.CENTER);
 
         return bottomPanel;
-
-        
     }
 
     public static void playSong(File songFile) {
         audioFile = songFile; // Update the current audio file
         System.out.println("Playing song: " + audioFile.getPath());
         AudioManager.playAudio(audioFile, playbackSlider, pauseButton, scaledPauseImage);
+    }
+
+    private static void insertion(Object[][] albums, int index, boolean ascending) {
+        for (int i = 1; i < albums.length; i++) {
+            Object[] key = albums[i];
+            String keyField = (String) key[index]; // Extract the field to sort by
+            int j = i - 1;
+    
+            // Compare the field values and shift elements based on the sorting direction
+            while (j >= 0) {
+                String sortItem = (String) albums[j][index];
+                if (ascending) {
+                    // Ascending order comparison
+                    if (sortItem.compareToIgnoreCase(keyField) > 0) {
+                        albums[j + 1] = albums[j];
+                        j--;
+                    } else {
+                        break;
+                    }
+                } else {
+                    // Descending order comparison
+                    if (sortItem.compareToIgnoreCase(keyField) < 0) {
+                        albums[j + 1] = albums[j];
+                        j--;
+                    } else {
+                        break;
+                    }
+                }
+            }
+            albums[j + 1] = key; // Insert the key element into the correct position
+        }
+    }
+
+    private void resetSort() {
+        albums = new Object[][] {
+            {new ImageIcon("cnTower.png"), "$ome $exy Songs 4U", "Drake", cnTowerSongs},
+            {new ImageIcon("albumCover2.png"), "blbum Name 2", "Artist 2", new Song[]{
+                new Song("Song A2", "3:50", "songA2.wav"),
+                new Song("Song B2", "4:10", "songB2.wav")
+            }},
+            {new ImageIcon("albumCover3.png"), "Album Name 3", "Artist 3", new Song[]{
+                new Song("Song A3", "3:30", "songA3.wav"),
+                new Song("Song B3", "4:00", "songB3.wav")
+            }},
+            {new ImageIcon("albumCover4.png"), "Album Name 4", "brtist 4", new Song[]{
+                new Song("Song A4", "3:40", "songA4.wav"),
+                new Song("Song B4", "4:15", "songB4.wav")
+            }},
+            {new ImageIcon("albumCover5.png"), "Album Name 5", "Artist 5", new Song[]{
+                new Song("Song A4", "3:40", "songA4.wav"),
+                new Song("Song B4", "4:15", "songB4.wav")
+            }},
+            {new ImageIcon("albumCover6.png"), "Album Name 6", "Artist 6", new Song[]{
+                new Song("Song A4", "3:40", "songA4.wav"),
+                new Song("Song B4", "4:15", "songB4.wav")
+            }},
+            {new ImageIcon("albumCover7.png"), "Album Name 7", "Artist 7", new Song[]{
+                new Song("Song A4", "3:40", "songA4.wav"),
+                new Song("Song B4", "4:15", "songB4.wav")
+            }},
+            {new ImageIcon("albumCover8.png"), "Album Name 8", "Artist 8", new Song[]{
+                new Song("Song A4", "3:40", "songA4.wav"),
+                new Song("Song B4", "4:15", "songB4.wav")
+            }}
+        };
+    }
+
+    private void resetPanel() {
+        albumsPanel.removeAll();
+        
+            // Re-add the sorted albums to the panel
+            for (Object[] albumData : albums) {
+                Album album = new Album((String) albumData[1], (String) albumData[2], (Song[]) albumData[3]);
+        
+                JButton albumButton = new JButton();
+                albumButton.setLayout(new BorderLayout());
+                albumButton.setBackground(Color.WHITE);
+                albumButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                albumButton.setContentAreaFilled(false);
+                albumButton.setOpaque(true);
+        
+                // Load and scale the album cover image
+                ImageIcon albumIcon = (ImageIcon) albumData[0];
+                Image scaledAlbumIcon = albumIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+                ImageIcon scaledIcon = new ImageIcon(scaledAlbumIcon);
+        
+                // Create the JLabel for the album cover
+                JLabel albumCover = new JLabel(scaledIcon);
+                albumCover.setHorizontalAlignment(SwingConstants.CENTER);
+        
+                JLabel albumName = new JLabel(album.getTitle());
+                albumName.setFont(new Font("Arial", Font.BOLD, 14));
+                albumName.setHorizontalAlignment(SwingConstants.CENTER);
+        
+                JLabel albumArtist = new JLabel(album.getArtist());
+                albumArtist.setFont(new Font("Arial", Font.PLAIN, 12));
+                albumArtist.setHorizontalAlignment(SwingConstants.CENTER);
+        
+                albumButton.add(albumCover, BorderLayout.NORTH);
+                albumButton.add(albumName, BorderLayout.CENTER);
+                albumButton.add(albumArtist, BorderLayout.SOUTH);
+        
+                albumButton.addActionListener(event -> {
+                    AlbumFrame newAlbum = new AlbumFrame(album.getTitle(), album.getArtist(), album.getSongs());
+                    File currentAudioFile = Layout.audioFile;
+                    int audioFrame = AudioManager.getFrame();
+                    Layout.audioFile = currentAudioFile;
+                    newAlbum.displayFrame();
+                    if(!AudioManager.isPlaying()) {
+                        if(audioFrame != 0) {
+                            AudioManager.stopAudio();
+                        }
+                    }
+                    else {
+                        playSong(Layout.audioFile);
+                        AudioManager.setFrame(audioFrame);
+                    }
+                        layoutFrame.dispose();
+                });
+        
+                albumButton.addMouseListener(new java.awt.event.MouseAdapter() {
+                    @Override
+                    public void mouseEntered(java.awt.event.MouseEvent e) {
+                        albumButton.setBackground(Color.LIGHT_GRAY);
+                    }
+        
+                    @Override
+                    public void mouseExited(java.awt.event.MouseEvent evt) {
+                        albumButton.setBackground(Color.WHITE);
+                    }
+                });
+        
+                albumsPanel.add(albumButton);
+            }
+        
+            // Refresh the albums panel
+            albumsPanel.revalidate();
+            albumsPanel.repaint();
     }
 }
 
@@ -810,6 +1147,7 @@ class AlbumFrame extends Album {
                 JPanel bottomPanel = Layout.musicPanel(Layout.audioFile);
                 album.add(bottomPanel, BorderLayout.SOUTH);
                 } else {
+                    Layout.pauseButton.setIcon(new ImageIcon(Layout.scaledPauseImage)); 
                     Layout.playSong(Layout.audioFile);
                 }
                 Layout.songOn = true; 
@@ -899,8 +1237,8 @@ class Playlist {
 
 class AudioManager {
     private static Clip clip;
-   // private static JSlider playbackSlider;
     private static Timer timer;
+    private static boolean looping = false;
 
     public static void playAudio(File audioFile, JSlider slider, JButton pauseButton, Image scaledPauseImage) {
         try {
@@ -936,13 +1274,37 @@ class AudioManager {
                     int newPosition = slider.getValue();
                     clip.setFramePosition(newPosition);
                     clip.start();
+                    if(looping)
+                        clip.loop(Clip.LOOP_CONTINUOUSLY);
                 }
             });
             clip.start();
+            if(looping) {
+                clip.loop(Clip.LOOP_CONTINUOUSLY);
+            }
 
             timer = new Timer(0, e -> {
                 if(clip.isOpen() && clip.isRunning()){
                     slider.setValue(clip.getFramePosition());
+                }
+                if(clip.getFramePosition() >= clip.getFrameLength()) {
+                    if(looping) {
+                        clip.setFramePosition(0);
+                    } else {
+                        int currentSongIndex = Layout.cnTower.checkSongIndex(audioFile.getPath().replace('\\', '/'));
+                        int randomIndex = currentSongIndex;
+                        if(Layout.shuffle) {
+                            while(randomIndex == currentSongIndex) {
+                                randomIndex = (int)(Math.random() * Layout.cnTower.songs.length);
+                                Layout.audioFile = new File(Layout.cnTower.getSong(randomIndex).getFilePath());
+                            }
+                        } else if(currentSongIndex < Layout.cnTower.songs.length - 1) {
+                            Layout.audioFile = new File(Layout.cnTower.getSong(currentSongIndex + 1).getFilePath());
+                        } else {
+                            Layout.audioFile = new File(Layout.cnTower.getSong(0).getFilePath());   
+                        }
+                        Layout.playSong(Layout.audioFile);
+                    }
                 }
             });
             timer.start();
@@ -957,10 +1319,41 @@ class AudioManager {
     }
 
     public static void stopAudio() {
-        clip.stop();
+        if (clip != null) {
+            clip.stop();
+        }
     }
 
     public static void startAudio(){
         clip.start();
+    }
+
+    public static boolean isLooping() {
+        return looping;
+    }
+
+    public static void setLooping(boolean loop) {
+        if (clip != null && clip.isRunning()) {
+            if (loop) {
+                looping = true;
+                clip.loop(Clip.LOOP_CONTINUOUSLY);
+            } else {
+                looping = false;
+                clip.stop();
+            }
+        }
+    }
+
+    public static int getFrame() {
+        if (clip != null) {
+            return clip.getFramePosition();
+        }
+        return 0; 
+    }
+
+    public static void setFrame(int frame) {
+        if (clip != null) {
+            clip.setFramePosition(frame);
+        }
     }
 }
