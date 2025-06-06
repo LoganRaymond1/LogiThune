@@ -187,6 +187,9 @@ class Layout{
     private boolean isSortButton3Active = false;
     private boolean isSortButton4Active = false;
     public static boolean shuffle = false;
+    public static JPanel rightPanel;
+    public static Album currentAlbum;
+    public static Album currentAlbumFrame;
 
     
     static Song[] cnTowerSongs = {
@@ -259,7 +262,7 @@ class Layout{
         JPanel topPanel = homeSearchPanel(layoutFrame);        
         
 
-        JPanel rightPanel = new JPanel();
+        rightPanel = new JPanel();
         rightPanel.setPreferredSize(new Dimension(700, 700)); // Extend up to 700 pixels from the right
         rightPanel.setLayout(new BorderLayout()); // Use BorderLayout for structure
         rightPanel.setBackground(Color.LIGHT_GRAY);
@@ -444,18 +447,27 @@ class Layout{
 
             albumButton.addActionListener(e -> {
                 AlbumFrame newAlbum = new AlbumFrame(album.getTitle(), album.getArtist(), album.getSongs());
+                if(currentAlbum == null){
+                    System.out.println("assigned");
+                    System.out.println(currentAlbum == null);
+                    currentAlbum = album;
+                    System.out.println(currentAlbum);
+                } else {
+                    currentAlbumFrame = album;
+                }
+                
                 File currentAudioFile = Layout.audioFile; // Store the current audio file
-                int audioFrame = AudioManager.getFrame();
+                int audioFrame = Song.getFrame();
                 Layout.audioFile = currentAudioFile; // Restore the audio file in the new layout
                 newAlbum.displayFrame();
-                if(!AudioManager.isPlaying()) {
+                if(!Song.isPlaying()) {
                     if(audioFrame != 0){
                         System.out.println("PAUSED");
-                        AudioManager.stopAudio(); // Stop the current audio if playing
+                        Song.stopAudio(); // Stop the current audio if playing
                     } 
                 } else {
                     playSong(Layout.audioFile); // Play the current audio file
-                    AudioManager.setFrame(audioFrame); // Restore the audio frame
+                    Song.setFrame(audioFrame); // Restore the audio frame
                 }
                 layoutFrame.dispose();
 
@@ -517,17 +529,17 @@ class Layout{
         homeButton.setOpaque(true);
         homeButton.addActionListener(e -> {
             File currentAudioFile = Layout.audioFile; // Store the current audio file
-            int audioFrame = AudioManager.getFrame();
+            int audioFrame = Song.getFrame();
             new Layout(); 
             Layout.audioFile = currentAudioFile; // Restore the audio file in the new layout
             ImageIcon playIcon;
-            if((!AudioManager.isPlaying())) {
-                AudioManager.stopAudio();
+            if((!Song.isPlaying())) {
+                Song.stopAudio();
                 playIcon = new ImageIcon("play.png");
             } else {
                 playIcon = new ImageIcon("pause.png");
                 playSong(Layout.audioFile); // Play the current audio file
-                AudioManager.setFrame(audioFrame); // Restore the audio frame
+                Song.setFrame(audioFrame); // Restore the audio frame
 
             }
             Image scaledPlayImage = playIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
@@ -640,18 +652,18 @@ class Layout{
 
 
         pauseButton.addActionListener(e -> {
-            if (AudioManager.isPlaying()) {
-                AudioManager.stopAudio();
+            if (Song.isPlaying()) {
+                Song.stopAudio();
                 ImageIcon playIcon = new ImageIcon("play.png");
                 Image scaledPlayImage = playIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
                 pauseButton.setIcon(new ImageIcon(scaledPlayImage)); // Change icon to play
             } else {
-                AudioManager.startAudio();
+                Song.startAudio();
                 pauseButton.setIcon(new ImageIcon(scaledPauseImage)); // Change icon to pause
             }
         });
-        if(!AudioManager.isPlaying()) {
-            AudioManager.playAudio(Layout.audioFile, playbackSlider, pauseButton, scaledPauseImage); // Start playing the audio
+        if(!Song.isPlaying()) {
+            Song.playAudio(Layout.audioFile, playbackSlider, pauseButton, scaledPauseImage); // Start playing the audio
         }
 
         JPanel rightPanel = new JPanel();
@@ -668,18 +680,18 @@ class Layout{
         prevButton.addActionListener(e -> {
             // Logic to play the previous song
             pauseButton.setIcon(new ImageIcon(scaledPauseImage)); // Ensure pause icon is set
-            int currentSongIndex = Layout.cnTower.checkSongIndex(Layout.audioFile.getPath().replace('\\', '/'));
+            int currentSongIndex = Layout.currentAlbum.checkSongIndex(Layout.audioFile.getPath().replace('\\', '/'));
             int randomIndex = currentSongIndex;
             if(shuffle){
                 while(randomIndex == currentSongIndex){
-                    randomIndex = (int) (Math.random() * Layout.cnTower.songs.length);
-                    Layout.audioFile = new File(Layout.cnTower.getSong(randomIndex).getFilePath());
+                    randomIndex = (int) (Math.random() * Layout.currentAlbum.songs.length);
+                    Layout.audioFile = new File(Layout.currentAlbum.getSong(randomIndex).getFilePath());
                 }
             } else if(currentSongIndex > 0){
-                Layout.audioFile = new File(Layout.cnTower.getSong(currentSongIndex - 1).getFilePath());
+                Layout.audioFile = new File(Layout.currentAlbum.getSong(currentSongIndex - 1).getFilePath());
             }
             else{
-                Layout.audioFile = new File(Layout.cnTower.getSong(Layout.cnTower.songs.length - 1).getFilePath());
+                Layout.audioFile = new File(Layout.currentAlbum.getSong(Layout.currentAlbum.songs.length - 1).getFilePath());
             }
             System.out.println(Layout.audioFile);
             playSong(Layout.audioFile);
@@ -697,17 +709,17 @@ class Layout{
         nextButton.addActionListener(e -> {
             // Logic to play the previous song
             pauseButton.setIcon(new ImageIcon(scaledPauseImage)); // Ensure pause icon is set
-            int currentSongIndex = Layout.cnTower.checkSongIndex(Layout.audioFile.getPath().replace('\\', '/'));
+            int currentSongIndex = Layout.currentAlbum.checkSongIndex(Layout.audioFile.getPath().replace('\\', '/'));
             int randomIndex = currentSongIndex;
             if(shuffle){
                 while(randomIndex == currentSongIndex){
-                    randomIndex = (int) (Math.random() * Layout.cnTower.songs.length);
-                    Layout.audioFile = new File(Layout.cnTower.getSong(randomIndex).getFilePath());
+                    randomIndex = (int) (Math.random() * Layout.currentAlbum.songs.length);
+                    Layout.audioFile = new File(Layout.currentAlbum.getSong(randomIndex).getFilePath());
                 }
-            } else if(currentSongIndex < Layout.cnTower.songs.length - 1){
-                Layout.audioFile = new File(Layout.cnTower.getSong(currentSongIndex + 1).getFilePath());
+            } else if(currentSongIndex < Layout.currentAlbum.songs.length - 1){
+                Layout.audioFile = new File(Layout.currentAlbum.getSong(currentSongIndex + 1).getFilePath());
             } else{
-                Layout.audioFile = new File(Layout.cnTower.getSong(0).getFilePath());
+                Layout.audioFile = new File(Layout.currentAlbum.getSong(0).getFilePath());
             }
             playSong(Layout.audioFile);
         });
@@ -737,12 +749,12 @@ class Layout{
 
         loopButton.addActionListener(e -> {
             // Logic to toggle loop
-            if(AudioManager.isLooping()){
-                AudioManager.setLooping(false);
+            if(Song.isLooping()){
+                Song.setLooping(false);
                 loopButton.setBackground(null);
 
             } else {
-                AudioManager.setLooping(true);
+                Song.setLooping(true);
                 loopButton.setBackground(Color.GRAY);
 
             }
@@ -758,7 +770,7 @@ class Layout{
     public static void playSong(File songFile) {
         audioFile = songFile; // Update the current audio file
         System.out.println("Playing song: " + audioFile.getPath());
-        AudioManager.playAudio(audioFile, playbackSlider, pauseButton, scaledPauseImage);
+        Song.playAudio(audioFile, playbackSlider, pauseButton, scaledPauseImage);
     }
 
     private static void insertion(Object[][] albums, int index, boolean ascending) {
@@ -843,11 +855,9 @@ class Layout{
                 // Load and scale the album cover image
                 ImageIcon albumIcon = (ImageIcon) albumData[0];
                 Image scaledAlbumIcon = albumIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
-                ImageIcon scaledIcon = new ImageIcon(scaledAlbumIcon);
-        
-                // Create the JLabel for the album cover
-                JLabel albumCover = new JLabel(scaledIcon);
+                JLabel albumCover = new JLabel((Icon) albumData[0]);
                 albumCover.setHorizontalAlignment(SwingConstants.CENTER);
+        
         
                 JLabel albumName = new JLabel(album.getTitle());
                 albumName.setFont(new Font("Arial", Font.BOLD, 14));
@@ -863,18 +873,24 @@ class Layout{
         
                 albumButton.addActionListener(event -> {
                     AlbumFrame newAlbum = new AlbumFrame(album.getTitle(), album.getArtist(), album.getSongs());
+                    if(currentAlbum == null) {
+                        currentAlbum = album; // Update the current album
+                    } else {
+                        currentAlbumFrame = album; // Update the current album frame
+                    }
+                    System.out.println("Current Album: " + currentAlbum.getTitle());
                     File currentAudioFile = Layout.audioFile;
-                    int audioFrame = AudioManager.getFrame();
+                    int audioFrame = Song.getFrame();
                     Layout.audioFile = currentAudioFile;
                     newAlbum.displayFrame();
-                    if(!AudioManager.isPlaying()) {
+                    if(!Song.isPlaying()) {
                         if(audioFrame != 0) {
-                            AudioManager.stopAudio();
+                            Song.stopAudio();
                         }
                     }
                     else {
                         playSong(Layout.audioFile);
-                        AudioManager.setFrame(audioFrame);
+                        Song.setFrame(audioFrame);
                     }
                         layoutFrame.dispose();
                 });
@@ -894,6 +910,8 @@ class Layout{
                 albumsPanel.add(albumButton);
             }
         
+
+            
             // Refresh the albums panel
             albumsPanel.revalidate();
             albumsPanel.repaint();
@@ -906,7 +924,9 @@ class Song{
     private String filePath;
     private boolean isPaused;
     private boolean isLooping;
-    private Clip clip;
+    private static Clip clip;
+    private static Timer timer;
+    private static boolean looping = false;
 
 
     public Song(String title, String duration, String filePath) {
@@ -926,40 +946,126 @@ class Song{
     public String getFilePath() {
         return filePath;
     }
-/* 
-    private void playMusic(int songIndex) {
-        File file = null;
+    
 
-        isPaused = false;
-        pauseButton.setText("Pause");
-
-        if (clip != null && clip.isRunning()) {
-            clip.stop();
-        }
-
+    public static void playAudio(File audioFile, JSlider slider, JButton pauseButton, Image scaledPauseImage) {
         try {
-            if(songNumber == 1) {
-                file = new File("PARTYNEXTDOOR-CN-TOWER-Ft-DRAKE-(HipHopKit.com).wav");
-            } else if(songNumber == 2) {
-                file = new File("Spongebob Squarepants.wav");
+            if (clip != null && clip.isRunning()) {
+                clip.stop();
             }
-            AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
+            if(timer != null) {
+                timer.stop(); // Stop the timer if it's already running
+            }
 
+           // playbackSlider = externalSlider; // Assign the slider for playback updates
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
             clip = AudioSystem.getClip();
-            clip.open(audioIn);
+            clip.open(audioStream);
 
-            if (isLooping) {
+            // Start playback and update the progress bar
+                        
+            slider.setMaximum(clip.getFrameLength());
+            slider.setValue(0);
+            slider.revalidate();
+            slider.repaint();
+            slider.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e){
+                    if(clip.isRunning()){
+                        clip.stop();
+                    }
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e){
+                    pauseButton.setIcon(new ImageIcon(scaledPauseImage)); // Change icon to pause
+                    int newPosition = slider.getValue();
+                    clip.setFramePosition(newPosition);
+                    clip.start();
+                    if(looping) {
+                        clip.loop(Clip.LOOP_CONTINUOUSLY);
+                    }
+                }
+            });
+            clip.start();
+            if(looping) {
                 clip.loop(Clip.LOOP_CONTINUOUSLY);
             }
 
-            clip.start();
-
-        } catch (Exception e) {
-            System.out.println(e);
+            timer = new Timer(0, e -> {
+                if(clip.isOpen() && clip.isRunning()){
+                    slider.setValue(clip.getFramePosition());
+                }
+                if(clip.getFramePosition() >= clip.getFrameLength()) {
+                    if(looping) {
+                        clip.setFramePosition(0); // Reset to the beginning if looping
+                    } else {
+                        int currentSongIndex = Layout.currentAlbum.checkSongIndex(Layout.audioFile.getPath().replace('\\', '/'));
+                        int randomIndex = currentSongIndex;
+                        if(Layout.shuffle){
+                            while(randomIndex == currentSongIndex){
+                                randomIndex = (int) (Math.random() * Layout.currentAlbum.songs.length);
+                                Layout.audioFile = new File(Layout.currentAlbum.getSong(randomIndex).getFilePath());
+                            }
+                        } else if(currentSongIndex < Layout.currentAlbum.songs.length - 1){
+                            Layout.audioFile = new File(Layout.currentAlbum.getSong(currentSongIndex + 1).getFilePath());
+                        } else{
+                            Layout.audioFile = new File(Layout.currentAlbum.getSong(0).getFilePath());
+                        }
+                        Layout.playSong(Layout.audioFile);
+                    }
+                }
+            });
+            timer.start();
+            
+        } catch (IOException | LineUnavailableException | UnsupportedAudioFileException e) {
+            e.printStackTrace();
         }
     }
-        */
+
+    public static boolean isPlaying() {
+        return clip != null && clip.isRunning();
+    }
+
+    public static void stopAudio() {
+        if(clip != null){
+        clip.stop();
+        }
+    }
+
+    public static void startAudio(){
+        clip.start();
+    }
+
+    public static boolean isLooping() {
+        return looping;
+    }
+    public static void setLooping(boolean loop){
+        if(clip != null && clip.isRunning()){
+            if(loop) {
+                looping = true;
+                clip.loop(Clip.LOOP_CONTINUOUSLY);
+            } else {
+                looping = false;
+                clip.loop(0);
+            }
+        }
+    }
+
+    public static int getFrame(){
+        if(clip != null) {
+            return clip.getFramePosition();
+        }
+        return 0;
+    }
+    public static void setFrame(int frame) {
+        if(clip != null) {
+            clip.setFramePosition(frame);
+        }
+    }
+
 }
+
 
 class RoundedBorder implements Border {
     private int radius;
@@ -1134,7 +1240,9 @@ class AlbumFrame extends Album {
             songButton.add(buttonContent, BorderLayout.CENTER);
             
             songButton.addActionListener(e -> {
-        
+                if(Layout.currentAlbum != Layout.currentAlbumFrame && Layout.currentAlbumFrame != null) {
+                    Layout.currentAlbum = Layout.currentAlbumFrame; // Update the current album
+                }
                 // Revert the button's appearance after a short delay
                 Timer timer = new Timer(1000, event -> {
                     songButton.setBackground(Color.WHITE); 
@@ -1234,125 +1342,31 @@ class Playlist {
     }
 }
 
-class AudioManager {
-    private static Clip clip;
-    private static Timer timer;
-    private static boolean looping = false;
 
-    public static void playAudio(File audioFile, JSlider slider, JButton pauseButton, Image scaledPauseImage) {
-        try {
-            if (clip != null && clip.isRunning()) {
-                clip.stop();
-            }
-            if(timer != null) {
-                timer.stop(); // Stop the timer if it's already running
-            }
 
-           // playbackSlider = externalSlider; // Assign the slider for playback updates
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
-            clip = AudioSystem.getClip();
-            clip.open(audioStream);
+abstract class Account{
+    private String username;
+    private String encryptedPassword;
 
-            // Start playback and update the progress bar
-                        
-            slider.setMaximum(clip.getFrameLength());
-            slider.setValue(0);
-            slider.revalidate();
-            slider.repaint();
-            slider.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mousePressed(MouseEvent e){
-                    if(clip.isRunning()){
-                        clip.stop();
-                    }
-                }
+    public Account(String username, String encryptedPassword){
+        this.username = username;
+        this.encryptedPassword = encryptedPassword;
+    }
+}
 
-                @Override
-                public void mouseReleased(MouseEvent e){
-                    pauseButton.setIcon(new ImageIcon(scaledPauseImage)); // Change icon to pause
-                    int newPosition = slider.getValue();
-                    clip.setFramePosition(newPosition);
-                    clip.start();
-                    if(looping) {
-                        clip.loop(Clip.LOOP_CONTINUOUSLY);
-                    }
-                }
-            });
-            clip.start();
-            if(looping) {
-                clip.loop(Clip.LOOP_CONTINUOUSLY);
-            }
-
-            timer = new Timer(0, e -> {
-                if(clip.isOpen() && clip.isRunning()){
-                    slider.setValue(clip.getFramePosition());
-                }
-                if(clip.getFramePosition() >= clip.getFrameLength()) {
-                    if(looping) {
-                        clip.setFramePosition(0); // Reset to the beginning if looping
-                    } else {
-                        int currentSongIndex = Layout.cnTower.checkSongIndex(Layout.audioFile.getPath().replace('\\', '/'));
-                        int randomIndex = currentSongIndex;
-                        if(Layout.shuffle){
-                            while(randomIndex == currentSongIndex){
-                                randomIndex = (int) (Math.random() * Layout.cnTower.songs.length);
-                                Layout.audioFile = new File(Layout.cnTower.getSong(randomIndex).getFilePath());
-                            }
-                        } else if(currentSongIndex < Layout.cnTower.songs.length - 1){
-                            Layout.audioFile = new File(Layout.cnTower.getSong(currentSongIndex + 1).getFilePath());
-                        } else{
-                            Layout.audioFile = new File(Layout.cnTower.getSong(0).getFilePath());
-                        }
-                        Layout.playSong(Layout.audioFile);
-                    }
-                }
-            });
-            timer.start();
-            
-        } catch (IOException | LineUnavailableException | UnsupportedAudioFileException e) {
-            e.printStackTrace();
-        }
+class User extends Account {
+    static ArrayList<Playlist> playlists = new ArrayList<>();
+    public User(String username, String encryptedPassword){
+        super(username, encryptedPassword);
     }
 
-    public static boolean isPlaying() {
-        return clip != null && clip.isRunning();
-    }
 
-    public static void stopAudio() {
-        if(clip != null){
-        clip.stop();
-        }
-    }
+    public static void createPlaylist(String playlistName){
+        Playlist newPlaylist = new Playlist(playlistName);
+        playlists.add(newPlaylist);
 
-    public static void startAudio(){
-        clip.start();
     }
-
-    public static boolean isLooping() {
-        return looping;
+    public static void addSong(Playlist playlist, Song song) {
+            playlist.addSong(song);
     }
-    public static void setLooping(boolean loop){
-        if(clip != null && clip.isRunning()){
-            if(loop) {
-                looping = true;
-                clip.loop(Clip.LOOP_CONTINUOUSLY);
-            } else {
-                looping = false;
-                clip.loop(0);
-            }
-        }
-    }
-
-    public static int getFrame(){
-        if(clip != null) {
-            return clip.getFramePosition();
-        }
-        return 0;
-    }
-    public static void setFrame(int frame) {
-        if(clip != null) {
-            clip.setFramePosition(frame);
-        }
-    }
-
 }
