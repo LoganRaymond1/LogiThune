@@ -6,13 +6,13 @@
     "configurations": [
     
         {
-            "type": "jdk",
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
         },
         {
-            "type": "jdk",
+            "type": "java",
             "name": "swing",
             "request": "launch",
             "mainClass": "swing",

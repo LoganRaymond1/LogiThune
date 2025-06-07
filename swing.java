@@ -10,31 +10,7 @@ import javax.swing.border.Border;
 public class swing {
     public static void main(String[] args) {
                 //new Login(); 
-                new Layout();
-                
-                /*Album tower = new Album("cn", "drake", new Song[]{
-                    new Song("Song A", "3:45", "songA.wav"),
-                    new Song("Song B", "4:20", "songB.wav"),
-                    new Song("Song C", "2:50", "songC.wav"),
-                    new Song("Song D", "5:10", "songD.wav"),
-                    new Song("Song E", "3:30", "songE.wav"),
-                    new Song("Song F", "4:00", "songF.wav"),
-                    new Song("Song G", "3:15", "songG.wav"),
-                    new Song("Song H", "4:05", "songH.wav"),
-                    new Song("Song I", "3:50", "songI.wav"),
-                    new Song("Song J", "4:25", "songJ.wav"),
-                    new Song("Song K", "2:55", "songK.wav"),
-                    new Song("Song L", "5:15", "songL.wav"),
-                    new Song("Song M", "3:40", "songM.wav"),
-                    new Song("Song N", "4:30", "songN.wav"),
-                    new Song("Song O", "3:20", "songO.wav"),
-                    new Song("Song P", "4:10", "songP.wav"),
-                    new Song("Song Q", "3:55", "songQ.wav"),
-                });
-                tower.albumFrame();*/
-                
-                
-                
+                new Layout();  
     }
 }
 
@@ -181,7 +157,7 @@ class Layout{
     public static JSlider playbackSlider; // Declare playbackSlider as a static variable
     public static JButton pauseButton; // Declare pauseButton as a static variable
     public static Image scaledPauseImage; // Declare scaledPauseImage as a static variable
-    private JPanel albumsPanel;
+    private static JPanel albumsPanel;
     private boolean isSortButton1Active = false;
     private boolean isSortButton2Active = false;
     private boolean isSortButton3Active = false;
@@ -403,7 +379,7 @@ class Layout{
                 isSortButton1Active = false;
             }
             
-            resetPanel();
+            resetPanelSort();
         });
 
         sortButton2.addActionListener(e -> {
@@ -423,7 +399,7 @@ class Layout{
                 isSortButton2Active = false;
             }
             
-            resetPanel();
+            resetPanelSort();
         });
 
         sortButton3.addActionListener(e -> {
@@ -443,7 +419,7 @@ class Layout{
                 isSortButton3Active = false;
             }
         
-            resetPanel();
+            resetPanelSort();
         });
 
         sortButton4.addActionListener(e -> {
@@ -463,7 +439,7 @@ class Layout{
                 isSortButton4Active = false;
             }
         
-            resetPanel();
+            resetPanelSort();
         });
         
     
@@ -563,7 +539,7 @@ class Layout{
             }
             });
 
-            albumsPanel.add(albumButton);
+            Layout.albumsPanel.add(albumButton);
         }
     
         // Add the top section and albums panel to the right panel
@@ -704,8 +680,20 @@ class Layout{
         searchField.setPreferredSize(new Dimension(300, 30));
         searchField.setToolTipText("Search for songs, albums, or artists");
 
+        JButton searchButton = new JButton("Search");
+        searchButton.setPreferredSize(new Dimension(80, 30));
+
+        searchField.addActionListener(e -> {
+            handleSearch(albums, searchField.getText().trim());
+        });
+
+        searchButton.addActionListener(e -> {
+            handleSearch(albums, searchField.getText().trim());
+        });
+
         searchHomePanel.add(homeButton);
         searchHomePanel.add(searchField);
+        searchHomePanel.add(searchButton);
         
         JPanel accountMenuPanel = new JPanel();
         accountMenuPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10));
@@ -755,6 +743,7 @@ class Layout{
 
         return topPanel;
     }
+
     public static JPanel musicPanel(File audioFile) {
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new BorderLayout());
@@ -1004,7 +993,70 @@ class Layout{
         }
     }
 
-    private void resetSort() {
+    private static void handleSearch(Object[][] albums, String search) {
+        if (search.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please enter a search term.");
+            return;
+        }
+        
+        insertion(albums, 1, true);
+
+        int left = 0;
+        int right = albums.length - 1;
+
+        while(left <= right) {
+            int mid = (left + right) / 2;
+            String album = (String) albums[mid][1]; // Compare with album name
+            
+            if (album.equalsIgnoreCase(search)) {
+                resetSort();
+                updatePanelSearch(albums[mid]);
+                return;
+            } else if (album.compareToIgnoreCase(search) < 0) {
+                left = mid + 1; // Search in the right half
+            } else {
+                right = mid - 1; // Search in the left half
+            }
+        }
+
+
+        insertion(albums, 2, true);
+
+        left = 0;
+        right = albums.length - 1;
+
+        while(left <= right) {
+            int mid = (left + right) / 2;
+            String artist = (String) albums[mid][2]; // Compare with artist name
+            
+            if (artist.equalsIgnoreCase(search)) {
+                resetSort();
+                updatePanelSearch(albums[mid]);
+                return;
+            } else if (artist.compareToIgnoreCase(search) < 0) {
+                left = mid + 1; // Search in the right half
+            } else {
+                right = mid - 1; // Search in the left half
+            }
+        }
+
+        for(Object[] albumData : albums) {
+            Song[] songs = (Song[]) albumData[3];
+            for(Song song : songs) {
+                if(song.getTitle().equalsIgnoreCase(search)) {
+                    Album album = new Album((String) albumData[1], (String) albumData[2], songs, (ImageIcon) albumData[0]);
+                    AlbumFrame newAlbum = new AlbumFrame(album.getTitle(), album.getArtist(), album.getSongs(), (ImageIcon) albumData[0]);
+                    newAlbum.displayFrame();
+                    layoutFrame.dispose();
+                    return;
+                }
+            }
+        }
+
+        JOptionPane.showMessageDialog(layoutFrame, "No results found for: " + search, "Search Result", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private static void resetSort() {
         albums = new Object[][] {
             {new ImageIcon("cnTower.png"), "$ome $exy Songs 4U", "Drake", someSexySongs4USongs},
             {new ImageIcon("starboyAlbum.png"), "Starboy", "The Weeknd", starboy},
@@ -1015,7 +1067,81 @@ class Layout{
         };
     }
 
-    private void resetPanel() {
+    private static void updatePanelSearch(Object[] albumData) {
+        albumsPanel.removeAll();
+
+        Album album = new Album((String) albumData[1], (String) albumData[2], (Song[]) albumData[3], (ImageIcon) albumData[0]);
+
+        JButton albumButton = new JButton();
+        albumButton.setLayout(new BorderLayout());
+        albumButton.setBackground(Color.WHITE);
+        albumButton.setPreferredSize(new Dimension(100, 00));
+        albumButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        albumButton.setContentAreaFilled(false);
+        albumButton.setOpaque(true);
+
+        // Load and scale the album cover image
+        ImageIcon albumIcon = (ImageIcon) albumData[0];
+        Image scaledAlbumIcon = albumIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+        JLabel albumCover = new JLabel((Icon) albumData[0]);
+        albumCover.setHorizontalAlignment(SwingConstants.CENTER);
+
+        JLabel albumName = new JLabel(album.getTitle());
+        albumName.setFont(new Font("Arial", Font.BOLD, 14));
+        albumName.setHorizontalAlignment(SwingConstants.CENTER);
+
+        JLabel albumArtist = new JLabel(album.getArtist());
+        albumArtist.setFont(new Font("Arial", Font.PLAIN, 12));
+        albumArtist.setHorizontalAlignment(SwingConstants.CENTER);
+
+        albumButton.add(albumCover, BorderLayout.NORTH);
+        albumButton.add(albumName, BorderLayout.CENTER);
+        albumButton.add(albumArtist, BorderLayout.SOUTH);
+
+        albumButton.addActionListener(event -> {
+            AlbumFrame newAlbum = new AlbumFrame(album.getTitle(), album.getArtist(), album.getSongs(), (ImageIcon) albumData[0]);
+            if(currentAlbum == null) {
+                currentAlbum = album; // Update the current album
+            } else {
+                currentAlbumFrame = album; // Update the current album frame
+            }
+            System.out.println("Current Album: " + currentAlbum.getTitle());
+            File currentAudioFile = Layout.audioFile;
+            int audioFrame = Song.getFrame();
+            Layout.audioFile = currentAudioFile;
+            newAlbum.displayFrame();
+            if(!Song.isPlaying()) {
+                if(audioFrame != 0) {
+                    Song.stopAudio();
+                }
+            }
+            else {
+                playSong(Layout.audioFile);
+                Song.setFrame(audioFrame);
+            }
+                layoutFrame.dispose();
+        });
+
+        albumButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent e) {
+                albumButton.setBackground(Color.LIGHT_GRAY);
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                albumButton.setBackground(Color.WHITE);
+            }
+        });
+
+        albumsPanel.add(albumButton);
+    
+        // Refresh the albums panel
+        albumsPanel.revalidate();
+        albumsPanel.repaint();
+    }
+
+    private void resetPanelSort() {
         albumsPanel.removeAll();
         
             // Re-add the sorted albums to the panel
@@ -1086,14 +1212,12 @@ class Layout{
         
                 albumsPanel.add(albumButton);
             }
-        
-
             
             // Refresh the albums panel
             albumsPanel.revalidate();
             albumsPanel.repaint();
+        }
     }
-}
 
 class Song{
     private String title;
@@ -1313,7 +1437,6 @@ class Album{
         this.title = title;
         this.artist = artist;
         this.songs = songs;
-        this.albumCover = albumCover;
     }
     
     public String getTitle() {
