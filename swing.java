@@ -767,8 +767,8 @@ class Layout{
             int randomIndex = currentSongIndex;
             System.out.println("Current song index: " + currentSongIndex);
             if(shuffle){
-                while(randomIndex == currentSongIndex && currentPlaylist.getSongs().size() > 1){
-                    if(playlingPlaylist){
+                while(randomIndex == currentSongIndex ){
+                    if(playlingPlaylist && currentPlaylist.getSongs().size() > 1){
                         randomIndex = (int) (Math.random() * Layout.currentPlaylist.getSongs().size());
                         Layout.audioFile = new File(Layout.currentPlaylist.getSongs().get(randomIndex).getFilePath());
                     } else {
@@ -821,8 +821,8 @@ class Layout{
             int randomIndex = currentSongIndex;
             System.out.println("Current song index: " + currentSongIndex);
             if(shuffle){
-                while(randomIndex == currentSongIndex && currentPlaylist.getSongs().size() > 1){
-                    if(playlingPlaylist){
+                while(randomIndex == currentSongIndex ){
+                    if(playlingPlaylist && currentPlaylist.getSongs().size() > 1){
                         randomIndex = (int) (Math.random() * Layout.currentPlaylist.getSongs().size());
                         Layout.audioFile = new File(Layout.currentPlaylist.getSongs().get(randomIndex).getFilePath());
                     } else {
