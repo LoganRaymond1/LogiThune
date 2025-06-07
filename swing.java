@@ -189,7 +189,7 @@ class Layout{
     public static boolean shuffle = false;
 
     
-    static Song[] cnTowerSongs = {
+    static Song[] someSexySongs4USongs = {
         new Song("CN TOWER", "4:01", "someSexySongs4U/01-PARTYNEXTDOOR-CN-TOWER-ft-Drake-(JustNaija.wav"),
         new Song("MOTH BALLS", "3:32", "someSexySongs4U/02-PARTYNEXTDOOR-MOTH-BALLS-ft-Drake-(JustNaija.wav"),
         new Song("SOMETHING ABOUT YOU", "3:38", "someSexySongs4U/03-PARTYNEXTDOOR-SOMETHING-ABOUT-YOU-ft-Drake-(JustNaija.wav"),
@@ -213,38 +213,113 @@ class Layout{
         new Song("GREEDY", "6:26", "someSexySongs4U/21-PARTYNEXTDOOR-GREEDY-Ft-Drake-(JustNaija.wav")
     };
 
-    static Album cnTower = new Album("$ome $exy $ongs 4 U", "Drake", cnTowerSongs);
+    static Song[] starboy = {
+        new Song("STARBOY", "3:51", "starboy/01-The-Weeknd-Starboy-ft-Daft-Punk-(JustNaija.wav"),
+        new Song("PARTY MONSTER", "4:09", "starboy/02-The-Weeknd-Party-Monster-(JustNaija.wav"),
+        new Song("FALSE ALARM", "3:39", "starboy/03-The-Weeknd-False-Alarm-(JustNaija.wav"),
+        new Song("REMINDER", "3:40", "starboy/04-The-Weeknd-Reminder-(JustNaija.wav"),
+        new Song("ROCKIN", "3:53", "starboy/05-The-Weeknd-Rockin-(JustNaija.wav"),
+        new Song("SECRETS", "4:26", "starboy/06-The-Weeknd-Secrets-(JustNaija.wav"),
+        new Song("TRUE COLORS", "3:26", "starboy/07-The-Weeknd-True-Colors-(JustNaija.wav"),
+        new Song("STARGIRL INTERLUDE", "1:52", "starboy/08-The-Weeknd-Stargirl-Interlude-Ft-Lana-Del-Rey-(JustNaija.wav"),
+        new Song("SIDEWALKS", "3:51", "starboy/09-The-Weeknd-Sidewalks-ft-Kendrick-Lamar-(JustNaija.wav"),
+        new Song("SIX FEET UNDER", "3:58", "starboy/10-The-Weeknd-Six-Feet-Under-(JustNaija.wav"),
+        new Song("LOVE TO LAY", "3:43", "starboy/11-The-Weeknd-Love-To-Lay-(JustNaija.wav"),
+        new Song("A LONELY NIGHT", "3:40", "starboy/12-The-Weeknd-A-Lonely-Night-(JustNaija.wav"),
+        new Song("ATTENTION", "3:18", "starboy/13-The-Weeknd-Attention-(JustNaija.wav"),
+        new Song("ORDINARY LIFE", "3:42", "starboy/14-The-Weeknd-Ordinary-Life-(JustNaija.wav"),
+        new Song("NOTHING WITHOUT YOU", "3:19", "starboy/15-The-Weeknd-Nothing-Without-You-(JustNaija.wav"),
+        new Song("ALL I KNOW", "5:21", "starboy/16-The-Weeknd-All-I-Know-Ft-Future-(JustNaija.wav"),
+        new Song("DIE FOR YOU", "4:20", "starboy/17-The-Weeknd-Die-For-You-(JustNaija.wav"),
+        new Song("I FEEL IT COMING", "4:29", "starboy/18-The-Weeknd-I-Feel-It-Coming-ft-Daft-Punk-(JustNaija.wav")
+    };
 
-    Object[][] albums = {
-        {new ImageIcon("cnTower.png"), "$ome $exy Songs 4U", "Drake", cnTowerSongs},
-        {new ImageIcon("albumCover2.png"), "blbum Name 2", "Artist 2", new Song[]{
-            new Song("Song A2", "3:50", "songA2.wav"),
-            new Song("Song B2", "4:10", "songB2.wav")
-        }},
-        {new ImageIcon("albumCover3.png"), "Album Name 3", "Artist 3", new Song[]{
-            new Song("Song A3", "3:30", "songA3.wav"),
-            new Song("Song B3", "4:00", "songB3.wav")
-        }},
-        {new ImageIcon("albumCover4.png"), "Album Name 4", "brtist 4", new Song[]{
-            new Song("Song A4", "3:40", "songA4.wav"),
-            new Song("Song B4", "4:15", "songB4.wav")
-        }},
-        {new ImageIcon("albumCover5.png"), "Album Name 5", "Artist 5", new Song[]{
-            new Song("Song A4", "3:40", "songA4.wav"),
-            new Song("Song B4", "4:15", "songB4.wav")
-        }},
-        {new ImageIcon("albumCover6.png"), "Album Name 6", "Artist 6", new Song[]{
-            new Song("Song A4", "3:40", "songA4.wav"),
-            new Song("Song B4", "4:15", "songB4.wav")
-        }},
-        {new ImageIcon("albumCover7.png"), "Album Name 7", "Artist 7", new Song[]{
-            new Song("Song A4", "3:40", "songA4.wav"),
-            new Song("Song B4", "4:15", "songB4.wav")
-        }},
-        {new ImageIcon("albumCover8.png"), "Album Name 8", "Artist 8", new Song[]{
-            new Song("Song A4", "3:40", "songA4.wav"),
-            new Song("Song B4", "4:15", "songB4.wav")
-        }},
+    static Song[] sos = {
+        new Song("SOS", "1:58", "sos/16-SZA-SOS-(JustNaija.wav"),
+        new Song("KILL BILL", "2:34", "sos/17-SZA-Kill-Bill-(JustNaija.wav"),
+        new Song("SEEK & DESTROY", "3:24", "sos/18-SZA-Seek-Destroy-(JustNaija.wav"),
+        new Song("LOW", "3:01", "sos/19-SZA-Low-(JustNaija.wav"),
+        new Song("LOVE LANGUAGE", "3:04", "sos/20-SZA-Love-Language-(JustNaija.wav"),
+        new Song("BLIND", "2:31", "sos/21-SZA-Blind-(JustNaija.wav"),
+        new Song("USED", "2:27", "sos/22-SZA-Used-ft-Don-Toliver-(JustNaija.wav"),
+        new Song("SNOOZE", "3:22", "sos/23-SZA-Snooze-(JustNaija.wav"),
+        new Song("NOTICE ME", "2:41", "sos/24-SZA-Notice-Me-(JustNaija.wav"),
+        new Song("GONE GIRL", "4:04", "sos/25-SZA-Gone-Girl-(JustNaija.wav"),
+        new Song("SMOKING ON MY EX PACK", "1:24", "sos/26-SZA-Smoking-on-my-Ex-Pack-(JustNaija.wav"),
+        new Song("GHOST IN THE MACHINE", "3:39", "sos/27-SZA-Ghost-in-the-Machine-(JustNaija.wav"),
+        new Song("F2F", "3:05", "sos/28-SZA-F2F-(JustNaija.wav"),
+        new Song("NOBODY GETS ME", "3:01", "sos/29-SZA-Nobody-Gets-Me-(JustNaija.wav"),
+        new Song("CONCEITED", "2:31", "sos/30-SZA-Conceited-(JustNaija.wav"),
+        new Song("SPECIAL", "2:39", "sos/31-SZA-Special-(JustNaija.wav"),
+        new Song("TOO LATE", "2:45", "sos/32-SZA-Too-Late-(JustNaija.wav"),
+        new Song("FAR", "3:01", "sos/33-SZA-Far-(JustNaija.wav"),
+        new Song("SHIRT", "4:54", "sos/34-SZA-Shirt-(JustNaija.wav"),
+        new Song("OPEN ARMS", "4:00", "sos/35-SZA-Open-Arms-Ft-Travis-Scott-(JustNaija.wav"),
+        new Song("I HATE U", "3:19", "sos/36-SZA-I-Hate-U-(JustNaija.wav"),
+        new Song("GOOD DAYS", "5:39", "sos/37-SZA-Good-Days-(JustNaija.wav"),
+        new Song("FORGIVELESS", "2:22", "sos/38-SZA-Forgiveless-Ft-Ol-Dirty-Bastard-(JustNaija.wav")
+    };
+
+    static Song[] mozartClassical = {
+        new Song("ALLA TURCA", "3:35", "mozart/Alla-Turca(chosic.wav"),
+        new Song("SONATA B FLAT ALLEGRETTO GRAZIOSO", "6:16", "mozart/Brendan_Kinsella_-_Mozart_-_Piano_Sonata_in_B-flat_major_III_Allegretto_Grazioso(chosic.wav"),
+        new Song("SONATA B FLAT ALLEGRO", "6:38", "mozart/Brendan_Kinsella_-_Mozart_-_Sonata_No_13_In_B_Flat_Major_K333_-_I_Allegro(chosic.wav"),
+        new Song("SONATA B FLAT ANDANTE CANTABILE", "6:30", "mozart/Brendan_Kinsella_-_Mozart_-_Sonata_No_13_In_B_Flat_Major_K333_-_II_Andante_Cantabile(chosic.wav"),
+        new Song("DON GIOVANNI OVERTURE", "5:33", "mozart/Don-Giovanni-K.wav"),
+        new Song("SERENDADE IN G MAJOR", "4:13", "mozart/Mozart-Serenade-in-G-major(chosic.wav"),
+        new Song("OVERTURE MARRIAGE", "5:59", "mozart/Overture-to-The-marriage-of-Figaro-K.wav"),
+        new Song("PIANO CONCERTO ANDANTE", "4:21", "mozart/Piano-Concerto-no.wav"),
+        new Song("SYMPHONY NO 40 ALLEGRO", "4:01", "mozart/Symphony-no.wav")
+    };
+
+    static Song[] utopia = {
+        new Song("HYAENA", "3:42", "utopia/01-Travis-Scott-HYAENA-(JustNaija.wav"),
+        new Song("THANK GOD", "3:05", "utopia/02-Travis-Scott-THANK-GOD-(JustNaija.wav"),
+        new Song("MODERN JAM", "4:15", "utopia/03-Travis-Scott-MODERN-JAM-(JustNaija.wav"),
+        new Song("MY EYES", "4:11", "utopia/04-Travis-Scott-MY-EYES-(JustNaija.wav"),
+        new Song("GODS COUNTRY", "2:08", "utopia/05-Travis-Scott-GOD-S-COUNTRY-(JustNaija.wav"),
+        new Song("SIRENS", "3:25", "utopia/06-Travis-Scott-SIRENS-(JustNaija.wav"),
+        new Song("MELTDOWN", "4:06", "utopia/07-Travis-Scott-MELTDOWN-(JustNaija.wav"),
+        new Song("FEIN", "3:12", "utopia/08-Travis-Scott-FE-N-(JustNaija.wav"),
+        new Song("DELRESTO ECHOES", "4:34", "utopia/09-Travis-Scott-DELRESTO-ECHOES-(JustNaija.wav"),
+        new Song("I KNOW", "3:32", "utopia/10-Travis-Scott-I-KNOW-(JustNaija.wav"),
+        new Song("TOPIA TWINS", "3:43", "utopia/11-Travis-Scott-TOPIA-TWINS-(JustNaija.wav"),
+        new Song("CIRCUS MAXIMUS", "4:19", "utopia/12-Travis-Scott-CIRCUS-MAXIMUS-(JustNaija.wav"),
+        new Song("PARASAIL", "2:35", "utopia/13-Travis-Scott-PARASAIL-(JustNaija.wav"),
+        new Song("SKITZO", "6:07", "utopia/14-Travis-Scott-SKITZO-(JustNaija.wav"),
+        new Song("LOST FOREVER", "2:43", "utopia/15-Travis-Scott-LOST-FOREVER-(JustNaija.wav"),
+        new Song("LOOOVE", "3:47", "utopia/16-Travis-Scott-LOOOVE-(JustNaija.wav"),
+        new Song("K-POP", "3:05", "utopia/17-Travis-Scott-K-POP-(JustNaija.wav"),
+        new Song("TELEKINESIS", "5:54", "utopia/18-Travis-Scott-TELEKINESIS-(JustNaija.wav"),
+        new Song("TIL FURTHER NOTICE", "5:15", "utopia/19-Travis-Scott-TIL-FURTHER-NOTICE-(JustNaija.wav")
+    };
+
+    static Song[] chromakopia = {
+        new Song("ST CHROMA", "3:42", "chromakopia/01-Tyler-St-Chroma-Ft-The-Creator-Daniel-Caesar-(JustNaija.wav"),
+        new Song("RAH TAH TAH", "3:05", "chromakopia/02-Tyler-Rah-Tah-Tah-ft-The-Creator-(JustNaija.wav"),
+        new Song("NOID", "4:15", "chromakopia/03-Tyler-Noid-Ft-The-Creator-(JustNaija.wav"),
+        new Song("DARLING, I", "4:11", "chromakopia/04-Tyler-The-Creator-Darling-I-ft-Teezo-Touchdown-(JustNaija.wav"),
+        new Song("HEY JANE", "2:08", "chromakopia/05-Tyler-The-Creator-Hey-Jane-(JustNaija.wav"),
+        new Song("I KILLED YOU", "3:25", "chromakopia/06-Tyler-The-Creator-I-Killed-You-(JustNaija.wav"),
+        new Song("JUDGE JUDY", "4:06", "chromakopia/07-Tyler-The-Creator-Judge-Judy-(JustNaija.wav"),
+        new Song("STICKY", "3:12", "chromakopia/08-Tyler-The-Creator-Sticky-ft-GloRilla-Sexyy-Red-Lil-Wayne-(JustNaija.wav"),
+        new Song("TAKE YOUR MASK OFF", "4:34", "chromakopia/09-Tyler-The-Creator-Take-Your-Mask-Off-ft-Daniel-Caesar-LaToiya-Williams-(JustNaija.wav"),
+        new Song("TOMORROW", "3:32", "chromakopia/10-Tyler-The-Creator-Tomorrow-(JustNaija.wav"),
+        new Song("THOUGHT I WAS DEAD", "3:43", "chromakopia/11-Tyler-The-Creator-Thought-I-Was-Dead-ft-ScHoolboy-Q-Santigold-(JustNaija.wav"),
+        new Song("LIKE HIM", "4:19", "chromakopia/12-Tyler-The-Creator-Like-Him-Ft-Lola-Young-(JustNaija.wav"),
+        new Song("BALLOON", "2:35", "chromakopia/13-Tyler-The-Creator-Balloon-ft-Doechii-(JustNaija.wav"),
+        new Song("I HOPE YOU FIND YOUR WAY HOME", "6:07", "chromakopia/14-Tyler-The-Creator-I-Hope-You-Find-Your-Way-Home-(JustNaija.wav")
+    };
+
+    static Album cnTower = new Album("$ome $exy $ongs 4 U", "Drake", someSexySongs4USongs);
+
+    static Object[][] albums = {
+        {new ImageIcon("cnTower.png"), "$ome $exy Songs 4U", "Drake", someSexySongs4USongs},
+        {new ImageIcon("starboyAlbum.png"), "Starboy", "The Weeknd", starboy},
+        {new ImageIcon("SOSAlbum.png"), "SOS", "SZA", sos},
+        {new ImageIcon("mozartMusic.png"), "Mozart Classical Music", "Mozart", mozartClassical},
+        {new ImageIcon("utopiaAlbum.png"), "Utopia", "Travis Scott", utopia}, 
+        {new ImageIcon("chromakopiaAlbum.jpg"), "Chromakopia", "Tyler, The Creator", chromakopia}
     };
 
     public Layout() {
@@ -443,7 +518,8 @@ class Layout{
             albumButton.add(albumArtist, BorderLayout.SOUTH);
 
             albumButton.addActionListener(e -> {
-                AlbumFrame newAlbum = new AlbumFrame(album.getTitle(), album.getArtist(), album.getSongs());
+                AlbumFrame newAlbum = new AlbumFrame(album.getTitle(), album.getArtist(), album.getSongs(), (ImageIcon) albumData[0]);
+                newAlbum.setLayoutFrame(layoutFrame); // Set the layout frame for the new album
                 File currentAudioFile = Layout.audioFile; // Store the current audio file
                 int audioFrame = AudioManager.getFrame();
                 Layout.audioFile = currentAudioFile; // Restore the audio file in the new layout
@@ -794,35 +870,12 @@ class Layout{
 
     private void resetSort() {
         albums = new Object[][] {
-            {new ImageIcon("cnTower.png"), "$ome $exy Songs 4U", "Drake", cnTowerSongs},
-            {new ImageIcon("albumCover2.png"), "blbum Name 2", "Artist 2", new Song[]{
-                new Song("Song A2", "3:50", "songA2.wav"),
-                new Song("Song B2", "4:10", "songB2.wav")
-            }},
-            {new ImageIcon("albumCover3.png"), "Album Name 3", "Artist 3", new Song[]{
-                new Song("Song A3", "3:30", "songA3.wav"),
-                new Song("Song B3", "4:00", "songB3.wav")
-            }},
-            {new ImageIcon("albumCover4.png"), "Album Name 4", "brtist 4", new Song[]{
-                new Song("Song A4", "3:40", "songA4.wav"),
-                new Song("Song B4", "4:15", "songB4.wav")
-            }},
-            {new ImageIcon("albumCover5.png"), "Album Name 5", "Artist 5", new Song[]{
-                new Song("Song A4", "3:40", "songA4.wav"),
-                new Song("Song B4", "4:15", "songB4.wav")
-            }},
-            {new ImageIcon("albumCover6.png"), "Album Name 6", "Artist 6", new Song[]{
-                new Song("Song A4", "3:40", "songA4.wav"),
-                new Song("Song B4", "4:15", "songB4.wav")
-            }},
-            {new ImageIcon("albumCover7.png"), "Album Name 7", "Artist 7", new Song[]{
-                new Song("Song A4", "3:40", "songA4.wav"),
-                new Song("Song B4", "4:15", "songB4.wav")
-            }},
-            {new ImageIcon("albumCover8.png"), "Album Name 8", "Artist 8", new Song[]{
-                new Song("Song A4", "3:40", "songA4.wav"),
-                new Song("Song B4", "4:15", "songB4.wav")
-            }}
+            {new ImageIcon("cnTower.png"), "$ome $exy Songs 4U", "Drake", someSexySongs4USongs},
+            {new ImageIcon("starboyAlbum.png"), "Starboy", "The Weeknd", starboy},
+            {new ImageIcon("SOSAlbum.png"), "SOS", "SZA", sos},
+            {new ImageIcon("mozartMusic.png"), "Mozart Classical Music", "Mozart", mozartClassical},
+            {new ImageIcon("utopiaAlbum.png"), "Utopia", "Travis Scott", utopia},
+            {new ImageIcon("chromakopiaAlbum.jpg"), "Chromakopia", "Tyler, The Creator", chromakopia}
         };
     }
 
@@ -862,7 +915,7 @@ class Layout{
                 albumButton.add(albumArtist, BorderLayout.SOUTH);
         
                 albumButton.addActionListener(event -> {
-                    AlbumFrame newAlbum = new AlbumFrame(album.getTitle(), album.getArtist(), album.getSongs());
+                    AlbumFrame newAlbum = new AlbumFrame(album.getTitle(), album.getArtist(), album.getSongs(), (ImageIcon) albumData[0]);
                     File currentAudioFile = Layout.audioFile;
                     int audioFrame = AudioManager.getFrame();
                     Layout.audioFile = currentAudioFile;
@@ -926,39 +979,6 @@ class Song{
     public String getFilePath() {
         return filePath;
     }
-/* 
-    private void playMusic(int songIndex) {
-        File file = null;
-
-        isPaused = false;
-        pauseButton.setText("Pause");
-
-        if (clip != null && clip.isRunning()) {
-            clip.stop();
-        }
-
-        try {
-            if(songNumber == 1) {
-                file = new File("PARTYNEXTDOOR-CN-TOWER-Ft-DRAKE-(HipHopKit.com).wav");
-            } else if(songNumber == 2) {
-                file = new File("Spongebob Squarepants.wav");
-            }
-            AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
-
-            clip = AudioSystem.getClip();
-            clip.open(audioIn);
-
-            if (isLooping) {
-                clip.loop(Clip.LOOP_CONTINUOUSLY);
-            }
-
-            clip.start();
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-        */
 }
 
 class RoundedBorder implements Border {
@@ -1023,8 +1043,16 @@ class Album{
 
 class AlbumFrame extends Album {
 
-    public AlbumFrame(String title, String artist, Song[] songs) {
+    private ImageIcon albumCoverImage;
+    private JFrame layoutFrame; // Add a field to store the layout frame
+
+    public AlbumFrame(String title, String artist, Song[] songs, ImageIcon albumCoverImage) {
         super(title, artist, songs);
+        this.albumCoverImage = albumCoverImage;
+    }
+
+    public void setLayoutFrame(JFrame layoutFrame) {
+        this.layoutFrame = layoutFrame; // Store the layout frame
     }
 
     public void displayFrame() {
@@ -1047,7 +1075,7 @@ class AlbumFrame extends Album {
         JLabel albumCover = new JLabel();
         albumCover.setHorizontalAlignment(SwingConstants.CENTER);
         albumCover.setPreferredSize(new Dimension(300, 300));
-        ImageIcon albumImage = new ImageIcon("cnTower.png"); // Replace with actual album cover image
+        ImageIcon albumImage = albumCoverImage; // Cast albumCoverImage to String before creating ImageIcon
         albumCover.setIcon(albumImage);
         albumCover.setAlignmentX(Component.CENTER_ALIGNMENT); // Center-align within the panel
 
@@ -1075,7 +1103,7 @@ class AlbumFrame extends Album {
 
         // Song panel for the list of songs
         JPanel songPanel = new JPanel();
-        songPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 90)); 
+        songPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 40)); 
         songPanel.setPreferredSize(new Dimension(600, 600)); 
 
         // Song list panel
