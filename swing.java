@@ -320,25 +320,28 @@ class Layout{
         rightPanel = new JPanel();
         rightPanel.setPreferredSize(new Dimension(800, 700)); // Extend up to 700 pixels from the right
         rightPanel.setLayout(new BorderLayout()); // Use BorderLayout for structure
-        rightPanel.setBackground(Color.LIGHT_GRAY);
+        rightPanel.setBackground(Color.BLACK);
     
         // Top panel for the "Your Section" label and sort buttons
         JPanel topSectionPanel = new JPanel();
         topSectionPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10)); // Align to the left
-        topSectionPanel.setBackground(Color.LIGHT_GRAY);
+        topSectionPanel.setBackground(Color.BLACK);
     
         JLabel sectionLabel = new JLabel("For You");
         sectionLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        sectionLabel.setForeground(Color.WHITE); 
 
         JLabel sortLabel = new JLabel("Sort Album Name:");
         sortLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         sortLabel.setPreferredSize(new Dimension(120, 30));
         sortLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        sortLabel.setForeground(Color.WHITE);
 
         JLabel sortLabel2 = new JLabel("Sort Artist Name:");
         sortLabel2.setFont(new Font("Arial", Font.PLAIN, 14));
         sortLabel2.setPreferredSize(new Dimension(120, 30));
         sortLabel2.setHorizontalAlignment(SwingConstants.LEFT);
+        sortLabel2.setForeground(Color.WHITE);
 
         ImageIcon sortAscendIcon = new ImageIcon("upArrow.png");
         Image scaledSortAscendIcon = sortAscendIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
@@ -349,6 +352,9 @@ class Layout{
         JButton sortButton3 = new JButton(new ImageIcon(scaledSortAscendIcon));
         JButton sortButton4 = new JButton(new ImageIcon(scaledSortDescendIcon));
         sortButton1.setToolTipText("Sort by Album Name Ascending");
+        sortButton2.setToolTipText("Sort by Album Name Descending");
+        sortButton3.setToolTipText("Sort by Artist Name Ascending");
+        sortButton4.setToolTipText("Sort by Artist Name Descending");
     
         sortButton1.setPreferredSize(new Dimension(30, 30));
         sortButton2.setPreferredSize(new Dimension(30, 30));
@@ -417,7 +423,7 @@ class Layout{
                 resetSort();
         
                 // Reset the button color
-                sortButton2.setBackground(Color.WHITE);
+                sortButton3.setBackground(Color.WHITE);
                 isSortButton3Active = false;
             }
         
@@ -447,7 +453,7 @@ class Layout{
     
         JPanel sortingPanel = new JPanel();
         sortingPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 10)); // Horizontal gap: 20px, Vertical gap: 10px
-        sortingPanel.setBackground(Color.LIGHT_GRAY);
+        sortingPanel.setBackground(Color.BLACK);
 
         // Add "Sort Album Name" label and buttons
         sortingPanel.add(sortLabel); // Add "Sort Album Name" label
@@ -469,7 +475,7 @@ class Layout{
         // Center panel for albums in a square layout
         albumsPanel = new JPanel();
         albumsPanel.setLayout(new GridLayout(0, 2, 10, 10)); // 10 rows, 2 columns, with gaps
-        albumsPanel.setBackground(Color.LIGHT_GRAY);
+        albumsPanel.setBackground(Color.BLACK);
         
     
         for (Object[] albumData : albums) {
@@ -477,10 +483,12 @@ class Layout{
 
             JButton albumButton = new JButton();
             albumButton.setLayout(new BorderLayout());
-            albumButton.setBackground(Color.WHITE);
-            albumButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            albumButton.setBackground(Color.DARK_GRAY);
+            albumButton.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1)); 
             albumButton.setContentAreaFilled(false);
             albumButton.setOpaque(true);
+            albumButton.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+            albumButton.setMaximumSize(new Dimension(200, 200)); // Set maximum size for square layout
 
             ImageIcon albumIcon = (ImageIcon) albumData[0];
             Image scaledAlbumIcon = albumIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
@@ -491,10 +499,12 @@ class Layout{
             JLabel albumName = new JLabel(album.getTitle());
             albumName.setFont(new Font("Arial", Font.BOLD, 14));
             albumName.setHorizontalAlignment(SwingConstants.CENTER);
+            albumName.setForeground(Color.WHITE); // Set text color to white for better visibility
 
             JLabel albumArtist = new JLabel(album.getArtist());
             albumArtist.setFont(new Font("Arial", Font.PLAIN, 12));
             albumArtist.setHorizontalAlignment(SwingConstants.CENTER);
+            albumArtist.setForeground(Color.LIGHT_GRAY); // Set text color to light gray for better visibility
 
             albumButton.add(albumCover, BorderLayout.NORTH);
             albumButton.add(albumName, BorderLayout.CENTER);
@@ -534,11 +544,15 @@ class Layout{
             @Override
             public void mouseEntered(java.awt.event.MouseEvent e) {
                 albumButton.setBackground(Color.LIGHT_GRAY);
+                albumName.setForeground(Color.BLACK); 
+                albumArtist.setForeground(Color.BLACK); 
             }
 
             @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                albumButton.setBackground(Color.WHITE);
+                albumButton.setBackground(Color.DARK_GRAY);
+                albumName.setForeground(Color.WHITE); 
+                albumArtist.setForeground(Color.LIGHT_GRAY); 
             }
             });
 
@@ -567,12 +581,13 @@ class Layout{
         JPanel playlistsPanel = new JPanel();
         playlistsPanel.setLayout(new BoxLayout(playlistsPanel, BoxLayout.Y_AXIS));
         playlistsPanel.setPreferredSize(new Dimension(300, 600));
-        playlistsPanel.setBackground(Color.LIGHT_GRAY);
+        playlistsPanel.setBackground(Color.BLACK);
 
         JLabel playlistsLabel = new JLabel("Playlists");
         playlistsLabel.setFont(new Font("Arial", Font.BOLD, 16));
         playlistsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         playlistsPanel.add(playlistsLabel);
+        playlistsLabel.setForeground(Color.WHITE); 
 
         // Adjust the layout and size of playlist buttons
         playlistsPanel.setLayout(new BoxLayout(playlistsPanel, BoxLayout.Y_AXIS));
@@ -637,12 +652,12 @@ class Layout{
     public static JPanel homeSearchPanel(JFrame currentFrame) {
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new BorderLayout());
-        topPanel.setBackground(Color.LIGHT_GRAY);
+        topPanel.setBackground(Color.BLACK);
         topPanel.setPreferredSize(new Dimension(1100, 50));
 
         JPanel searchHomePanel = new JPanel();
         searchHomePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
-        searchHomePanel.setBackground(Color.LIGHT_GRAY);
+        searchHomePanel.setBackground(Color.BLACK);
 
         ImageIcon homeIcon = new ImageIcon("homeIcon.png");
         Image scaledImage = homeIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
@@ -700,7 +715,7 @@ class Layout{
         
         JPanel accountMenuPanel = new JPanel();
         accountMenuPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10));
-        accountMenuPanel.setBackground(Color.LIGHT_GRAY);
+        accountMenuPanel.setBackground(Color.BLACK);
         JMenuBar menuBar = new JMenuBar();
         menuBar.setBackground(Color.LIGHT_GRAY);
         JMenu menu = new JMenu();
@@ -751,12 +766,12 @@ class Layout{
         bottomPanel = new JPanel();
         bottomPanel.setLayout(new BorderLayout());
         bottomPanel.setPreferredSize(new Dimension(1100, 70));
-        bottomPanel.setBackground(Color.LIGHT_GRAY);
+        bottomPanel.setBackground(Color.BLACK);
 
         // Left panel for album cover and song title
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10)); // Align to the left
-        leftPanel.setBackground(Color.LIGHT_GRAY);
+        leftPanel.setBackground(Color.BLACK);
 
         JLabel albumCover = new JLabel();
         albumCover.setPreferredSize(new Dimension(40, 40)); 
@@ -766,6 +781,7 @@ class Layout{
 
         JLabel songTitle = new JLabel("Song Title");
         songTitle.setFont(new Font("Arial", Font.BOLD, 16));
+        songTitle.setForeground(Color.WHITE); 
 
         leftPanel.add(albumCover);
         leftPanel.add(songTitle);
@@ -773,7 +789,7 @@ class Layout{
         // Center panel for playback bar and play button
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10)); // Center-align
-        centerPanel.setBackground(Color.LIGHT_GRAY);
+        centerPanel.setBackground(Color.BLACK);
 
         ImageIcon pauseIcon = new ImageIcon("pause.png");
         scaledPauseImage = pauseIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
@@ -786,7 +802,8 @@ class Layout{
         playbackSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
         playbackSlider.setBounds(350, 670, 650, 630);
         playbackSlider.setPreferredSize(new Dimension(400, 30));
-        playbackSlider.setBackground(null);
+        playbackSlider.setForeground(Color.DARK_GRAY);
+        playbackSlider.setOpaque(true);
         centerPanel.add(playbackSlider);
 
 
@@ -809,7 +826,7 @@ class Layout{
 
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10)); // Align to the right
-        rightPanel.setBackground(Color.LIGHT_GRAY);
+        rightPanel.setBackground(Color.BLACK);
 
         ImageIcon prevIcon = new ImageIcon("prevSong.png");
         Image scaledPrevImage = prevIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
@@ -1110,11 +1127,12 @@ class Layout{
 
         JButton albumButton = new JButton();
         albumButton.setLayout(new BorderLayout());
-        albumButton.setBackground(Color.WHITE);
+        albumButton.setBackground(Color.DARK_GRAY);
         albumButton.setPreferredSize(new Dimension(100, 00));
         albumButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         albumButton.setContentAreaFilled(false);
         albumButton.setOpaque(true);
+        albumButton.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1)); 
 
         // Load and scale the album cover image
         ImageIcon albumIcon = (ImageIcon) albumData[0];
@@ -1125,10 +1143,12 @@ class Layout{
         JLabel albumName = new JLabel(album.getTitle());
         albumName.setFont(new Font("Arial", Font.BOLD, 14));
         albumName.setHorizontalAlignment(SwingConstants.CENTER);
+        albumName.setForeground(Color.WHITE); // Set text color to white for better visibility
 
         JLabel albumArtist = new JLabel(album.getArtist());
         albumArtist.setFont(new Font("Arial", Font.PLAIN, 12));
         albumArtist.setHorizontalAlignment(SwingConstants.CENTER);
+        albumArtist.setForeground(Color.LIGHT_GRAY); // Set text color to light gray for better visibility
 
         albumButton.add(albumCover, BorderLayout.NORTH);
         albumButton.add(albumName, BorderLayout.CENTER);
@@ -1162,11 +1182,15 @@ class Layout{
             @Override
             public void mouseEntered(java.awt.event.MouseEvent e) {
                 albumButton.setBackground(Color.LIGHT_GRAY);
+                albumName.setForeground(Color.BLACK);
+                albumArtist.setForeground(Color.BLACK);
             }
 
             @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                albumButton.setBackground(Color.WHITE);
+                albumButton.setBackground(Color.DARK_GRAY);
+                albumName.setForeground(Color.WHITE);
+                albumArtist.setForeground(Color.LIGHT_GRAY);
             }
         });
 
@@ -1186,10 +1210,11 @@ class Layout{
         
                 JButton albumButton = new JButton();
                 albumButton.setLayout(new BorderLayout());
-                albumButton.setBackground(Color.WHITE);
+                albumButton.setBackground(Color.DARK_GRAY);
                 albumButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 albumButton.setContentAreaFilled(false);
                 albumButton.setOpaque(true);
+                albumButton.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1)); 
         
                 // Load and scale the album cover image
                 ImageIcon albumIcon = (ImageIcon) albumData[0];
@@ -1201,10 +1226,12 @@ class Layout{
                 JLabel albumName = new JLabel(album.getTitle());
                 albumName.setFont(new Font("Arial", Font.BOLD, 14));
                 albumName.setHorizontalAlignment(SwingConstants.CENTER);
+                albumName.setForeground(Color.WHITE); // Set text color to white for better visibility
         
                 JLabel albumArtist = new JLabel(album.getArtist());
                 albumArtist.setFont(new Font("Arial", Font.PLAIN, 12));
                 albumArtist.setHorizontalAlignment(SwingConstants.CENTER);
+                albumArtist.setForeground(Color.LIGHT_GRAY); // Set text color to light gray for better visibility
         
                 albumButton.add(albumCover, BorderLayout.NORTH);
                 albumButton.add(albumName, BorderLayout.CENTER);
@@ -1238,11 +1265,15 @@ class Layout{
                     @Override
                     public void mouseEntered(java.awt.event.MouseEvent e) {
                         albumButton.setBackground(Color.LIGHT_GRAY);
+                        albumName.setForeground(Color.BLACK);
+                        albumArtist.setForeground(Color.BLACK);
                     }
         
                     @Override
                     public void mouseExited(java.awt.event.MouseEvent evt) {
-                        albumButton.setBackground(Color.WHITE);
+                        albumButton.setBackground(Color.DARK_GRAY);
+                        albumName.setForeground(Color.WHITE);
+                        albumArtist.setForeground(Color.LIGHT_GRAY);
                     }
                 });
         
@@ -1531,9 +1562,9 @@ class AlbumFrame extends Album {
 
         // Create a panel for the album cover, title, and artist
         JPanel albumPanel = new JPanel();
-        albumPanel.setPreferredSize(new Dimension(400, 600));
+        albumPanel.setPreferredSize(new Dimension(500, 600));
         albumPanel.setLayout(new BoxLayout(albumPanel, BoxLayout.Y_AXIS)); // Use vertical layout
-        albumPanel.setBackground(Color.DARK_GRAY); // Set background color for the album panel
+        albumPanel.setBackground(Color.BLACK); // Set background color for the album panel
 
         // Album cover
         JLabel albumCover = new JLabel();
@@ -1542,16 +1573,19 @@ class AlbumFrame extends Album {
         ImageIcon albumImage = albumCoverImage; // Cast albumCoverImage to String before creating ImageIcon
         albumCover.setIcon(albumImage);
         albumCover.setAlignmentX(Component.CENTER_ALIGNMENT); // Center-align within the panel
+        albumCover.setBorder(BorderFactory.createLineBorder(Color.WHITE, 10)); // Add top and bottom padding
 
         // Album title
         JLabel albumTitle = new JLabel(title, SwingConstants.CENTER);
         albumTitle.setFont(new Font("Arial", Font.BOLD, 30));
         albumTitle.setAlignmentX(Component.CENTER_ALIGNMENT); // Center-align within the panel
+        albumTitle.setForeground(Color.WHITE); // Set text color to white for better visibility
 
         // Album artist
         JLabel albumArtist = new JLabel(artist, SwingConstants.CENTER);
         albumArtist.setFont(new Font("Arial", Font.ITALIC, 18));
         albumArtist.setAlignmentX(Component.CENTER_ALIGNMENT); // Center-align within the panel
+        albumArtist.setForeground(Color.LIGHT_GRAY); // Set text color to light gray for better visibility
 
         // Add spacing and components to the album panel
         albumPanel.add(Box.createVerticalGlue()); // Add flexible space at the top
@@ -1569,12 +1603,14 @@ class AlbumFrame extends Album {
         JPanel songPanel = new JPanel();
         songPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 40)); 
         songPanel.setPreferredSize(new Dimension(600, 600)); 
+        songPanel.setBackground(Color.LIGHT_GRAY); // Set background color for the song panel
 
         // Song list panel
         JPanel songListPanel = new JPanel();
         songListPanel.setPreferredSize(new Dimension(500, 500)); 
         songListPanel.setLayout(new GridLayout(0, 2, 5, 5)); 
         songListPanel.setOpaque(false);
+        
         
         for (int i = 0; i < songs.length; i++) { 
             Song song = songs[i];
