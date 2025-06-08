@@ -29,6 +29,7 @@ class Login {
         loginFrame.setSize(400, 250);
         loginFrame.setLocationRelativeTo(null);
         loginFrame.setLayout(null);
+        loginFrame.setResizable(false);
 
         JLabel usernameLabel = new JLabel("Username:");
         usernameLabel.setBounds(50, 50, 100, 30);
@@ -74,7 +75,7 @@ class Login {
 
 class Decryption{
     private JFrame decryptionFrame;
-    private String encryptedWords[] = {"fdw"};
+    private String encryptedWords[] = {"fdw", "wkh", "zkhq", "vdpw", "qdph", "frph"};
     private String randomEncryptWord;
     private int random = (int) (Math.random() * encryptedWords.length);
     private int key = (int) (Math.random() * 4 + 1); 
@@ -92,6 +93,7 @@ class Decryption{
         decryptionFrame.setSize(400, 300); 
         decryptionFrame.setLocationRelativeTo(null);
         decryptionFrame.setLayout(null);
+        decryptionFrame.setResizable(false);
 
         JLabel encryptedWordLabel = new JLabel(randomEncryptWord, SwingConstants.CENTER);
         encryptedWordLabel.setBounds(50, 20, 300, 50);
@@ -312,6 +314,7 @@ class Layout{
         layoutFrame.setSize(1100, 700);
         layoutFrame.setLocationRelativeTo(null);
         layoutFrame.setLayout(new BorderLayout());
+        layoutFrame.setResizable(false);
 
 
         JPanel topPanel = homeSearchPanel(layoutFrame);        
@@ -720,7 +723,7 @@ class Layout{
         menuBar.setBackground(Color.LIGHT_GRAY);
         JMenu menu = new JMenu();
         ImageIcon userIcon = new ImageIcon("userIcon.jpg");
-        Image scaledImageUser = userIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        Image scaledImageUser = userIcon.getImage().getScaledInstance(23, 23, Image.SCALE_SMOOTH);
         menu.setIcon(new ImageIcon(scaledImageUser)); 
         menu.setBorder(BorderFactory.createEmptyBorder());
         menu.setPreferredSize(new Dimension(30, 30));
@@ -734,13 +737,30 @@ class Layout{
         JMenuItem supportItem = new JMenuItem("Support");
         menu.add(supportItem);
         supportItem.addActionListener(e -> {
-            JOptionPane.showMessageDialog(layoutFrame, "Support will be available soon.");
+            String supportMessage = "<html><body style='font-family: Arial; font-size: 14px;'>"
+                    + "<h2>How to use Logithune</h2>"
+                    + "<b>1.</b> Use the search bar at the top to quickly find an album. Just type in the album name (or artist), and matching results will appear.<br><br>"
+                    + "<b>2.</b> You can organize the album list by using the sort buttons. These may let you sort alphabetically, by artist, or by album name.<br><br>"
+                    + "<b>3.</b> To return to the default album view and clear any search or sorting, just click the Home button. This will reset the page to show all albums in their original order.<br><br>"
+                    + "<b>4.</b> To play a song, click on the album cover. This will take you to the album page where you can see all the songs.<br><br>"
+                    + "<b>5.</b> To add a song to a playlist, simply hover over the song, and an “Add” button will appear. Click it to add the song to your selected playlist or create a playlist.<br><br>"
+                    + "If extra support is needed, please contact us at <b>logithune@gmail.com</b>"
+                    + "</body></html>";
+        
+            JEditorPane editorPane = new JEditorPane("text/html", supportMessage);
+            editorPane.setEditable(false); // Make the editor pane non-editable
+            editorPane.setFont(new Font("Arial", Font.PLAIN, 14)); // Set font for better readability
+        
+            JScrollPane scrollPane = new JScrollPane(editorPane);
+            scrollPane.setPreferredSize(new Dimension(400, 300)); // Set the size of the scroll pane
+        
+            JOptionPane.showMessageDialog(layoutFrame, scrollPane, "Support", JOptionPane.INFORMATION_MESSAGE);
         });
 
         JMenuItem settingsItem = new JMenuItem("Settings");
         menu.add(settingsItem);
         settingsItem.addActionListener(e -> {
-            JOptionPane.showMessageDialog(layoutFrame, "Settings will be available soon.");
+            
         });
 
         JMenuItem logoutItem = new JMenuItem("Log out");
@@ -1556,6 +1576,7 @@ class AlbumFrame extends Album {
         album.setSize(1100, 700);
         album.setLocationRelativeTo(null);
         album.setLayout(new BorderLayout());
+        album.setResizable(false);
 
         JPanel topPanel = Layout.homeSearchPanel(album);
         album.add(topPanel, BorderLayout.NORTH); 
@@ -1649,6 +1670,7 @@ class AlbumFrame extends Album {
                 playlistFrame.setSize(300, 200);
                 playlistFrame.setLocationRelativeTo(null);
                 playlistFrame.setLayout(new FlowLayout());
+                playlistFrame.setResizable(false);
 
                 // Button to display all playlists
                 JButton viewPlaylistsButton = new JButton("View Playlists");
