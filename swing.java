@@ -166,8 +166,10 @@ class Layout{
     public static JPanel rightPanel;
     public static Album currentAlbum;
     public static Album currentAlbumFrame;
-    public static boolean playlingPlaylist = false; // Variable to track if a playlist is being played
+    public static boolean playingPlaylist = false; // Variable to track if a playlist is being played
     public static Playlist currentPlaylist; // Variable to store the current playlist being played
+    public static boolean paused = false; // Variable to track if a song is currently playing
+    public static JPanel bottomPanel; // Declare bottomPanel as a static variable
 
     
     static Song[] someSexySongs4USongs = {
@@ -525,6 +527,7 @@ class Layout{
                 }
                 layoutFrame.dispose();
 
+
             });
 
             albumButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -556,7 +559,7 @@ class Layout{
         layoutFrame.add(topPanel, BorderLayout.NORTH);
 
         if(songOn) {
-            JPanel bottomPanel = musicPanel(audioFile);
+            bottomPanel = musicPanel(audioFile);
             layoutFrame.add(bottomPanel, BorderLayout.SOUTH);
         }
 
@@ -601,14 +604,14 @@ class Layout{
                     songButton.setAlignmentX(Component.CENTER_ALIGNMENT);
                     songButton.addActionListener(songEvent -> {
                         if(!songOn){
-                            JPanel bottomPanel = musicPanel(audioFile);
+                            bottomPanel = musicPanel(audioFile);
                             layoutFrame.add(bottomPanel, BorderLayout.SOUTH);
                             songOn = true;
                         }
                         // Play the selected song
                         Layout.audioFile = new File(song.getFilePath());
                         Layout.playSong(Layout.audioFile);
-                        playlingPlaylist = true;
+                        playingPlaylist = true;
                         Layout.currentPlaylist = playlist;
                     });
                     songsPanel.add(songButton);
@@ -745,7 +748,7 @@ class Layout{
     }
 
     public static JPanel musicPanel(File audioFile) {
-        JPanel bottomPanel = new JPanel();
+        bottomPanel = new JPanel();
         bottomPanel.setLayout(new BorderLayout());
         bottomPanel.setPreferredSize(new Dimension(1100, 70));
         bottomPanel.setBackground(Color.LIGHT_GRAY);
@@ -793,9 +796,11 @@ class Layout{
                 ImageIcon playIcon = new ImageIcon("play.png");
                 Image scaledPlayImage = playIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
                 pauseButton.setIcon(new ImageIcon(scaledPlayImage)); // Change icon to play
+                paused = true;
             } else {
                 Song.startAudio();
                 pauseButton.setIcon(new ImageIcon(scaledPauseImage)); // Change icon to pause
+                paused = false;
             }
         });
         if(!Song.isPlaying()) {
@@ -817,8 +822,8 @@ class Layout{
             // Logic to play the previous song
             pauseButton.setIcon(new ImageIcon(scaledPauseImage)); // Ensure pause icon is set
             int currentSongIndex = 0;
-            System.out.println("Playing playlist: " + playlingPlaylist);
-            if(playlingPlaylist){
+            System.out.println("Playing playlist: " + playingPlaylist);
+            if(playingPlaylist){
                 for (int i = 0; i < Layout.currentPlaylist.getSongs().size(); i++) {
                     if (Layout.currentPlaylist.getSongs().get(i).getFilePath().equals(Layout.audioFile.getPath().replace('\\', '/'))) {
                         currentSongIndex = i;
@@ -833,7 +838,7 @@ class Layout{
             System.out.println("Current song index: " + currentSongIndex);
             if(shuffle){
                 while(randomIndex == currentSongIndex ){
-                    if(playlingPlaylist && currentPlaylist.getSongs().size() > 1){
+                    if(playingPlaylist && currentPlaylist.getSongs().size() > 1){
                         randomIndex = (int) (Math.random() * Layout.currentPlaylist.getSongs().size());
                         Layout.audioFile = new File(Layout.currentPlaylist.getSongs().get(randomIndex).getFilePath());
                     } else {
@@ -841,7 +846,7 @@ class Layout{
                         Layout.audioFile = new File(Layout.currentAlbum.getSong(randomIndex).getFilePath());
                     }
                 }
-            } else if(playlingPlaylist){
+            } else if(playingPlaylist){
                 if(currentSongIndex > 0){
                     Layout.audioFile = new File(Layout.currentPlaylist.getSongs().get(currentSongIndex - 1).getFilePath());
 
@@ -871,8 +876,8 @@ class Layout{
             // Logic to play the previous song
             pauseButton.setIcon(new ImageIcon(scaledPauseImage)); // Ensure pause icon is set
             int currentSongIndex = 0;
-            System.out.println("Playing playlist: " + playlingPlaylist);
-            if(playlingPlaylist){
+            System.out.println("Playing playlist: " + playingPlaylist);
+            if(playingPlaylist){
                 for (int i = 0; i < Layout.currentPlaylist.getSongs().size(); i++) {
                     if (Layout.currentPlaylist.getSongs().get(i).getFilePath().equals(Layout.audioFile.getPath().replace('\\', '/'))) {
                         currentSongIndex = i;
@@ -887,7 +892,7 @@ class Layout{
             System.out.println("Current song index: " + currentSongIndex);
             if(shuffle){
                 while(randomIndex == currentSongIndex ){
-                    if(playlingPlaylist && currentPlaylist.getSongs().size() > 1){
+                    if(playingPlaylist && currentPlaylist.getSongs().size() > 1){
                         randomIndex = (int) (Math.random() * Layout.currentPlaylist.getSongs().size());
                         Layout.audioFile = new File(Layout.currentPlaylist.getSongs().get(randomIndex).getFilePath());
                     } else {
@@ -895,7 +900,7 @@ class Layout{
                         Layout.audioFile = new File(Layout.currentAlbum.getSong(randomIndex).getFilePath());
                     }
                 }
-            } else if(playlingPlaylist){
+            } else if(playingPlaylist){
                 if(currentSongIndex < Layout.currentPlaylist.getSongs().size() - 1){
                     Layout.audioFile = new File(Layout.currentPlaylist.getSongs().get(currentSongIndex + 1).getFilePath());
 
@@ -958,8 +963,39 @@ class Layout{
 
     public static void playSong(File songFile) {
         audioFile = songFile; // Update the current audio file
-        System.out.println("Playing song: " + audioFile.getPath());
         Song.playAudio(audioFile, playbackSlider, pauseButton, scaledPauseImage);
+        // Update the album cover in the bottom panel based on the current song's album
+        JLabel albumCover = (JLabel) ((JPanel) Layout.bottomPanel.getComponent(1)).getComponent(0); // Assuming the album cover is the first component in the left panel
+        // Find the album that contains the current song
+        if(playingPlaylist){
+            for (Object[] albumData : Layout.albums) {
+                Song[] songs = (Song[]) albumData[3];
+                for (Song song : songs) {
+                    if (song.getFilePath().equals(Layout.audioFile.getPath().replace('\\', '/'))) {
+                        Layout.currentAlbum  = new Album((String) albumData[1], (String) albumData[2], songs, (ImageIcon) albumData[0]);
+                        break;
+                    }
+                }
+            }
+        }
+
+        
+        Image scaledAlbumImage = currentAlbum.getCover().getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+        albumCover.setIcon(new ImageIcon(scaledAlbumImage));
+        albumCover.revalidate();
+        albumCover.repaint();
+        
+
+        // Update the song title in the bottom panel
+        JPanel songTitle = (JPanel) Layout.bottomPanel.getComponent(1); // Assuming the song title is the second component in leftPanel
+        JLabel songTitleLabel = (JLabel) songTitle.getComponent(1); // Assuming the song title is the second component in leftPanel
+        String songTitleText = Layout.currentAlbum.getSong(Layout.currentAlbum.checkSongIndex(Layout.audioFile.getPath().replace('\\', '/'))).getTitle();
+        if(songTitleText.length() > 15) {
+            songTitleText = songTitleText.substring(0, 12) + "..."; // Truncate to 15 characters and add ellipsis
+        }
+        songTitleLabel.setText(songTitleText);
+        songTitleLabel.revalidate();
+        songTitleLabel.repaint();
     }
 
     private static void insertion(Object[][] albums, int index, boolean ascending) {
@@ -1304,7 +1340,7 @@ class Song{
                         // Logic to play the previous song
                         pauseButton.setIcon(new ImageIcon(scaledPauseImage)); // Ensure pause icon is set
                         int currentSongIndex = 0;
-                        if(Layout.playlingPlaylist){
+                        if(Layout.playingPlaylist){
                             for (int i = 0; i < Layout.currentPlaylist.getSongs().size(); i++) {
                                 if (Layout.currentPlaylist.getSongs().get(i).getFilePath().equals(Layout.audioFile.getPath().replace('\\', '/'))) {
                                     currentSongIndex = i;
@@ -1319,7 +1355,7 @@ class Song{
                         System.out.println("Current song index: " + currentSongIndex);
                         if(Layout.shuffle){
                             while(randomIndex == currentSongIndex){
-                                if(Layout.playlingPlaylist){
+                                if(Layout.playingPlaylist){
                                     randomIndex = (int) (Math.random() * Layout.currentPlaylist.getSongs().size());
                                     Layout.audioFile = new File(Layout.currentPlaylist.getSongs().get(randomIndex).getFilePath());
                                 } else {
@@ -1327,7 +1363,7 @@ class Song{
                                     Layout.audioFile = new File(Layout.currentAlbum.getSong(randomIndex).getFilePath());
                                 }
                             }
-                        } else if(Layout.playlingPlaylist){
+                        } else if(Layout.playingPlaylist){
                             if(currentSongIndex < Layout.currentPlaylist.getSongs().size() - 1){
                                 Layout.audioFile = new File(Layout.currentPlaylist.getSongs().get(currentSongIndex + 1).getFilePath());
 
@@ -1580,6 +1616,10 @@ class AlbumFrame extends Album {
 
                 // Button to display all playlists
                 JButton viewPlaylistsButton = new JButton("View Playlists");
+                viewPlaylistsButton.setBackground(Color.WHITE); 
+                viewPlaylistsButton.setBorder(new RoundedBorder(10)); 
+                viewPlaylistsButton.setContentAreaFilled(false);
+                viewPlaylistsButton.setOpaque(true);
                 viewPlaylistsButton.addActionListener(event -> {
                     // Create a new frame to display playlists
                     JFrame playlistsFrame = new JFrame("User Playlists");
@@ -1604,9 +1644,9 @@ class AlbumFrame extends Album {
                         playlistButton.addActionListener(playlistEvent -> {
                             // Logic to handle playlist selection
                             User.addSong(playlist, song);
-                            JOptionPane.showMessageDialog(playlistFrame, "Added " + song.getTitle() + "to playlist " + playlist.getName() + ".", "Success", JOptionPane.INFORMATION_MESSAGE);
-                            playlistsFrame.dispose();
                             playlistFrame.dispose();
+                            JOptionPane.showMessageDialog(playlistFrame, "Added " + song.getTitle() + " to playlist " + playlist.getName() + ".", "Success", JOptionPane.INFORMATION_MESSAGE);
+                            playlistsFrame.dispose();
 
                         });
                         playlistsPanel.add(playlistButton);
@@ -1622,6 +1662,10 @@ class AlbumFrame extends Album {
 
                 // Button to create a new playlist
                 JButton createPlaylistButton = new JButton("Create New Playlist");
+                createPlaylistButton.setBackground(Color.WHITE); 
+                createPlaylistButton.setBorder(new RoundedBorder(10)); 
+                createPlaylistButton.setContentAreaFilled(false);
+                createPlaylistButton.setOpaque(true);
                 createPlaylistButton.addActionListener(event -> {
                     // Prompt the user to enter a playlist name
                     String playlistName = JOptionPane.showInputDialog(playlistFrame, "Enter Playlist Name:", "New Playlist", JOptionPane.PLAIN_MESSAGE);
@@ -1657,7 +1701,7 @@ class AlbumFrame extends Album {
             songButton.add(buttonContent, BorderLayout.CENTER);
             
             songButton.addActionListener(e -> {
-                Layout.playlingPlaylist = false;
+                Layout.playingPlaylist = false;
 
                 if(Layout.currentAlbum != Layout.currentAlbumFrame && Layout.currentAlbumFrame != null) {
                     Layout.currentAlbum = Layout.currentAlbumFrame; // Update the current album
@@ -1670,15 +1714,21 @@ class AlbumFrame extends Album {
                 timer.start();
                 Layout.audioFile = new File(song.getFilePath());
                 if(!Layout.songOn){
-                JPanel bottomPanel = Layout.musicPanel(Layout.audioFile);
-                album.add(bottomPanel, BorderLayout.SOUTH);
+                    Layout.bottomPanel = Layout.musicPanel(Layout.audioFile);
+                    album.add(Layout.bottomPanel, BorderLayout.SOUTH);
+                    Layout.playSong(Layout.audioFile);
                 } else {
+                    
                     Layout.pauseButton.setIcon(new ImageIcon(Layout.scaledPauseImage)); 
                     Layout.playSong(Layout.audioFile);
                 }
                 Layout.songOn = true; 
+                
                 album.revalidate(); 
                 album.repaint();
+
+                albumCover.revalidate();
+                albumCover.repaint();
             });
 
             songButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1717,7 +1767,6 @@ class AlbumFrame extends Album {
         album.add(songPanel, BorderLayout.EAST);
 
         if(Layout.songOn) {
-            System.out.println("SONGON2" + Layout.audioFile);
             JPanel bottomPanel = Layout.musicPanel(Layout.audioFile);
             album.add(bottomPanel, BorderLayout.SOUTH);
         }
