@@ -19,10 +19,13 @@ interface DisplayableUI {
 }
 
 class LoginUI implements DisplayableUI {
-    protected JFrame loginFrame;
+    private JFrame loginFrame;
 
     private JTextField username;
     private JPasswordField password;
+    private JLabel usernameLabel;
+    private JLabel passwordLabel;
+    private JButton loginButton;
 
     //13 key shift
     User user1 = new User("user1", "cnff1");
@@ -40,7 +43,7 @@ class LoginUI implements DisplayableUI {
         loginFrame.setLayout(null);
         loginFrame.setResizable(false);
 
-        JLabel usernameLabel = new JLabel("Username:");
+        usernameLabel = new JLabel("Username:");
         usernameLabel.setBounds(50, 50, 100, 30);
         loginFrame.add(usernameLabel);
 
@@ -48,7 +51,7 @@ class LoginUI implements DisplayableUI {
         username.setBounds(150, 50, 200, 30);
         loginFrame.add(username);
 
-        JLabel passwordLabel = new JLabel("Password:");
+        passwordLabel = new JLabel("Password:");
         passwordLabel.setBounds(50, 100, 100, 30);
         loginFrame.add(passwordLabel);
 
@@ -56,7 +59,7 @@ class LoginUI implements DisplayableUI {
         password.setBounds(150, 100, 200, 30);
         loginFrame.add(password);
 
-        JButton loginButton = new JButton("Login");
+        loginButton = new JButton("Login");
         loginButton.setBounds(150, 150, 100, 30);
         loginFrame.add(loginButton);
 
@@ -79,7 +82,7 @@ class LoginUI implements DisplayableUI {
         return decrypted.toString();
     }
 
-    public void checkLogin() {
+    private void checkLogin() {
         String username = this.username.getText();
         String password = new String(this.password.getPassword());
 
@@ -104,13 +107,13 @@ class DecryptionUI implements DisplayableUI {
     private JFrame decryptionFrame;
     private String encryptedWords[] = {"fdw", "wkh", "zkhq", "vdpw", "qdph", "frph"};
     private String randomEncryptWord;
+    private JLabel encryptedWordLabel;
+    private JLabel keyLabel;
+    private JTextField textField;
+    private JButton decryptButton;
+    private JButton helpButton;
     private int random = (int) (Math.random() * encryptedWords.length);
     private int key = (int) (Math.random() * 4 + 1); 
-    private String decryptHelp = "To decrypt the word:\n" +
-                "1. Use the key to shift each letter of the encrypted word backward in the alphabet.\n" +
-                "2. For example, if the key is 3 and the encrypted word is 'fdw', shift each letter back by 3.\n" +
-                "3. 'f' becomes 'c', 'd' becomes 'a', and 'w' becomes 't'.\n" +
-                "4. Enter the decrypted word in the text field and click Submit.";
 
     public DecryptionUI() {
         randomEncryptWord = encryptedWords[random];
@@ -122,21 +125,21 @@ class DecryptionUI implements DisplayableUI {
         decryptionFrame.setLayout(null);
         decryptionFrame.setResizable(false);
 
-        JLabel encryptedWordLabel = new JLabel(randomEncryptWord, SwingConstants.CENTER);
+        encryptedWordLabel = new JLabel(randomEncryptWord, SwingConstants.CENTER);
         encryptedWordLabel.setBounds(50, 20, 300, 50);
         encryptedWordLabel.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 24)); // Large, bold, italic font
         encryptedWordLabel.setBorder(BorderFactory.createEmptyBorder()); 
         decryptionFrame.add(encryptedWordLabel);
 
-        JLabel keyLabel = new JLabel("Key: " + key);
+        keyLabel = new JLabel("Key: " + key);
         keyLabel.setBounds(50, 70, 300, 30); 
         decryptionFrame.add(keyLabel);
 
-        JTextField textField = new JTextField();
+        textField = new JTextField();
         textField.setBounds(50, 100, 300, 30);
         decryptionFrame.add(textField);
 
-        JButton decryptButton = new JButton("Submit");
+        decryptButton = new JButton("Submit");
         decryptButton.setBounds(150, 150, 100, 30);
         decryptionFrame.add(decryptButton);
 
@@ -154,11 +157,16 @@ class DecryptionUI implements DisplayableUI {
             }
         });
 
-        JButton helpButton = new JButton("Help");
+        helpButton = new JButton("Help");
         helpButton.setBounds(150, 200, 100, 30); 
         decryptionFrame.add(helpButton);
 
         helpButton.addActionListener(e -> {
+            String decryptHelp = "To decrypt the word:\n" +
+                "1. Use the key to shift each letter of the encrypted word backward in the alphabet.\n" +
+                "2. For example, if the key is 3 and the encrypted word is 'fdw', shift each letter back by 3.\n" +
+                "3. 'f' becomes 'c', 'd' becomes 'a', and 'w' becomes 't'.\n" +
+                "4. Enter the decrypted word in the text field and click Submit.";
             JOptionPane.showMessageDialog(decryptionFrame, decryptHelp,"How to Decrypt", JOptionPane.INFORMATION_MESSAGE);
         });
 
@@ -193,18 +201,18 @@ class LayoutUI implements DisplayableUI {
     public static JButton pauseButton; // Declare pauseButton as a static variable
     public static Image scaledPauseImage; // Declare scaledPauseImage as a static variable
     private static JPanel albumsPanel;
-    private boolean isSortButton1Active = false;
-    private boolean isSortButton2Active = false;
-    private boolean isSortButton3Active = false;
-    private boolean isSortButton4Active = false;
-    public static boolean shuffle = false;
+    public static boolean shuffle;
     public static JPanel rightPanel;
     public static Album currentAlbum;
     public static Album currentAlbumFrame;
-    public static boolean playingPlaylist = false; // Variable to track if a playlist is being played
+    public static boolean playingPlaylist; // Variable to track if a playlist is being played
     public static Playlist currentPlaylist; // Variable to store the current playlist being played
-    public static boolean paused = false; // Variable to track if a song is currently playing
+    public static boolean paused; // Variable to track if a song is currently playing
     public static JPanel bottomPanel; // Declare bottomPanel as a static variable
+    private boolean isSortButton1Active;
+    private boolean isSortButton2Active;
+    private boolean isSortButton3Active;
+    private boolean isSortButton4Active;
 
     
     static Song[] someSexySongs4USongs = {
