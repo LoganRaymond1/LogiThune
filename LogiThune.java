@@ -548,7 +548,7 @@ class LayoutUI implements DisplayableUI {
             albumButton.add(albumArtist, BorderLayout.SOUTH);
 
             albumButton.addActionListener(e -> {
-                AlbumFrame newAlbum = new AlbumFrame(album.getTitle(), album.getArtist(), album.getSongs(), (ImageIcon) albumData[0]);
+                AlbumFrameUI newAlbum = new AlbumFrameUI(album.getTitle(), album.getArtist(), album.getSongs(), (ImageIcon) albumData[0]);
                 newAlbum.setLayoutFrame(layoutFrame); // Set the layout frame for the new album
                 if (currentAlbum == null) {
                     currentAlbum = album;
@@ -1164,7 +1164,7 @@ class LayoutUI implements DisplayableUI {
             for (Song song : songs) {
                 if (song.getTitle().equalsIgnoreCase(search)) {
                     Album album = new Album((String) albumData[1], (String) albumData[2], songs, (ImageIcon) albumData[0]);
-                    AlbumFrame newAlbum = new AlbumFrame(album.getTitle(), album.getArtist(), album.getSongs(), (ImageIcon) albumData[0]);
+                    AlbumFrameUI newAlbum = new AlbumFrameUI(album.getTitle(), album.getArtist(), album.getSongs(), (ImageIcon) albumData[0]);
                     newAlbum.display();
                     layoutFrame.dispose();
                     return;
@@ -1221,7 +1221,7 @@ class LayoutUI implements DisplayableUI {
         albumButton.add(albumArtist, BorderLayout.SOUTH);
 
         albumButton.addActionListener(event -> {
-            AlbumFrame newAlbum = new AlbumFrame(album.getTitle(), album.getArtist(), album.getSongs(), (ImageIcon) albumData[0]);
+            AlbumFrameUI newAlbum = new AlbumFrameUI(album.getTitle(), album.getArtist(), album.getSongs(), (ImageIcon) albumData[0]);
             if (currentAlbum == null) {
                 currentAlbum = album; // Update the current album
             } else {
@@ -1301,7 +1301,7 @@ class LayoutUI implements DisplayableUI {
             albumButton.add(albumArtist, BorderLayout.SOUTH);
 
             albumButton.addActionListener(event -> {
-                AlbumFrame newAlbum = new AlbumFrame(album.getTitle(), album.getArtist(), album.getSongs(), (ImageIcon) albumData[0]);
+                AlbumFrameUI newAlbum = new AlbumFrameUI(album.getTitle(), album.getArtist(), album.getSongs(), (ImageIcon) albumData[0]);
                 if (currentAlbum == null) {
                     currentAlbum = album; // Update the current album
                 } else {
@@ -1588,6 +1588,15 @@ class Album {
         return songs[index];
     }
 
+    public Song getSong(String name) {
+        for (Song song : songs) {
+            if (song.getTitle().equals(name)) {
+                return song;
+            }
+        }
+        return null; 
+    }
+
     public ImageIcon getCover() {
         return albumCover;
     }
@@ -1602,12 +1611,20 @@ class Album {
     }
 }
 
-class AlbumFrame extends Album implements DisplayableUI {
-
+class AlbumFrameUI extends Album implements DisplayableUI {
+    private JFrame album;
+    private JPanel topPanel;
+    private JPanel albumPanel;
+    private JLabel albumCover;
+    private JLabel albumTitle;
+    private JLabel albumArtist;
+    private JPanel songPanel;
+    private JPanel songListPanel;
+    private ImageIcon albumImage;
     private ImageIcon albumCoverImage;
-    private JFrame layoutFrame; // Add a field to store the layout frame
+    private JFrame layoutFrame;
 
-    public AlbumFrame(String title, String artist, Song[] songs, ImageIcon albumCoverImage) {
+    public AlbumFrameUI(String title, String artist, Song[] songs, ImageIcon albumCoverImage) {
         super(title, artist, songs);
         this.albumCoverImage = albumCoverImage;
     }
@@ -1617,39 +1634,39 @@ class AlbumFrame extends Album implements DisplayableUI {
     }
 
     public void display() {
-        JFrame album = new JFrame(title);
+        album = new JFrame(title);
         album.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         album.setSize(1100, 700);
         album.setLocationRelativeTo(null);
         album.setLayout(new BorderLayout());
         album.setResizable(false);
 
-        JPanel topPanel = LayoutUI.homeSearchPanel(album);
+        topPanel = LayoutUI.homeSearchPanel(album);
         album.add(topPanel, BorderLayout.NORTH);
 
         // Create a panel for the album cover, title, and artist
-        JPanel albumPanel = new JPanel();
+        albumPanel = new JPanel();
         albumPanel.setPreferredSize(new Dimension(500, 600));
         albumPanel.setLayout(new BoxLayout(albumPanel, BoxLayout.Y_AXIS)); // Use vertical layout
         albumPanel.setBackground(Color.BLACK); // Set background color for the album panel
 
         // Album cover
-        JLabel albumCover = new JLabel();
+        albumCover = new JLabel();
         albumCover.setHorizontalAlignment(SwingConstants.CENTER);
         albumCover.setPreferredSize(new Dimension(300, 300));
-        ImageIcon albumImage = albumCoverImage; // Cast albumCoverImage to String before creating ImageIcon
+        albumImage = albumCoverImage; // Cast albumCoverImage to String before creating ImageIcon
         albumCover.setIcon(albumImage);
         albumCover.setAlignmentX(Component.CENTER_ALIGNMENT); // Center-align within the panel
         albumCover.setBorder(BorderFactory.createLineBorder(Color.WHITE, 10)); // Add top and bottom padding
 
         // Album title
-        JLabel albumTitle = new JLabel(title, SwingConstants.CENTER);
+        albumTitle = new JLabel(title, SwingConstants.CENTER);
         albumTitle.setFont(new Font("Arial", Font.BOLD, 30));
         albumTitle.setAlignmentX(Component.CENTER_ALIGNMENT); // Center-align within the panel
         albumTitle.setForeground(Color.WHITE); // Set text color to white for better visibility
 
         // Album artist
-        JLabel albumArtist = new JLabel(artist, SwingConstants.CENTER);
+        albumArtist = new JLabel(artist, SwingConstants.CENTER);
         albumArtist.setFont(new Font("Arial", Font.ITALIC, 18));
         albumArtist.setAlignmentX(Component.CENTER_ALIGNMENT); // Center-align within the panel
         albumArtist.setForeground(Color.LIGHT_GRAY); // Set text color to light gray for better visibility
@@ -1667,13 +1684,13 @@ class AlbumFrame extends Album implements DisplayableUI {
         album.add(albumPanel, BorderLayout.WEST);
 
         // Song panel for the list of songs
-        JPanel songPanel = new JPanel();
+        songPanel = new JPanel();
         songPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 40));
         songPanel.setPreferredSize(new Dimension(600, 600));
         songPanel.setBackground(Color.LIGHT_GRAY); // Set background color for the song panel
 
         // Song list panel
-        JPanel songListPanel = new JPanel();
+        songListPanel = new JPanel();
         songListPanel.setPreferredSize(new Dimension(500, 500));
         songListPanel.setLayout(new GridLayout(0, 2, 5, 5));
         songListPanel.setOpaque(false);
