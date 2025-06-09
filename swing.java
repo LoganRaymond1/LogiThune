@@ -10,19 +10,28 @@ import javax.swing.border.Border;
 public class swing {
     public static void main(String[] args) {
                 //new Login(); 
-                new Layout();  
+                new LayoutUI();  
     }
 }
 
-class Login {
+interface DisplayableUI {
+    void display();
+}
+
+class LoginUI implements DisplayableUI {
     protected JFrame loginFrame;
 
     private JTextField username;
     private JPasswordField password;
-    private String usernames[] = {"user1", "user2", "admin"};
-    private String passwords[] = {"pass1", "pass2", "admin123"};
 
-    public Login() {
+    //13 key shift
+    User user1 = new User("user1", "cnff1");
+    User user2 = new User("user2", "cnff2");
+    User admin = new User("admin", "nqzva123");
+
+    User[] users = {user1, user2, admin};
+
+    public LoginUI() {
         loginFrame = new JFrame("Login"); 
 
         loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -54,26 +63,44 @@ class Login {
         loginButton.addActionListener(e -> checkLogin());
         loginFrame.getRootPane().setDefaultButton(loginButton); // Set the default button for Enter key
 
-        loginFrame.setVisible(true);
+        display();
+    }
+
+    public String decryptPassword(String encryptedPassword) {
+        StringBuilder decrypted = new StringBuilder();
+        for (char c : encryptedPassword.toCharArray()) {
+            if (Character.isLetter(c)) {
+                char base = Character.isLowerCase(c) ? 'a' : 'A';
+                decrypted.append((char) ((c - base - 13 + 26) % 26 + base)); // 13 key shift
+            } else {
+                decrypted.append(c); // Non-letter characters remain unchanged
+            }
+        }
+        return decrypted.toString();
     }
 
     public void checkLogin() {
         String username = this.username.getText();
         String password = new String(this.password.getPassword());
 
-        for (int i = 0; i < usernames.length; i++) {
-            if (usernames[i].equals(username) && passwords[i].equals(password)) {
+        for (User user : users) {
+            if (user.getUsername().equals(username) && decryptPassword(user.getPassword()).equals(password)) {
                 JOptionPane.showMessageDialog(loginFrame, "Login successful!");
                 loginFrame.dispose(); 
-                new Decryption();
+                new DecryptionUI();
                 return;
             }
         }
         JOptionPane.showMessageDialog(loginFrame, "Invalid username or password.", "Error", JOptionPane.ERROR_MESSAGE);
     }
+
+    @Override
+    public void display() {
+        loginFrame.setVisible(true);
+    }
 }
 
-class Decryption{
+class DecryptionUI implements DisplayableUI {
     private JFrame decryptionFrame;
     private String encryptedWords[] = {"fdw", "wkh", "zkhq", "vdpw", "qdph", "frph"};
     private String randomEncryptWord;
@@ -85,7 +112,7 @@ class Decryption{
                 "3. 'f' becomes 'c', 'd' becomes 'a', and 'w' becomes 't'.\n" +
                 "4. Enter the decrypted word in the text field and click Submit.";
 
-    public Decryption() {
+    public DecryptionUI() {
         randomEncryptWord = encryptedWords[random];
 
         decryptionFrame = new JFrame("Are you a Robot?");
@@ -119,7 +146,7 @@ class Decryption{
             if (userInput.equalsIgnoreCase(decryptedWord)) {
                 JOptionPane.showMessageDialog(decryptionFrame, "Correct! The decrypted word was: " + decryptedWord);
                 decryptionFrame.dispose();
-                new Layout();
+                new LayoutUI();
 
             } else {
                 JOptionPane.showMessageDialog(decryptionFrame, "Incorrect! Try again.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -135,7 +162,7 @@ class Decryption{
         });
 
         decryptionFrame.getRootPane().setDefaultButton(decryptButton); // Set the default button for Enter key
-        decryptionFrame.setVisible(true);
+        display();
     }
         
         private String decrypt(String text, int key) {
@@ -150,9 +177,14 @@ class Decryption{
             }
             return decrypted.toString();
         }
+
+        @Override
+    public void display() {
+        decryptionFrame.setVisible(true);
+    }
 }
 
-class Layout{
+class LayoutUI implements DisplayableUI {
     private static JFrame layoutFrame;
     public static boolean songOn; 
     public static File audioFile; // Declare audioFile as a static variable
@@ -307,7 +339,7 @@ class Layout{
         {new ImageIcon("chromakopiaAlbum.jpg"), "Chromakopia", "Tyler, The Creator", chromakopia}
     };
 
-    public Layout() {
+    public LayoutUI() {
         audioFile = new File("someSexySongs4U/01-PARTYNEXTDOOR-CN-TOWER-ft-Drake-(JustNaija.wav"); // Declare audioFile as a static variable
         layoutFrame = new JFrame("LogiThune");
         layoutFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -364,29 +396,24 @@ class Layout{
         sortButton3.setPreferredSize(new Dimension(30, 30));
         sortButton4.setPreferredSize(new Dimension(30, 30));
 
-        sortButton1.setOpaque(false);
-        sortButton1.setContentAreaFilled(false);
-        sortButton2.setOpaque(false);
-        sortButton2.setContentAreaFilled(false);
-        sortButton3.setOpaque(false);
-        sortButton3.setContentAreaFilled(false);
-        sortButton4.setOpaque(false);
-        sortButton4.setContentAreaFilled(false);
+        sortButton1.setBackground(Color.WHITE);
+        sortButton2.setBackground(Color.WHITE);
+        sortButton3.setBackground(Color.WHITE);
+        sortButton4.setBackground(Color.WHITE);
+        
 
         sortButton1.addActionListener(e -> {
             if (!isSortButton1Active) {
                 // Sort the albums array by album name (field index 1)
                 insertion(albums, 1, true);
-        
+                sortButton1.setBackground(Color.GRAY);
                 // Highlight the button
-                sortButton1.setBackground(Color.BLUE);
                 isSortButton1Active = true;
             } else {
                 // Reset the albums array to its original order (unsorted)
                 resetSort();
-        
-                // Reset the button color
                 sortButton1.setBackground(Color.WHITE);
+                // Reset the button color
                 isSortButton1Active = false;
             }
             
@@ -399,7 +426,7 @@ class Layout{
                 insertion(albums, 1, false);
         
                 // Highlight the button
-                sortButton2.setBackground(Color.BLUE);
+                sortButton2.setBackground(Color.GRAY);
                 isSortButton2Active = true;
             } else {
                 // Reset the albums array to its original order (unsorted)
@@ -419,7 +446,7 @@ class Layout{
                 insertion(albums, 2, true);
         
                 // Highlight the button
-                sortButton3.setBackground(Color.BLUE);
+                sortButton3.setBackground(Color.GRAY);
                 isSortButton3Active = true;
             } else {
                 // Reset the albums array to its original order (unsorted)
@@ -439,7 +466,7 @@ class Layout{
                 insertion(albums, 2, false);
         
                 // Highlight the button
-                sortButton4.setBackground(Color.BLUE);
+                sortButton4.setBackground(Color.GRAY);
                 isSortButton4Active = true;
             } else {
                 // Reset the albums array to its original order (unsorted)
@@ -525,17 +552,17 @@ class Layout{
                     currentAlbumFrame = album;
                 }
                 
-                File currentAudioFile = Layout.audioFile; // Store the current audio file
+                File currentAudioFile = LayoutUI.audioFile; // Store the current audio file
                 int audioFrame = Song.getFrame();
-                Layout.audioFile = currentAudioFile; // Restore the audio file in the new layout
-                newAlbum.displayFrame();
+                LayoutUI.audioFile = currentAudioFile; // Restore the audio file in the new layout
+                newAlbum.display();
                 if(!Song.isPlaying()) {
                     if(audioFrame != 0){
                         System.out.println("PAUSED");
                         Song.stopAudio(); // Stop the current audio if playing
                     } 
                 } else {
-                    playSong(Layout.audioFile); // Play the current audio file
+                    playSong(LayoutUI.audioFile); // Play the current audio file
                     Song.setFrame(audioFrame); // Restore the audio frame
                 }
                 layoutFrame.dispose();
@@ -559,7 +586,7 @@ class Layout{
             }
             });
 
-            Layout.albumsPanel.add(albumButton);
+            LayoutUI.albumsPanel.add(albumButton);
         }
     
         // Add the top section and albums panel to the right panel
@@ -614,11 +641,19 @@ class Layout{
 
                 // Create a panel to list songs
                 JPanel songsPanel = new JPanel();
+                songsPanel.setBackground(Color.BLACK);
+                songsPanel.add(Box.createVerticalStrut(10)); // Add spacing between buttons
                 songsPanel.setLayout(new BoxLayout(songsPanel, BoxLayout.Y_AXIS));
 
                 // Add each song in the playlist to the panel
                 for (Song song : playlist.getSongs()) {
                     JButton songButton = new JButton(song.getTitle() + " (" + song.getDuration() + ")");
+                    songButton.setBackground(Color.WHITE); // Set text color to white for better visibility
+                    songButton.setBorder(new RoundedBorder(10)); // Add rounded border
+                    songButton.setContentAreaFilled(false);
+                    songButton.setOpaque(true);
+                    songButton.setPreferredSize(new Dimension(300, 40)); // Make buttons wider
+                    songButton.setMaximumSize(new Dimension(300, 40)); // Ensure consistent size
                     songButton.setAlignmentX(Component.CENTER_ALIGNMENT);
                     songButton.addActionListener(songEvent -> {
                         if(!songOn){
@@ -627,10 +662,10 @@ class Layout{
                             songOn = true;
                         }
                         // Play the selected song
-                        Layout.audioFile = new File(song.getFilePath());
-                        Layout.playSong(Layout.audioFile);
+                        LayoutUI.audioFile = new File(song.getFilePath());
+                        LayoutUI.playSong(LayoutUI.audioFile);
                         playingPlaylist = true;
-                        Layout.currentPlaylist = playlist;
+                        LayoutUI.currentPlaylist = playlist;
                     });
                     songsPanel.add(songButton);
                 }
@@ -649,8 +684,8 @@ class Layout{
         // Add playlistsPanel to the layout beside the album panel
         layoutFrame.add(playlistsPanel, BorderLayout.WEST);
 
-        layoutFrame.setVisible(true);
-    }
+        display();
+        }
 
     public static JPanel homeSearchPanel(JFrame currentFrame) {
         JPanel topPanel = new JPanel();
@@ -671,17 +706,17 @@ class Layout{
         homeButton.setContentAreaFilled(false);
         homeButton.setOpaque(true);
         homeButton.addActionListener(e -> {
-            File currentAudioFile = Layout.audioFile; // Store the current audio file
+            File currentAudioFile = LayoutUI.audioFile; // Store the current audio file
             int audioFrame = Song.getFrame();
-            new Layout(); 
-            Layout.audioFile = currentAudioFile; // Restore the audio file in the new layout
+            new LayoutUI(); 
+            LayoutUI.audioFile = currentAudioFile; // Restore the audio file in the new layout
             ImageIcon playIcon;
             if((!Song.isPlaying())) {
                 Song.stopAudio();
                 playIcon = new ImageIcon("play.png");
             } else {
                 playIcon = new ImageIcon("pause.png");
-                playSong(Layout.audioFile); // Play the current audio file
+                playSong(LayoutUI.audioFile); // Play the current audio file
                 Song.setFrame(audioFrame); // Restore the audio frame
 
             }
@@ -703,6 +738,10 @@ class Layout{
 
         JButton searchButton = new JButton("Search");
         searchButton.setPreferredSize(new Dimension(80, 30));
+        searchButton.setBackground(Color.WHITE);
+        searchButton.setBorder(new RoundedBorder(10));
+        searchButton.setContentAreaFilled(false);
+        searchButton.setOpaque(true);
 
         searchField.addActionListener(e -> {
             handleSearch(albums, searchField.getText().trim());
@@ -769,7 +808,7 @@ class Layout{
             int response = JOptionPane.showConfirmDialog(layoutFrame, "Are you sure you want to log out?", "Log Out", JOptionPane.YES_NO_OPTION);
             if (response == JOptionPane.YES_OPTION) {
                 layoutFrame.dispose(); 
-                new Login(); 
+                new LoginUI(); 
             }
         });
         
@@ -814,7 +853,7 @@ class Layout{
         ImageIcon pauseIcon = new ImageIcon("pause.png");
         scaledPauseImage = pauseIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         pauseButton = new JButton(new ImageIcon(scaledPauseImage)); 
-        pauseButton.setBackground(null);
+        pauseButton.setBackground(Color.WHITE);
         pauseButton.setFocusPainted(false);
         centerPanel.add(pauseButton);
         
@@ -823,6 +862,7 @@ class Layout{
         playbackSlider.setBounds(350, 670, 650, 630);
         playbackSlider.setPreferredSize(new Dimension(400, 30));
         playbackSlider.setForeground(Color.DARK_GRAY);
+        playbackSlider.setBackground(Color.BLACK);
         playbackSlider.setOpaque(true);
         centerPanel.add(playbackSlider);
 
@@ -841,7 +881,7 @@ class Layout{
             }
         });
         if(!Song.isPlaying()) {
-            Song.playAudio(Layout.audioFile, playbackSlider, pauseButton, scaledPauseImage); // Start playing the audio
+            Song.playAudio( LayoutUI.audioFile, playbackSlider, pauseButton, scaledPauseImage); // Start playing the audio
         }
 
         JPanel rightPanel = new JPanel();
@@ -851,7 +891,7 @@ class Layout{
         ImageIcon prevIcon = new ImageIcon("prevSong.png");
         Image scaledPrevImage = prevIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         JButton prevButton = new JButton(new ImageIcon(scaledPrevImage));
-        prevButton.setBackground(null);
+        prevButton.setBackground(Color.WHITE);
         prevButton.setFocusPainted(false);
         rightPanel.add(prevButton);
 
@@ -861,14 +901,14 @@ class Layout{
             int currentSongIndex = 0;
             System.out.println("Playing playlist: " + playingPlaylist);
             if(playingPlaylist){
-                for (int i = 0; i < Layout.currentPlaylist.getSongs().size(); i++) {
-                    if (Layout.currentPlaylist.getSongs().get(i).getFilePath().equals(Layout.audioFile.getPath().replace('\\', '/'))) {
+                for (int i = 0; i < LayoutUI.currentPlaylist.getSongs().size(); i++) {
+                    if ( LayoutUI.currentPlaylist.getSongs().get(i).getFilePath().equals( LayoutUI.audioFile.getPath().replace('\\', '/'))) {
                         currentSongIndex = i;
                         break;
                     }
                 }
             } else {
-                currentSongIndex = Layout.currentAlbum.checkSongIndex(Layout.audioFile.getPath().replace('\\', '/'));
+                currentSongIndex = LayoutUI.currentAlbum.checkSongIndex( LayoutUI.audioFile.getPath().replace('\\', '/'));
             }
             
             int randomIndex = currentSongIndex;
@@ -876,36 +916,36 @@ class Layout{
             if(shuffle){
                 while(randomIndex == currentSongIndex ){
                     if(playingPlaylist && currentPlaylist.getSongs().size() > 1){
-                        randomIndex = (int) (Math.random() * Layout.currentPlaylist.getSongs().size());
-                        Layout.audioFile = new File(Layout.currentPlaylist.getSongs().get(randomIndex).getFilePath());
+                        randomIndex = (int) (Math.random() * LayoutUI.currentPlaylist.getSongs().size());
+                        LayoutUI.audioFile = new File( LayoutUI.currentPlaylist.getSongs().get(randomIndex).getFilePath());
                     } else {
-                        randomIndex = (int) (Math.random() * Layout.currentAlbum.songs.length);
-                        Layout.audioFile = new File(Layout.currentAlbum.getSong(randomIndex).getFilePath());
+                        randomIndex = (int) (Math.random() * LayoutUI.currentAlbum.songs.length);
+                        LayoutUI.audioFile = new File( LayoutUI.currentAlbum.getSong(randomIndex).getFilePath());
                     }
                 }
             } else if(playingPlaylist){
                 if(currentSongIndex > 0){
-                    Layout.audioFile = new File(Layout.currentPlaylist.getSongs().get(currentSongIndex - 1).getFilePath());
+                    LayoutUI.audioFile = new File( LayoutUI.currentPlaylist.getSongs().get(currentSongIndex - 1).getFilePath());
 
                 } else{
-                    Layout.audioFile = new File(Layout.currentPlaylist.getSongs().get(Layout.currentPlaylist.getSongs().size() - 1).getFilePath());
+                    LayoutUI.audioFile = new File( LayoutUI.currentPlaylist.getSongs().get( LayoutUI.currentPlaylist.getSongs().size() - 1).getFilePath());
 
                 }
             } else if(currentSongIndex > 0){
-                Layout.audioFile = new File(Layout.currentAlbum.getSong(currentSongIndex - 1).getFilePath());
+                LayoutUI.audioFile = new File( LayoutUI.currentAlbum.getSong(currentSongIndex - 1).getFilePath());
 
             } else{
-                Layout.audioFile = new File(Layout.currentAlbum.getSong(currentAlbum.songs.length - 1).getFilePath());
+                LayoutUI.audioFile = new File( LayoutUI.currentAlbum.getSong(currentAlbum.songs.length - 1).getFilePath());
 
             }
-            playSong(Layout.audioFile);
+            playSong( LayoutUI.audioFile);
             
         });
 
         ImageIcon nextIcon = new ImageIcon("nextSong.png");
         Image scaledNextImage = nextIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         JButton nextButton = new JButton(new ImageIcon(scaledNextImage));
-        nextButton.setBackground(null);
+        nextButton.setBackground(Color.WHITE);
         nextButton.setFocusPainted(false);
         rightPanel.add(nextButton);
 
@@ -915,14 +955,14 @@ class Layout{
             int currentSongIndex = 0;
             System.out.println("Playing playlist: " + playingPlaylist);
             if(playingPlaylist){
-                for (int i = 0; i < Layout.currentPlaylist.getSongs().size(); i++) {
-                    if (Layout.currentPlaylist.getSongs().get(i).getFilePath().equals(Layout.audioFile.getPath().replace('\\', '/'))) {
+                for (int i = 0; i < LayoutUI.currentPlaylist.getSongs().size(); i++) {
+                    if ( LayoutUI.currentPlaylist.getSongs().get(i).getFilePath().equals( LayoutUI.audioFile.getPath().replace('\\', '/'))) {
                         currentSongIndex = i;
                         break;
                     }
                 }
             } else {
-                currentSongIndex = Layout.currentAlbum.checkSongIndex(Layout.audioFile.getPath().replace('\\', '/'));
+                currentSongIndex = LayoutUI.currentAlbum.checkSongIndex( LayoutUI.audioFile.getPath().replace('\\', '/'));
             }
             
             int randomIndex = currentSongIndex;
@@ -930,43 +970,45 @@ class Layout{
             if(shuffle){
                 while(randomIndex == currentSongIndex ){
                     if(playingPlaylist && currentPlaylist.getSongs().size() > 1){
-                        randomIndex = (int) (Math.random() * Layout.currentPlaylist.getSongs().size());
-                        Layout.audioFile = new File(Layout.currentPlaylist.getSongs().get(randomIndex).getFilePath());
+                        randomIndex = (int) (Math.random() * LayoutUI.currentPlaylist.getSongs().size());
+                        LayoutUI.audioFile = new File( LayoutUI.currentPlaylist.getSongs().get(randomIndex).getFilePath());
                     } else {
-                        randomIndex = (int) (Math.random() * Layout.currentAlbum.songs.length);
-                        Layout.audioFile = new File(Layout.currentAlbum.getSong(randomIndex).getFilePath());
+                        randomIndex = (int) (Math.random() * LayoutUI.currentAlbum.songs.length);
+                        LayoutUI.audioFile = new File( LayoutUI.currentAlbum.getSong(randomIndex).getFilePath());
                     }
                 }
             } else if(playingPlaylist){
-                if(currentSongIndex < Layout.currentPlaylist.getSongs().size() - 1){
-                    Layout.audioFile = new File(Layout.currentPlaylist.getSongs().get(currentSongIndex + 1).getFilePath());
+                if(currentSongIndex < LayoutUI.currentPlaylist.getSongs().size() - 1){
+                    LayoutUI.audioFile = new File( LayoutUI.currentPlaylist.getSongs().get(currentSongIndex + 1).getFilePath());
 
                 } else{
-                    Layout.audioFile = new File(Layout.currentPlaylist.getSongs().get(0).getFilePath());
+                    LayoutUI.audioFile = new File( LayoutUI.currentPlaylist.getSongs().get(0).getFilePath());
 
                 }
-            } else if(currentSongIndex < Layout.currentAlbum.songs.length - 1){
-                Layout.audioFile = new File(Layout.currentAlbum.getSong(currentSongIndex + 1).getFilePath());
+            } else if(currentSongIndex < LayoutUI.currentAlbum.songs.length - 1){
+                LayoutUI.audioFile = new File( LayoutUI.currentAlbum.getSong(currentSongIndex + 1).getFilePath());
 
             } else{
-                Layout.audioFile = new File(Layout.currentAlbum.getSong(0).getFilePath());
+                LayoutUI.audioFile = new File( LayoutUI.currentAlbum.getSong(0).getFilePath());
 
             }
-            playSong(Layout.audioFile);
+            playSong( LayoutUI.audioFile);
         });
 
         ImageIcon shuffleIcon = new ImageIcon("shuffle.png");
         Image scaledShuffleImage = shuffleIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         JButton shuffleButton = new JButton(new ImageIcon(scaledShuffleImage));
-        shuffleButton.setBackground(null);
+        shuffleButton.setBackground(Color.WHITE);
         shuffleButton.setFocusPainted(false);
         rightPanel.add(shuffleButton);
 
         shuffleButton.addActionListener(e -> {
             // Logic to shuffle the songs
             if(shuffle){
+                shuffleButton.setBackground(Color.WHITE);
                 shuffle = false;
             } else {
+                shuffleButton.setBackground(Color.GRAY);
                 shuffle = true;
             }
         });
@@ -974,7 +1016,7 @@ class Layout{
         ImageIcon loopIcon = new ImageIcon("loop.png");
         Image scaledLoopImage = loopIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         JButton loopButton = new JButton(new ImageIcon(scaledLoopImage));
-        loopButton.setBackground(null);
+        loopButton.setBackground(Color.WHITE);
         loopButton.setFocusPainted(false);
         rightPanel.add(loopButton);
 
@@ -982,7 +1024,7 @@ class Layout{
             // Logic to toggle loop
             if(Song.isLooping()){
                 Song.setLooping(false);
-                loopButton.setBackground(null);
+                loopButton.setBackground(Color.WHITE);
 
             } else {
                 Song.setLooping(true);
@@ -1002,14 +1044,14 @@ class Layout{
         audioFile = songFile; // Update the current audio file
         Song.playAudio(audioFile, playbackSlider, pauseButton, scaledPauseImage);
         // Update the album cover in the bottom panel based on the current song's album
-        JLabel albumCover = (JLabel) ((JPanel) Layout.bottomPanel.getComponent(1)).getComponent(0); // Assuming the album cover is the first component in the left panel
+        JLabel albumCover = (JLabel) ((JPanel) LayoutUI.bottomPanel.getComponent(1)).getComponent(0); // Assuming the album cover is the first component in the left panel
         // Find the album that contains the current song
         if(playingPlaylist){
-            for (Object[] albumData : Layout.albums) {
+            for (Object[] albumData : LayoutUI.albums) {
                 Song[] songs = (Song[]) albumData[3];
                 for (Song song : songs) {
-                    if (song.getFilePath().equals(Layout.audioFile.getPath().replace('\\', '/'))) {
-                        Layout.currentAlbum  = new Album((String) albumData[1], (String) albumData[2], songs, (ImageIcon) albumData[0]);
+                    if (song.getFilePath().equals( LayoutUI.audioFile.getPath().replace('\\', '/'))) {
+                        LayoutUI.currentAlbum  = new Album((String) albumData[1], (String) albumData[2], songs, (ImageIcon) albumData[0]);
                         break;
                     }
                 }
@@ -1024,9 +1066,9 @@ class Layout{
         
 
         // Update the song title in the bottom panel
-        JPanel songTitle = (JPanel) Layout.bottomPanel.getComponent(1); // Assuming the song title is the second component in leftPanel
+        JPanel songTitle = (JPanel) LayoutUI.bottomPanel.getComponent(1); // Assuming the song title is the second component in leftPanel
         JLabel songTitleLabel = (JLabel) songTitle.getComponent(1); // Assuming the song title is the second component in leftPanel
-        String songTitleText = Layout.currentAlbum.getSong(Layout.currentAlbum.checkSongIndex(Layout.audioFile.getPath().replace('\\', '/'))).getTitle();
+        String songTitleText = LayoutUI.currentAlbum.getSong( LayoutUI.currentAlbum.checkSongIndex( LayoutUI.audioFile.getPath().replace('\\', '/'))).getTitle();
         if(songTitleText.length() > 15) {
             songTitleText = songTitleText.substring(0, 12) + "..."; // Truncate to 15 characters and add ellipsis
         }
@@ -1119,7 +1161,7 @@ class Layout{
                 if(song.getTitle().equalsIgnoreCase(search)) {
                     Album album = new Album((String) albumData[1], (String) albumData[2], songs, (ImageIcon) albumData[0]);
                     AlbumFrame newAlbum = new AlbumFrame(album.getTitle(), album.getArtist(), album.getSongs(), (ImageIcon) albumData[0]);
-                    newAlbum.displayFrame();
+                    newAlbum.display();
                     layoutFrame.dispose();
                     return;
                 }
@@ -1182,17 +1224,17 @@ class Layout{
                 currentAlbumFrame = album; // Update the current album frame
             }
             System.out.println("Current Album: " + currentAlbum.getTitle());
-            File currentAudioFile = Layout.audioFile;
+            File currentAudioFile = LayoutUI.audioFile;
             int audioFrame = Song.getFrame();
-            Layout.audioFile = currentAudioFile;
-            newAlbum.displayFrame();
+            LayoutUI.audioFile = currentAudioFile;
+            newAlbum.display();
             if(!Song.isPlaying()) {
                 if(audioFrame != 0) {
                     Song.stopAudio();
                 }
             }
             else {
-                playSong(Layout.audioFile);
+                playSong( LayoutUI.audioFile);
                 Song.setFrame(audioFrame);
             }
                 layoutFrame.dispose();
@@ -1265,17 +1307,17 @@ class Layout{
                         currentAlbumFrame = album; // Update the current album frame
                     }
                     System.out.println("Current Album: " + currentAlbum.getTitle());
-                    File currentAudioFile = Layout.audioFile;
+                    File currentAudioFile = LayoutUI.audioFile;
                     int audioFrame = Song.getFrame();
-                    Layout.audioFile = currentAudioFile;
-                    newAlbum.displayFrame();
+                    LayoutUI.audioFile = currentAudioFile;
+                    newAlbum.display();
                     if(!Song.isPlaying()) {
                         if(audioFrame != 0) {
                             Song.stopAudio();
                         }
                     }
                     else {
-                        playSong(Layout.audioFile);
+                        playSong( LayoutUI.audioFile);
                         Song.setFrame(audioFrame);
                     }
                         layoutFrame.dispose();
@@ -1304,7 +1346,11 @@ class Layout{
             albumsPanel.revalidate();
             albumsPanel.repaint();
         }
-    }
+
+        @Override
+        public void display() {
+            layoutFrame.setVisible(true);
+        }    }
 
 class Song{
     private String title;
@@ -1391,45 +1437,45 @@ class Song{
                         // Logic to play the previous song
                         pauseButton.setIcon(new ImageIcon(scaledPauseImage)); // Ensure pause icon is set
                         int currentSongIndex = 0;
-                        if(Layout.playingPlaylist){
-                            for (int i = 0; i < Layout.currentPlaylist.getSongs().size(); i++) {
-                                if (Layout.currentPlaylist.getSongs().get(i).getFilePath().equals(Layout.audioFile.getPath().replace('\\', '/'))) {
+                        if(LayoutUI.playingPlaylist){
+                            for (int i = 0; i < LayoutUI.currentPlaylist.getSongs().size(); i++) {
+                                if ( LayoutUI.currentPlaylist.getSongs().get(i).getFilePath().equals( LayoutUI.audioFile.getPath().replace('\\', '/'))) {
                                     currentSongIndex = i;
                                     break;
                                 }
                             }
                         } else {
-                            currentSongIndex = Layout.currentAlbum.checkSongIndex(Layout.audioFile.getPath().replace('\\', '/'));
+                            currentSongIndex = LayoutUI.currentAlbum.checkSongIndex( LayoutUI.audioFile.getPath().replace('\\', '/'));
                         }
                         
                         int randomIndex = currentSongIndex;
                         System.out.println("Current song index: " + currentSongIndex);
-                        if(Layout.shuffle){
+                        if(LayoutUI.shuffle){
                             while(randomIndex == currentSongIndex){
-                                if(Layout.playingPlaylist){
-                                    randomIndex = (int) (Math.random() * Layout.currentPlaylist.getSongs().size());
-                                    Layout.audioFile = new File(Layout.currentPlaylist.getSongs().get(randomIndex).getFilePath());
+                                if(LayoutUI.playingPlaylist){
+                                    randomIndex = (int) (Math.random() * LayoutUI.currentPlaylist.getSongs().size());
+                                    LayoutUI.audioFile = new File( LayoutUI.currentPlaylist.getSongs().get(randomIndex).getFilePath());
                                 } else {
-                                    randomIndex = (int) (Math.random() * Layout.currentAlbum.songs.length);
-                                    Layout.audioFile = new File(Layout.currentAlbum.getSong(randomIndex).getFilePath());
+                                    randomIndex = (int) (Math.random() * LayoutUI.currentAlbum.songs.length);
+                                    LayoutUI.audioFile = new File( LayoutUI.currentAlbum.getSong(randomIndex).getFilePath());
                                 }
                             }
-                        } else if(Layout.playingPlaylist){
-                            if(currentSongIndex < Layout.currentPlaylist.getSongs().size() - 1){
-                                Layout.audioFile = new File(Layout.currentPlaylist.getSongs().get(currentSongIndex + 1).getFilePath());
+                        } else if(LayoutUI.playingPlaylist){
+                            if(currentSongIndex < LayoutUI.currentPlaylist.getSongs().size() - 1){
+                                LayoutUI.audioFile = new File( LayoutUI.currentPlaylist.getSongs().get(currentSongIndex + 1).getFilePath());
 
                             } else{
-                                Layout.audioFile = new File(Layout.currentPlaylist.getSongs().get(0).getFilePath());
+                                LayoutUI.audioFile = new File( LayoutUI.currentPlaylist.getSongs().get(0).getFilePath());
 
                             }
-                        } else if(currentSongIndex < Layout.currentAlbum.songs.length - 1){
-                            Layout.audioFile = new File(Layout.currentAlbum.getSong(currentSongIndex + 1).getFilePath());
+                        } else if(currentSongIndex < LayoutUI.currentAlbum.songs.length - 1){
+                            LayoutUI.audioFile = new File( LayoutUI.currentAlbum.getSong(currentSongIndex + 1).getFilePath());
 
                         } else{
-                            Layout.audioFile = new File(Layout.currentAlbum.getSong(0).getFilePath());
+                            LayoutUI.audioFile = new File( LayoutUI.currentAlbum.getSong(0).getFilePath());
 
                         }
-                        Layout.playSong(Layout.audioFile);
+                        LayoutUI.playSong( LayoutUI.audioFile);
                     }
                 }
             });
@@ -1556,7 +1602,7 @@ class Album{
     }
 }
 
-class AlbumFrame extends Album {
+class AlbumFrame extends Album implements DisplayableUI {
 
     private ImageIcon albumCoverImage;
     private JFrame layoutFrame; // Add a field to store the layout frame
@@ -1570,7 +1616,7 @@ class AlbumFrame extends Album {
         this.layoutFrame = layoutFrame; // Store the layout frame
     }
 
-    public void displayFrame() {
+    public void display() {
         JFrame album = new JFrame(title);
         album.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         album.setSize(1100, 700);
@@ -1578,7 +1624,7 @@ class AlbumFrame extends Album {
         album.setLayout(new BorderLayout());
         album.setResizable(false);
 
-        JPanel topPanel = Layout.homeSearchPanel(album);
+        JPanel topPanel = LayoutUI.homeSearchPanel(album);
         album.add(topPanel, BorderLayout.NORTH); 
 
         // Create a panel for the album cover, title, and artist
@@ -1759,10 +1805,10 @@ class AlbumFrame extends Album {
             songButton.add(buttonContent, BorderLayout.CENTER);
             
             songButton.addActionListener(e -> {
-                Layout.playingPlaylist = false;
+                LayoutUI.playingPlaylist = false;
 
-                if(Layout.currentAlbum != Layout.currentAlbumFrame && Layout.currentAlbumFrame != null) {
-                    Layout.currentAlbum = Layout.currentAlbumFrame; // Update the current album
+                if( LayoutUI.currentAlbum != LayoutUI.currentAlbumFrame && LayoutUI.currentAlbumFrame != null) {
+                    LayoutUI.currentAlbum = LayoutUI.currentAlbumFrame; // Update the current album
                 }
                 // Revert the button's appearance after a short delay
                 Timer timer = new Timer(1000, event -> {
@@ -1770,17 +1816,17 @@ class AlbumFrame extends Album {
                 });
                 timer.setRepeats(false); // Ensure the timer only runs once
                 timer.start();
-                Layout.audioFile = new File(song.getFilePath());
-                if(!Layout.songOn){
-                    Layout.bottomPanel = Layout.musicPanel(Layout.audioFile);
-                    album.add(Layout.bottomPanel, BorderLayout.SOUTH);
-                    Layout.playSong(Layout.audioFile);
+                LayoutUI.audioFile = new File(song.getFilePath());
+                if(!LayoutUI.songOn){
+                    LayoutUI.bottomPanel = LayoutUI.musicPanel( LayoutUI.audioFile);
+                    album.add(LayoutUI.bottomPanel, BorderLayout.SOUTH);
+                    LayoutUI.playSong( LayoutUI.audioFile);
                 } else {
                     
-                    Layout.pauseButton.setIcon(new ImageIcon(Layout.scaledPauseImage)); 
-                    Layout.playSong(Layout.audioFile);
+                    LayoutUI.pauseButton.setIcon(new ImageIcon(LayoutUI.scaledPauseImage)); 
+                    LayoutUI.playSong( LayoutUI.audioFile);
                 }
-                Layout.songOn = true; 
+                LayoutUI.songOn = true; 
                 
                 album.revalidate(); 
                 album.repaint();
@@ -1824,13 +1870,14 @@ class AlbumFrame extends Album {
         // Add songPanel to the frame
         album.add(songPanel, BorderLayout.EAST);
 
-        if(Layout.songOn) {
-            JPanel bottomPanel = Layout.musicPanel(Layout.audioFile);
+        if(LayoutUI.songOn) {
+            JPanel bottomPanel = LayoutUI.musicPanel( LayoutUI.audioFile);
             album.add(bottomPanel, BorderLayout.SOUTH);
         }
 
         album.setVisible(true);
     }
+
 }
 
 class Playlist {
@@ -1877,6 +1924,13 @@ abstract class Account{
     public Account(String username, String encryptedPassword){
         this.username = username;
         this.encryptedPassword = encryptedPassword;
+    }
+
+    public String getPassword() {
+        return encryptedPassword;
+    }
+    public String getUsername() {
+        return username;
     }
 }
 
