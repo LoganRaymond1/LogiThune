@@ -779,12 +779,6 @@ class LayoutUI implements DisplayableUI {
         menu.setBorder(BorderFactory.createEmptyBorder());
         menu.setPreferredSize(new Dimension(30, 30));
 
-        JMenuItem loginItem = new JMenuItem("Account");
-        menu.add(loginItem);
-        loginItem.addActionListener(e -> {
-            JOptionPane.showMessageDialog(layoutFrame, "Account settings will be implemented soon.");
-        });
-
         JMenuItem supportItem = new JMenuItem("Support");
         menu.add(supportItem);
         supportItem.addActionListener(e -> {
@@ -806,12 +800,6 @@ class LayoutUI implements DisplayableUI {
             scrollPane.setPreferredSize(new Dimension(400, 300)); // Set the size of the scroll pane
 
             JOptionPane.showMessageDialog(layoutFrame, scrollPane, "Support", JOptionPane.INFORMATION_MESSAGE);
-        });
-
-        JMenuItem settingsItem = new JMenuItem("Settings");
-        menu.add(settingsItem);
-        settingsItem.addActionListener(e -> {
-
         });
 
         JMenuItem logoutItem = new JMenuItem("Log out");
