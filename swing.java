@@ -146,6 +146,7 @@ class DecryptionUI implements DisplayableUI {
             if (userInput.equalsIgnoreCase(decryptedWord)) {
                 JOptionPane.showMessageDialog(decryptionFrame, "Correct! The decrypted word was: " + decryptedWord);
                 decryptionFrame.dispose();
+                LayoutUI.songOn = false;
                 new LayoutUI();
 
             } else {
@@ -807,6 +808,7 @@ class LayoutUI implements DisplayableUI {
         logoutItem.addActionListener(e -> {
             int response = JOptionPane.showConfirmDialog(layoutFrame, "Are you sure you want to log out?", "Log Out", JOptionPane.YES_NO_OPTION);
             if (response == JOptionPane.YES_OPTION) {
+                Song.stopAudio();
                 layoutFrame.dispose(); 
                 new LoginUI(); 
             }
