@@ -1361,7 +1361,7 @@ class Song {
     private boolean isLooping;
     private static Clip clip;
     private static Timer timer;
-    private static boolean looping = false;
+    private static boolean looping;
 
     public Song(String title, String duration, String filePath) {
         this.title = title;
