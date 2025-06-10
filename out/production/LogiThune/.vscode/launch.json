@@ -1,0 +1,20 @@
+{
+
+    "version": "0.2.0",
+    "configurations": [
+    
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "swing",
+            "request": "launch",
+            "mainClass": "swing",
+            "projectName": "LogiThune_bde3d062"
+        }
+    ]
+}
