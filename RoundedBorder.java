@@ -4,6 +4,8 @@ import javax.swing.border.Border;
 
 /**
  * Represents a rounded border for UI components.
+ * 
+ * https://stackoverflow.com/questions/423950/rounded-swing-jbutton-using-java
  */
 public class RoundedBorder implements Border {
 
