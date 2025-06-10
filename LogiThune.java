@@ -8,11 +8,16 @@ import javax.swing.*;
 import javax.swing.Timer;
 import javax.swing.border.Border;
 
+
+
+
+
 /** 
  * The LogiThune class serves as the running point for the LogiThune music player.
  * It initializes the login interface to start the application.
 */
 public class LogiThune {
+
 
     /**
      * The main method initializes the LoginUI, which is the entry to the music player.
@@ -20,10 +25,12 @@ public class LogiThune {
      * @param args Command line arguments.
      */
     public static void main(String[] args) {
-        //new LoginUI(); 
-        new LayoutUI();
+        new LoginUI(); 
     }
 }
+
+
+
 
 
 
@@ -33,11 +40,15 @@ public class LogiThune {
  */
 interface DisplayableUI {
 
+
     /**
      * Displays the user interface.
      */
     void display();
 }
+
+
+
 
 
 /**
@@ -47,12 +58,14 @@ interface DisplayableUI {
  */
 class LoginUI implements DisplayableUI {
     
+
     private JFrame loginFrame; // The main frame for the login interface.
     private JTextField username; // Text field for entering the username.
     private JPasswordField password; // Password field for entering the password.
     private JLabel usernameLabel; // Label for the username field.
     private JLabel passwordLabel; // Label for the password field.
     private JButton loginButton; // Button to submit the login credentials.
+
 
     /**
      * Predefined user credentials for login.
@@ -61,8 +74,8 @@ class LoginUI implements DisplayableUI {
     User user1 = new User("user1", "cnff1"); // password is pass1
     User user2 = new User("user2", "cnff2"); // password is pass2
     User admin = new User("admin", "nqzva123"); // password is admin123
-
     User[] users = {user1, user2, admin}; //Array of predefined users.
+
 
     /**
      * Constructor for LoginUI.
@@ -70,38 +83,45 @@ class LoginUI implements DisplayableUI {
      */
     public LoginUI() {
         loginFrame = new JFrame("Login"); 
-
         loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //E xits the application when the frame is closed
         loginFrame.setSize(400, 250); 
         loginFrame.setLocationRelativeTo(null); // Centers the frame on the screen
         loginFrame.setLayout(null); // No layout manager, using absolute positioning
         loginFrame.setResizable(false); // Prevents the frame from being resized
 
+
         usernameLabel = new JLabel("Username:");
         usernameLabel.setBounds(50, 50, 100, 30); 
         loginFrame.add(usernameLabel); 
+
 
         username = new JTextField();
         username.setBounds(150, 50, 200, 30);
         loginFrame.add(username);
 
+
         passwordLabel = new JLabel("Password:");
         passwordLabel.setBounds(50, 100, 100, 30);
         loginFrame.add(passwordLabel);
+
 
         password = new JPasswordField();
         password.setBounds(150, 100, 200, 30);
         loginFrame.add(password);
 
+
         loginButton = new JButton("Login");
         loginButton.setBounds(150, 150, 100, 30);
         loginFrame.add(loginButton);
 
+
         loginButton.addActionListener(e -> checkLogin()); // When the login button is clicked, login is checked in checkLogin()
         loginFrame.getRootPane().setDefaultButton(loginButton); // Set the default button for Enter key
 
+
         display(); // Display the login frame
     }
+
 
 
     /**
@@ -155,6 +175,8 @@ class LoginUI implements DisplayableUI {
         loginFrame.setVisible(true);
     }
 }
+
+
 
 
 
@@ -242,6 +264,7 @@ class DecryptionUI implements DisplayableUI {
         display();
     }
 
+
     /**
      * Decrypts the given text using a Caesar cipher with the specified key.
      * This method shifts each letter backward in the alphabet by the key value.
@@ -275,6 +298,8 @@ class DecryptionUI implements DisplayableUI {
 }
 
 
+
+
 /**
  * The LayoutUI class represents the main user interface for the LogiThune music player.
  * It provides a layout for displaying albums, songs, and controls for playback.
@@ -283,6 +308,7 @@ class DecryptionUI implements DisplayableUI {
  * Allows playback of songs, shuffling, looping and pausing.
  */
 class LayoutUI implements DisplayableUI {
+
 
     private static JFrame layoutFrame; // The main frame for the layout interface.
     public static boolean songOn; // Track if a song is currently playing.
@@ -299,6 +325,7 @@ class LayoutUI implements DisplayableUI {
     public static Playlist currentPlaylist; // Stores the current playlist being played
     public static boolean paused; // Track if a song is currently playing
     public static JPanel bottomPanel; // Panel for the bottom section of the layout.
+
 
     // Tracks state of sorting
     private boolean isSortButton1Active; 
@@ -332,6 +359,7 @@ class LayoutUI implements DisplayableUI {
         new Song("GREEDY", "6:26", "someSexySongs4U/21-PARTYNEXTDOOR-GREEDY-Ft-Drake-(JustNaija.wav")
     */};
 
+    
     // Array of songs for Starboy album
     static Song[] starboy = {/* 
         new Song("STARBOY", "3:51", "starboy/01-The-Weeknd-Starboy-ft-Daft-Punk-(JustNaija.wav"),
@@ -353,6 +381,7 @@ class LayoutUI implements DisplayableUI {
         new Song("DIE FOR YOU", "4:20", "starboy/17-The-Weeknd-Die-For-You-(JustNaija.wav"),
         new Song("I FEEL IT COMING", "4:29", "starboy/18-The-Weeknd-I-Feel-It-Coming-ft-Daft-Punk-(JustNaija.wav")
     */};
+
 
     // Array of songs for SOS album
     static Song[] sos = {/*
@@ -381,6 +410,7 @@ class LayoutUI implements DisplayableUI {
         new Song("FORGIVELESS", "2:22", "sos/38-SZA-Forgiveless-Ft-Ol-Dirty-Bastard-(JustNaija.wav")
     */};
 
+
     // Array of songs for Mozart Classical Music album
     static Song[] mozartClassical = {/*
         new Song("ALLA TURCA", "3:35", "mozart/Alla-Turca(chosic.wav"),
@@ -393,6 +423,7 @@ class LayoutUI implements DisplayableUI {
         new Song("PIANO CONCERTO ANDANTE", "4:21", "mozart/Piano-Concerto-no.wav"),
         new Song("SYMPHONY NO 40 ALLEGRO", "4:01", "mozart/Symphony-no.wav")
     */};
+
 
     // Array of songs for Utopia album
     static Song[] utopia = { /*
@@ -417,6 +448,7 @@ class LayoutUI implements DisplayableUI {
         new Song("TIL FURTHER NOTICE", "5:15", "utopia/19-Travis-Scott-TIL-FURTHER-NOTICE-(JustNaija.wav")
      */};
 
+
     // Array of songs for Chromakopia album
     static Song[] chromakopia = {/*
         new Song("ST CHROMA", "3:42", "chromakopia/01-Tyler-St-Chroma-Ft-The-Creator-Daniel-Caesar-(JustNaija.wav"),
@@ -435,6 +467,7 @@ class LayoutUI implements DisplayableUI {
         new Song("I HOPE YOU FIND YOUR WAY HOME", "6:07", "chromakopia/14-Tyler-The-Creator-I-Hope-You-Find-Your-Way-Home-(JustNaija.wav")
     */};
 
+
     // Array of albums with their cover images, titles, artists, and songs
     static Object[][] albums = {
         {new ImageIcon("cnTower.png"), "$ome $exy Songs 4U", "Drake", someSexySongs4USongs},
@@ -444,6 +477,8 @@ class LayoutUI implements DisplayableUI {
         {new ImageIcon("utopiaAlbum.png"), "Utopia", "Travis Scott", utopia},
         {new ImageIcon("chromakopiaAlbum.jpg"), "Chromakopia", "Tyler, The Creator", chromakopia}
     };
+
+
 
     /**
      * Constructor for LayoutUI.
@@ -458,7 +493,9 @@ class LayoutUI implements DisplayableUI {
         layoutFrame.setLayout(new BorderLayout());
         layoutFrame.setResizable(false);
 
+
         JPanel topPanel = homeSearchPanel(layoutFrame); // Creates the top panel
+
 
         // Right panel for sorting and scroll bar
         rightPanel = new JPanel();
@@ -466,20 +503,24 @@ class LayoutUI implements DisplayableUI {
         rightPanel.setLayout(new BorderLayout()); // Use BorderLayout for structure
         rightPanel.setBackground(Color.BLACK);
 
+
         // Top panel for the sorting
         JPanel topSectionPanel = new JPanel();
         topSectionPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10)); // Align to the left
         topSectionPanel.setBackground(Color.BLACK);
 
+
         JLabel sectionLabel = new JLabel("For You");
         sectionLabel.setFont(new Font("Arial", Font.BOLD, 20));
         sectionLabel.setForeground(Color.WHITE);
+
 
         JLabel sortLabel = new JLabel("Sort Album Name:");
         sortLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         sortLabel.setPreferredSize(new Dimension(120, 30));
         sortLabel.setHorizontalAlignment(SwingConstants.LEFT);
         sortLabel.setForeground(Color.WHITE);
+
 
         JLabel sortLabel2 = new JLabel("Sort Artist Name:");
         sortLabel2.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -512,6 +553,7 @@ class LayoutUI implements DisplayableUI {
         sortButton3.setBackground(Color.WHITE);
         sortButton4.setBackground(Color.WHITE);
 
+
         // Add action listeners for sort buttons, sorting based on album name or artist name
         sortButton1.addActionListener(e -> {
             if (!isSortButton1Active) {
@@ -527,6 +569,7 @@ class LayoutUI implements DisplayableUI {
             resetPanelSort(); // Reset the panel to show sorted albums
         });
 
+
         sortButton2.addActionListener(e -> {
             if (!isSortButton2Active) {
                 // Sort the albums array by descending album name
@@ -540,6 +583,7 @@ class LayoutUI implements DisplayableUI {
 
             resetPanelSort(); // Reset the panel to show sorted albums
         });
+
 
         sortButton3.addActionListener(e -> {
             if (!isSortButton3Active) {
@@ -555,6 +599,7 @@ class LayoutUI implements DisplayableUI {
             resetPanelSort(); // Reset the panel to show sorted albums
         });
 
+
         sortButton4.addActionListener(e -> {
             if (!isSortButton4Active) {
                 // Sort the albums array by descending artist name
@@ -569,6 +614,7 @@ class LayoutUI implements DisplayableUI {
             resetPanelSort(); // Reset the panel to show sorted albums
         });
 
+
         // Panel for sorting buttons
         JPanel sortingPanel = new JPanel();
         sortingPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 10)); // Horizontal gap: 20px, Vertical gap: 10px
@@ -577,7 +623,7 @@ class LayoutUI implements DisplayableUI {
         sortingPanel.add(sortLabel); 
         sortingPanel.add(sortButton1); 
         sortingPanel.add(sortButton2);
-
+        
         // Add spacing between the two sorting sections
         sortingPanel.add(Box.createHorizontalStrut(50)); 
 
@@ -588,14 +634,18 @@ class LayoutUI implements DisplayableUI {
         topSectionPanel.add(sectionLabel);
         topSectionPanel.add(sortingPanel, BorderLayout.CENTER);
 
+
+
         // Center panel for albums in a square layout
         albumsPanel = new JPanel();
         albumsPanel.setLayout(new GridLayout(0, 2, 10, 10)); 
         albumsPanel.setBackground(Color.BLACK);
 
+
         // Iterate through the albums array and create buttons for each album.
         for (Object[] albumData : albums) { 
             Album album = new Album((String) albumData[1], (String) albumData[2], (Song[]) albumData[3], (ImageIcon) albumData[0]); // Create an Album object with the data. 
+
 
             JButton albumButton = new JButton();
             albumButton.setLayout(new BorderLayout());
@@ -605,25 +655,30 @@ class LayoutUI implements DisplayableUI {
             albumButton.setOpaque(true); 
             albumButton.setMaximumSize(new Dimension(200, 200)); 
 
+
             ImageIcon albumIcon = (ImageIcon) albumData[0];
             Image scaledAlbumIcon = albumIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
             ImageIcon scaledIcon = new ImageIcon(scaledAlbumIcon);
             JLabel albumCover = new JLabel((Icon) albumData[0]); 
             albumCover.setHorizontalAlignment(SwingConstants.CENTER);
 
+
             JLabel albumName = new JLabel(album.getTitle()); // Creates a JLabel for the album name with get method.
             albumName.setFont(new Font("Arial", Font.BOLD, 14));
             albumName.setHorizontalAlignment(SwingConstants.CENTER);
             albumName.setForeground(Color.WHITE); 
+
 
             JLabel albumArtist = new JLabel(album.getArtist()); // Creates a JLabel for the album artist with get method.
             albumArtist.setFont(new Font("Arial", Font.PLAIN, 12));
             albumArtist.setHorizontalAlignment(SwingConstants.CENTER);
             albumArtist.setForeground(Color.LIGHT_GRAY); 
 
+
             albumButton.add(albumCover, BorderLayout.NORTH); // Adds the album cover to the top of the button.
             albumButton.add(albumName, BorderLayout.CENTER); // Adds the album name to the center of the button.
             albumButton.add(albumArtist, BorderLayout.SOUTH); // Adds the album artist to the bottom of the button. 
+
 
             albumButton.addActionListener(e -> {
                 AlbumFrameUI newAlbum = new AlbumFrameUI(album.getTitle(), album.getArtist(), album.getSongs(), (ImageIcon) albumData[0]); // Create a new AlbumFrameUI with the album data.
@@ -634,10 +689,12 @@ class LayoutUI implements DisplayableUI {
                     currentAlbumFrame = album; // If there is a current album, set the current album frame to the clicked album.
                 }
 
+
                 File currentAudioFile = LayoutUI.audioFile; // Store the current audio file
                 int audioFrame = Song.getFrame(); 
                 LayoutUI.audioFile = currentAudioFile; 
                 newAlbum.display(); // Display the new album frame.
+
 
                 // If the song is paused, restore the audio frame when the song is played again.
                 if (paused) { 
@@ -657,8 +714,8 @@ class LayoutUI implements DisplayableUI {
                     }
                 }
                 layoutFrame.dispose(); // Dispose the layout frame after opening the album frame.
-
             });
+
 
             // Hover affects for the album button. 
             albumButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -669,6 +726,7 @@ class LayoutUI implements DisplayableUI {
                     albumName.setForeground(Color.BLACK);
                     albumArtist.setForeground(Color.BLACK);
                 }
+
 
                 // Change appearance when mouse exits the button.
                 @Override
@@ -692,14 +750,16 @@ class LayoutUI implements DisplayableUI {
 
         rightPanel.add(scrollPane, BorderLayout.CENTER);
         layoutFrame.add(rightPanel, BorderLayout.EAST);
-
         layoutFrame.add(topPanel, BorderLayout.NORTH);
+
 
         // Create a bottom panel for playback controls if a song is playing
         if (songOn) { 
             bottomPanel = musicPanel(audioFile);
             layoutFrame.add(bottomPanel, BorderLayout.SOUTH);
         }
+
+
 
         // Create a panel for playlists.
         JPanel playlistsPanel = new JPanel();
@@ -711,11 +771,12 @@ class LayoutUI implements DisplayableUI {
         JLabel playlistsLabel = new JLabel("Playlists");
         playlistsLabel.setFont(new Font("Arial", Font.BOLD, 16));
         playlistsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        playlistsPanel.add(playlistsLabel);
         playlistsLabel.setForeground(Color.WHITE);
-
+        
+        playlistsPanel.add(playlistsLabel);
         playlistsPanel.setLayout(new BoxLayout(playlistsPanel, BoxLayout.Y_AXIS));
         playlistsPanel.setAlignmentY(Component.BOTTOM_ALIGNMENT); // Aligns buttons lower down.
+
 
         // Iterate through the user's playlists and create buttons for each playlist.
         for (Playlist playlist : User.playlists) {
@@ -728,6 +789,7 @@ class LayoutUI implements DisplayableUI {
             playlistButton.setPreferredSize(new Dimension(250, 50)); 
             playlistButton.setMaximumSize(new Dimension(250, 50)); 
             
+
             // Playlist buttons to display the songs in the playlist.
             playlistButton.addActionListener(e -> {
                 // Create a new frame to display the playlist's songs.
@@ -736,11 +798,13 @@ class LayoutUI implements DisplayableUI {
                 playlistSongsFrame.setLocationRelativeTo(null);
                 playlistSongsFrame.setLayout(new BorderLayout());
 
+
                 // Create a panel to list songs.
                 JPanel songsPanel = new JPanel();
                 songsPanel.setBackground(Color.BLACK);
                 songsPanel.add(Box.createVerticalStrut(10)); 
                 songsPanel.setLayout(new BoxLayout(songsPanel, BoxLayout.Y_AXIS)); // Using a BoxLayout for vertical alignment.
+
 
                 // Add each song in the playlist to the panel.
                 for (Song song : playlist.getSongs()) {
@@ -770,12 +834,13 @@ class LayoutUI implements DisplayableUI {
                     songsPanel.add(songButton);
                 }
 
+
                 // Add the panel to a scroll pane to scroll through songs.
                 JScrollPane playlistScrollPane = new JScrollPane(songsPanel);
                 playlistSongsFrame.add(playlistScrollPane, BorderLayout.CENTER);
-
                 playlistSongsFrame.setVisible(true);
             });
+
             playlistsPanel.add(Box.createVerticalStrut(10)); // Add spacing between buttons
             playlistsPanel.add(playlistButton);
         }
@@ -787,6 +852,8 @@ class LayoutUI implements DisplayableUI {
     }
 
 
+
+
     /**
      * Creates a search panel at the top of the home screen.
      * This allows for searching through albums by title or artist.
@@ -796,15 +863,19 @@ class LayoutUI implements DisplayableUI {
      * @return JPanel the panel containing the search bar and home button.
      */
     public static JPanel homeSearchPanel(JFrame currentFrame) {
+        
+
         // Create the top panel with a search bar and home button.
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new BorderLayout());
         topPanel.setBackground(Color.BLACK);
         topPanel.setPreferredSize(new Dimension(1100, 50));
 
+
         JPanel searchHomePanel = new JPanel();
         searchHomePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
         searchHomePanel.setBackground(Color.BLACK);
+
 
         ImageIcon homeIcon = new ImageIcon("homeIcon.png");
         Image scaledImage = homeIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
@@ -815,6 +886,7 @@ class LayoutUI implements DisplayableUI {
         homeButton.setContentAreaFilled(false);
         homeButton.setOpaque(true);
         
+
         // Home button action listener to return to the home screen with audio still able to play from current position.
         homeButton.addActionListener(e -> {
             File currentAudioFile = LayoutUI.audioFile; 
@@ -822,7 +894,7 @@ class LayoutUI implements DisplayableUI {
             new LayoutUI();
             LayoutUI.audioFile = currentAudioFile; 
             ImageIcon playIcon;
-            System.out.println("PLAYING: " + Song.isPlaying());
+            
             if (paused) {
                 playIcon = new ImageIcon("play.png");
                 playSong(LayoutUI.audioFile); // Play the current audio file
@@ -832,7 +904,6 @@ class LayoutUI implements DisplayableUI {
                 playIcon = new ImageIcon("pause.png");
                 playSong(LayoutUI.audioFile); 
                 Song.setFrame(audioFrame);
-
             }
             Image scaledPlayImage = playIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
             if (pauseButton != null) {
@@ -843,12 +914,15 @@ class LayoutUI implements DisplayableUI {
 
         });
 
+
         homeButton.setToolTipText("Go to Home"); // Set tooltip for the home button.
+
 
         // Search bar
         JTextField searchField = new JTextField();
         searchField.setPreferredSize(new Dimension(300, 30));
         searchField.setToolTipText("Search for songs, albums, or artists");
+
 
         JButton searchButton = new JButton("Search");
         searchButton.setPreferredSize(new Dimension(80, 30));
@@ -856,6 +930,7 @@ class LayoutUI implements DisplayableUI {
         searchButton.setBorder(new RoundedBorder(10));
         searchButton.setContentAreaFilled(false);
         searchButton.setOpaque(true);
+
 
         // Search field and button which allows users to search for albums by title or artist.
         searchField.addActionListener(e -> {
@@ -866,17 +941,22 @@ class LayoutUI implements DisplayableUI {
             handleSearch(albums, searchField.getText().trim());
         });
 
+
         searchHomePanel.add(homeButton);
         searchHomePanel.add(searchField);
         searchHomePanel.add(searchButton);
+
+
 
         // Account menu panel with support and logout options.
         JPanel accountMenuPanel = new JPanel();
         accountMenuPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10));
         accountMenuPanel.setBackground(Color.BLACK);
 
+
         JMenuBar menuBar = new JMenuBar();
         menuBar.setBackground(Color.LIGHT_GRAY);
+
 
         JMenu menu = new JMenu();
         ImageIcon userIcon = new ImageIcon("userIcon.jpg");
@@ -912,6 +992,7 @@ class LayoutUI implements DisplayableUI {
             JOptionPane.showMessageDialog(layoutFrame, scrollPane, "Support", JOptionPane.INFORMATION_MESSAGE);
         });
 
+
         // Log out which allows the user to log out of their account.
         JMenuItem logoutItem = new JMenuItem("Log out");
         menu.add(logoutItem);
@@ -924,6 +1005,7 @@ class LayoutUI implements DisplayableUI {
             }
         });
 
+
         menuBar.add(menu);
         accountMenuPanel.add(menuBar);
 
@@ -932,6 +1014,8 @@ class LayoutUI implements DisplayableUI {
 
         return topPanel; // Returns the top panel with the search bar and home button.
     }
+
+
 
 
     /**
@@ -943,16 +1027,19 @@ class LayoutUI implements DisplayableUI {
      * @return JPanel the panel containing all features.
      */
     public static JPanel musicPanel(File audioFile) {
+        
+        
         // Create the bottom panel for playback controls.
         bottomPanel = new JPanel();
         bottomPanel.setLayout(new BorderLayout());
         bottomPanel.setPreferredSize(new Dimension(1100, 70));
         bottomPanel.setBackground(Color.BLACK);
 
-        // Left panel for album cover and song title.
+
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10)); // Align to the left
         leftPanel.setBackground(Color.BLACK);
+
 
         JLabel albumCover = new JLabel();
         albumCover.setPreferredSize(new Dimension(40, 40));
@@ -960,17 +1047,21 @@ class LayoutUI implements DisplayableUI {
         Image scaledAlbumImage = albumImage.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         albumCover.setIcon(new ImageIcon(scaledAlbumImage));
 
+
         JLabel songTitle = new JLabel("Song Title");
         songTitle.setFont(new Font("Arial", Font.BOLD, 16));
         songTitle.setForeground(Color.WHITE);
 
+
         leftPanel.add(albumCover);
         leftPanel.add(songTitle);
+
 
         // Center panel for playback bar and play button.
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10)); // Center-align
         centerPanel.setBackground(Color.BLACK);
+
 
         ImageIcon pauseIcon = new ImageIcon("pause.png");
         scaledPauseImage = pauseIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
@@ -978,6 +1069,7 @@ class LayoutUI implements DisplayableUI {
         pauseButton.setBackground(Color.WHITE);
         pauseButton.setFocusPainted(false);
         centerPanel.add(pauseButton);
+
 
         // Playback slider to view and move song play time.
         playbackSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
@@ -987,6 +1079,7 @@ class LayoutUI implements DisplayableUI {
         playbackSlider.setBackground(Color.BLACK);
         playbackSlider.setOpaque(true);
         centerPanel.add(playbackSlider);
+
 
         // Pause button to play or pause the current song.
         pauseButton.addActionListener(e -> {
@@ -1003,15 +1096,18 @@ class LayoutUI implements DisplayableUI {
                 paused = false;
             }
         });
+        
         // If the song is not playing, start playing it.
         if (!Song.isPlaying()) {
             Song.playAudio(LayoutUI.audioFile, playbackSlider, pauseButton, scaledPauseImage); 
         }
 
+
         // Right panel for playback controls (next, previous, shuffle).
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10)); 
         rightPanel.setBackground(Color.BLACK);
+
 
         ImageIcon prevIcon = new ImageIcon("prevSong.png");
         Image scaledPrevImage = prevIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
@@ -1019,6 +1115,7 @@ class LayoutUI implements DisplayableUI {
         prevButton.setBackground(Color.WHITE);
         prevButton.setFocusPainted(false);
         rightPanel.add(prevButton);
+
 
         prevButton.addActionListener(e -> {
             // Plays previous song in the playlist or album.
@@ -1035,6 +1132,7 @@ class LayoutUI implements DisplayableUI {
                 currentSongIndex = LayoutUI.currentAlbum.checkSongIndex(LayoutUI.audioFile.getPath().replace('\\', '/'));
             }
 
+
             int randomIndex = currentSongIndex;
             // If shuffle is enabled, select a random song that is not the current song.
             if (shuffle) {
@@ -1048,14 +1146,14 @@ class LayoutUI implements DisplayableUI {
                         LayoutUI.audioFile = new File(LayoutUI.currentAlbum.getSong(randomIndex).getFilePath());
                     }
                 }
+
             } else if (playingPlaylist) { // Play the previous song in the playlist.
                 if (currentSongIndex > 0) {
                     LayoutUI.audioFile = new File(LayoutUI.currentPlaylist.getSongs().get(currentSongIndex - 1).getFilePath());
-
                 } else { // If at the start of the playlist, play the last song.
                     LayoutUI.audioFile = new File(LayoutUI.currentPlaylist.getSongs().get(LayoutUI.currentPlaylist.getSongs().size() - 1).getFilePath());
-
                 }
+
             } else if (currentSongIndex > 0) { // Play the previous song in the album.
                 LayoutUI.audioFile = new File(LayoutUI.currentAlbum.getSong(currentSongIndex - 1).getFilePath());
 
@@ -1063,6 +1161,7 @@ class LayoutUI implements DisplayableUI {
                 LayoutUI.audioFile = new File(LayoutUI.currentAlbum.getSong(currentAlbum.songs.length - 1).getFilePath());
 
             }
+
             playSong(LayoutUI.audioFile); // Play the selected song.
 
         });
@@ -1076,11 +1175,13 @@ class LayoutUI implements DisplayableUI {
         nextButton.setFocusPainted(false);
         rightPanel.add(nextButton);
 
+
         // Next button to play the next song in the playlist or album.
         nextButton.addActionListener(e -> {
             // Plays next song in the playlist or album.
             pauseButton.setIcon(new ImageIcon(scaledPauseImage)); 
             int currentSongIndex = 0;
+            
             if (playingPlaylist) {
                 for (int i = 0; i < LayoutUI.currentPlaylist.getSongs().size(); i++) {
                     if (LayoutUI.currentPlaylist.getSongs().get(i).getFilePath().equals(LayoutUI.audioFile.getPath().replace('\\', '/'))) {
@@ -1091,6 +1192,7 @@ class LayoutUI implements DisplayableUI {
             } else {
                 currentSongIndex = LayoutUI.currentAlbum.checkSongIndex(LayoutUI.audioFile.getPath().replace('\\', '/'));
             }
+
 
             int randomIndex = currentSongIndex;
             // If shuffle is enabled, select a random song that is not the current song, otherwise select next song in playlist or album.
@@ -1104,6 +1206,7 @@ class LayoutUI implements DisplayableUI {
                         LayoutUI.audioFile = new File(LayoutUI.currentAlbum.getSong(randomIndex).getFilePath());
                     }
                 }
+
             } else if (playingPlaylist) {
                 if (currentSongIndex < LayoutUI.currentPlaylist.getSongs().size() - 1) {
                     LayoutUI.audioFile = new File(LayoutUI.currentPlaylist.getSongs().get(currentSongIndex + 1).getFilePath());
@@ -1112,6 +1215,7 @@ class LayoutUI implements DisplayableUI {
                     LayoutUI.audioFile = new File(LayoutUI.currentPlaylist.getSongs().get(0).getFilePath());
 
                 }
+
             } else if (currentSongIndex < LayoutUI.currentAlbum.songs.length - 1) {
                 LayoutUI.audioFile = new File(LayoutUI.currentAlbum.getSong(currentSongIndex + 1).getFilePath());
 
@@ -1119,6 +1223,8 @@ class LayoutUI implements DisplayableUI {
                 LayoutUI.audioFile = new File(LayoutUI.currentAlbum.getSong(0).getFilePath());
 
             }
+
+
             playSong(LayoutUI.audioFile); // Play the selected song.
         });
 
