@@ -381,7 +381,7 @@ class LayoutUI implements DisplayableUI {
     */};
 
     // Array of songs for Mozart Classical Music album
-    static Song[] mozartClassical = {/*
+    static Song[] mozartClassical = {
         new Song("ALLA TURCA", "3:35", "mozart/Alla-Turca(chosic.wav"),
         new Song("SONATA B FLAT ALLEGRETTO GRAZIOSO", "6:16", "mozart/Brendan_Kinsella_-_Mozart_-_Piano_Sonata_in_B-flat_major_III_Allegretto_Grazioso(chosic.wav"),
         new Song("SONATA B FLAT ALLEGRO", "6:38", "mozart/Brendan_Kinsella_-_Mozart_-_Sonata_No_13_In_B_Flat_Major_K333_-_I_Allegro(chosic.wav"),
@@ -391,7 +391,7 @@ class LayoutUI implements DisplayableUI {
         new Song("OVERTURE MARRIAGE", "5:59", "mozart/Overture-to-The-marriage-of-Figaro-K.wav"),
         new Song("PIANO CONCERTO ANDANTE", "4:21", "mozart/Piano-Concerto-no.wav"),
         new Song("SYMPHONY NO 40 ALLEGRO", "4:01", "mozart/Symphony-no.wav")
-    */};
+    };
 
     // Array of songs for Utopia album
     static Song[] utopia = { /*
